@@ -13,18 +13,14 @@ export const NavButton = ({
     href, label, isActive,
 }:Props) => {
     return (    
-        <Button
-            asChild
-            size="sm"
-            variant="outline"
+        <Link
+            href={href}
             className={cn(
-                "w-auto justify-between font-normal hover:bg-white/20 hover:text-white border-none focus-visible:ring-offset-0 focus-visible:ring-transparent outline-none text-white focus:bg-white/30 transition",
-                isActive ? "bg-white/10 text-white" : "bg-transparent",
+                "inline-flex items-center px-3 py-2 text-sm font-normal hover:bg-current/20 hover:text-current border-none focus-visible:ring-offset-0 focus-visible:ring-transparent outline-none text-current focus:bg-current/30 transition rounded-md shadow-none",
+                isActive ? "bg-current/10 text-current" : "bg-transparent",
             )}
         >
-            <Link href={href}>
-                {label}
-            </Link>
-        </Button>
+            {label}
+        </Link>
     )
 }

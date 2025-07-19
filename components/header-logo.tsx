@@ -6,7 +6,7 @@ export const HeaderLogo = () => {
         <Link href="/">
             <div className='hidden lg:flex gap-x-2 items-center'>
                 <Image src={"/globe.svg"} height={20} width={20} alt="Logo" className="invert brightness-0" />
-                Logo
+                Private CFO
             </div>
         </Link>
     )
