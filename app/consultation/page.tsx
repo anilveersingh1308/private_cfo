@@ -175,7 +175,7 @@ export default function ConsultationPage() {
     
     // Comprehensive validation
     let isValid = true;
-    let errorMessages: string[] = [];
+    const errorMessages: string[] = [];
     
     // Validate required fields
     const requiredFields = ['name', 'phone', 'city', 'occupation', 'email'];
@@ -322,65 +322,25 @@ export default function ConsultationPage() {
       
       {/* Top-right notification */}
       {showNotification && (
-        <div 
-          style={{
-            position: 'fixed',
-            top: '20px',
-            right: '20px',
-            zIndex: 1000,
-            maxWidth: '400px',
-            padding: '1rem',
-            borderRadius: '8px',
-            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
-            backgroundColor: notificationType === 'success' ? '#d4edda' : '#f8d7da',
-            border: `1px solid ${notificationType === 'success' ? '#c3e6cb' : '#f5c6cb'}`,
-            color: notificationType === 'success' ? '#155724' : '#721c24',
-            fontSize: '0.9rem',
-            animation: 'slideInRight 0.3s ease-out'
-          }}
-        >
-          <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.5rem' }}>
-            <span style={{ fontSize: '1.2rem' }}>
+        <div className={`notification-enhanced ${notificationType === 'success' ? 'notification-success' : 'notification-error'}`}>
+          <div className="notification-content">
+            <div className="notification-icon">
               {notificationType === 'success' ? '✅' : '❌'}
-            </span>
-            <div style={{ flex: 1 }}>
-              {submitMessage}
+            </div>
+            <div className="notification-text">
+              <strong>{notificationType === 'success' ? 'Success!' : 'Error!'}</strong>
+              <div>{submitMessage}</div>
               {notificationType === 'success' && isRedirecting && (
-                <div style={{ 
-                  marginTop: '0.5rem', 
-                  fontSize: '0.8rem', 
-                  opacity: 0.9,
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.5rem'
-                }}>
-                  <span>🕒</span>
-                  <span>Redirecting in {redirectCountdown} seconds...</span>
-                </div>
-              )}
-              {notificationType === 'success' && !isRedirecting && (
-                <div style={{ 
-                  marginTop: '0.5rem', 
-                  fontSize: '0.8rem', 
-                  opacity: 0.8 
-                }}>
-                  Form submitted successfully!
+                <div className="notification-countdown">
+                  ⏱️ Redirecting in {redirectCountdown} seconds...
                 </div>
               )}
             </div>
-            <button
+            <button 
+              className="notification-close"
               onClick={() => setShowNotification(false)}
-              style={{
-                background: 'none',
-                border: 'none',
-                color: 'inherit',
-                cursor: 'pointer',
-                fontSize: '1.2rem',
-                padding: '0',
-                lineHeight: 1
-              }}
             >
-              ×
+              ✕
             </button>
           </div>
         </div>
@@ -427,25 +387,8 @@ export default function ConsultationPage() {
 
                 <div className="form-group">
                   <label htmlFor="phone" className="required-field">Phone Number</label>
-                  <div className="phone-input-container" style={{
-                    display: 'flex',
-                    gap: '0.5rem',
-                    alignItems: 'stretch',
-                    maxWidth: '400px'
-                  }}>
-                    <div className="country-prefix" style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      padding: '0.75rem',
-                      borderRadius: '8px',
-                      border: '1px solid rgba(255, 255, 255, 0.2)',
-                      backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                      color: 'white',
-                      fontSize: '0.9rem',
-                      minWidth: '90px',
-                      justifyContent: 'center',
-                      gap: '0.25rem'
-                    }}>
+                  <div className="phone-input-container">
+                    <div className="country-prefix">
                       <span>🇮🇳</span>
                       <span>+91</span>
                     </div>
@@ -911,10 +854,6 @@ export default function ConsultationPage() {
                   type="submit" 
                   className="submit-btn" 
                   disabled={isSubmitting}
-                  style={{
-                    opacity: isSubmitting ? 0.7 : 1,
-                    cursor: isSubmitting ? 'not-allowed' : 'pointer'
-                  }}
                 >
                   {isSubmitting ? 'Submitting...' : 'Schedule Consultation'}
                 </button>

@@ -47,10 +47,10 @@ export default function HomePage() {
 
       // Handle dropdown toggles on mobile
       dropdownToggles.forEach(toggle => {
-        toggle.addEventListener('click', function(e) {
+        toggle.addEventListener('click', function(e: Event) {
           if (window.innerWidth <= 768) {
             e.preventDefault();
-            const parentItem = this.closest('.has-submenu');
+            const parentItem = (e.target as Element).closest('.has-submenu');
             
             const otherActiveItems = mainNav.querySelectorAll('.has-submenu.active');
             otherActiveItems.forEach(item => {
