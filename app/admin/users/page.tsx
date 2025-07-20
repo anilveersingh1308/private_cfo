@@ -57,6 +57,7 @@ export default function AdminUsers() {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   
   // Subscriber modal states
+  const [showAddSubscriberModal, setShowAddSubscriberModal] = useState(false);
   const [showViewSubscriberModal, setShowViewSubscriberModal] = useState(false);
   const [showEmailSubscriberModal, setShowEmailSubscriberModal] = useState(false);
   const [showAnalyticsModal, setShowAnalyticsModal] = useState(false);
@@ -70,6 +71,13 @@ export default function AdminUsers() {
     role: 'user' as User['role'],
     status: 'active' as User['status'],
     password: ''
+  });
+
+  const [subscriberFormData, setSubscriberFormData] = useState({
+    email: '',
+    categories: [] as string[],
+    source: 'Website' as string,
+    status: 'active' as NewsletterSubscriber['status']
   });
 
   useEffect(() => {
@@ -324,16 +332,26 @@ export default function AdminUsers() {
   };
 
   const handleAddUser = () => {
-    setFormData({
-      name: '',
-      email: '',
-      phone: '',
-      location: '',
-      role: 'user',
-      status: 'active',
-      password: ''
-    });
-    setShowAddUserModal(true);
+    if (activeTab === 'users') {
+      setFormData({
+        name: '',
+        email: '',
+        phone: '',
+        location: '',
+        role: 'user',
+        status: 'active',
+        password: ''
+      });
+      setShowAddUserModal(true);
+    } else {
+      setSubscriberFormData({
+        email: '',
+        categories: [],
+        source: 'Website',
+        status: 'active'
+      });
+      setShowAddSubscriberModal(true);
+    }
   };
 
   const handleCreateUser = async () => {
@@ -424,6 +442,47 @@ export default function AdminUsers() {
       ...prev,
       [name]: value
     }));
+  };
+
+  const handleSubscriberInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setSubscriberFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleCategoryToggle = (category: string) => {
+    setSubscriberFormData(prev => ({
+      ...prev,
+      categories: prev.categories.includes(category)
+        ? prev.categories.filter(c => c !== category)
+        : [...prev.categories, category]
+    }));
+  };
+
+  const handleCreateSubscriber = async () => {
+    try {
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      const newSubscriber: NewsletterSubscriber = {
+        id: Math.max(...subscribers.map(s => s.id)) + 1,
+        email: subscriberFormData.email,
+        categories: subscriberFormData.categories,
+        subscribed_at: new Date().toISOString(),
+        status: subscriberFormData.status,
+        engagement_score: 0,
+        total_emails_sent: 0,
+        source: subscriberFormData.source
+      };
+
+      setSubscribers(prev => [newSubscriber, ...prev]);
+      setShowAddSubscriberModal(false);
+      console.log('Subscriber created:', newSubscriber);
+    } catch (error) {
+      console.error('Failed to create subscriber:', error);
+    }
   };
 
   // Subscriber action handlers
@@ -1175,6 +1234,122 @@ export default function AdminUsers() {
         </div>
       )}
 
+      {/* Add Subscriber Modal */}
+      {showAddSubscriberModal && (
+        <div className="modal-overlay" onClick={() => setShowAddSubscriberModal(false)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h3>Add New Subscriber</h3>
+              <button className="modal-close" onClick={() => setShowAddSubscriberModal(false)}>
+                <i className="fas fa-times"></i>
+              </button>
+            </div>
+            <div className="modal-body">
+              <div className="form-grid">
+                <div className="form-group full-width">
+                  <label>Email Address *</label>
+                  <input
+                    type="email"
+                    name="email"
+                    value={subscriberFormData.email}
+                    onChange={handleSubscriberInputChange}
+                    placeholder="subscriber@example.com"
+                    required
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Source</label>
+                  <select
+                    name="source"
+                    value={subscriberFormData.source}
+                    onChange={handleSubscriberInputChange}
+                  >
+                    <option value="Website">Website</option>
+                    <option value="Social Media">Social Media</option>
+                    <option value="Newsletter">Newsletter</option>
+                    <option value="Referral">Referral</option>
+                    <option value="Event">Event</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </div>
+                <div className="form-group">
+                  <label>Status</label>
+                  <select
+                    name="status"
+                    value={subscriberFormData.status}
+                    onChange={handleSubscriberInputChange}
+                  >
+                    <option value="active">Active</option>
+                    <option value="pending">Pending</option>
+                    <option value="unsubscribed">Unsubscribed</option>
+                  </select>
+                </div>
+                <div className="form-group full-width">
+                  <label>Categories of Interest</label>
+                  <div style={{ 
+                    display: 'grid', 
+                    gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', 
+                    gap: '0.75rem', 
+                    marginTop: '0.5rem' 
+                  }}>
+                    {[
+                      'Financial Planning',
+                      'Tax Consulting',
+                      'Investment Advice',
+                      'Retirement Planning',
+                      'Business Consulting',
+                      'Risk Management',
+                      'Estate Planning',
+                      'Insurance Planning'
+                    ].map(category => (
+                      <label key={category} style={{ 
+                        display: 'flex', 
+                        alignItems: 'center', 
+                        gap: '0.5rem', 
+                        cursor: 'pointer',
+                        padding: '0.5rem',
+                        borderRadius: '6px',
+                        border: subscriberFormData.categories.includes(category) 
+                          ? '1px solid #0ea5e9' 
+                          : '1px solid rgba(75, 85, 99, 0.3)',
+                        background: subscriberFormData.categories.includes(category) 
+                          ? 'rgba(14, 165, 233, 0.1)' 
+                          : 'rgba(15, 23, 42, 0.5)',
+                        transition: 'all 0.2s ease'
+                      }}>
+                        <input
+                          type="checkbox"
+                          checked={subscriberFormData.categories.includes(category)}
+                          onChange={() => handleCategoryToggle(category)}
+                          style={{ margin: 0 }}
+                        />
+                        <span style={{ 
+                          fontSize: '0.875rem', 
+                          color: subscriberFormData.categories.includes(category) ? '#0ea5e9' : '#cbd5e1' 
+                        }}>
+                          {category}
+                        </span>
+                      </label>
+                    ))}
+                  </div>
+                  <small style={{ color: '#94a3b8', marginTop: '0.5rem', display: 'block' }}>
+                    Select the categories this subscriber is interested in
+                  </small>
+                </div>
+              </div>
+            </div>
+            <div className="modal-footer">
+              <Button variant="secondary" size="sm" onClick={() => setShowAddSubscriberModal(false)}>
+                Cancel
+              </Button>
+              <Button variant="primary" size="sm" onClick={handleCreateSubscriber}>
+                Add Subscriber
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* View User Modal */}
       {showViewUserModal && selectedUser && (
         <div className="modal-overlay" onClick={() => setShowViewUserModal(false)}>
@@ -1645,8 +1820,8 @@ export default function AdminUsers() {
                       <div className="timeline-title">Engagement Analysis</div>
                       <div className="timeline-date">Current Status</div>
                       <div className="timeline-desc">
-                        {selectedSubscriber.engagement_score >= 70 ? 'Highly engaged subscriber' :
-                         selectedSubscriber.engagement_score >= 40 ? 'Moderately engaged subscriber' :
+                        {(selectedSubscriber.engagement_score || 0) >= 70 ? 'Highly engaged subscriber' :
+                         (selectedSubscriber.engagement_score || 0) >= 40 ? 'Moderately engaged subscriber' :
                          'Low engagement - consider re-engagement campaign'}
                       </div>
                     </div>

@@ -78,6 +78,7 @@ export default function AdminSidebar() {
     { href: '/admin', icon: 'fas fa-chart-bar', label: 'Dashboard' },
     { href: '/admin/users', icon: 'fas fa-users', label: 'Users' },
     { href: '/admin/consultations', icon: 'fas fa-calendar-alt', label: 'Consultations' },
+    { href: '/admin/invoices', icon: 'fas fa-file-invoice', label: 'Invoices' },
     { href: '/admin/reports', icon: 'fas fa-chart-pie', label: 'Reports' },
   ];
 

@@ -43,19 +43,117 @@ export default function NewInvoicePage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Validate required fields
+    if (!formData.clientName.trim()) {
+      alert('Please enter client name');
+      return;
+    }
+    if (!formData.clientEmail.trim()) {
+      alert('Please enter client email');
+      return;
+    }
+    if (!formData.serviceType) {
+      alert('Please select service type');
+      return;
+    }
+    if (!formData.amount || parseFloat(formData.amount) <= 0) {
+      alert('Please enter a valid amount');
+      return;
+    }
+    if (!formData.dueDate) {
+      alert('Please select due date');
+      return;
+    }
+    
     setLoading(true);
     
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      // Prepare the invoice data
+      const invoiceData = {
+        client_name: formData.clientName,
+        client_email: formData.clientEmail,
+        client_phone: formData.clientPhone,
+        service_type: formData.serviceType,
+        service_description: formData.description,
+        amount: formData.amount,
+        payment_terms: formData.paymentTerms,
+        due_date: formData.dueDate,
+        status: 'sent',
+        payment_status: 'pending'
+      };
+
+      // Submit to API
+      const response = await fetch('/api/admin/invoices', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(invoiceData),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to create invoice');
+      }
+
+      const result = await response.json();
+      console.log('Invoice created:', result);
       
-      // Here you would typically send the data to your API
-      console.log('Invoice data:', formData);
-      
-      // Redirect back to dashboard or invoices list
-      router.push('/admin');
+      // Redirect to invoices list
+      router.push('/admin/invoices');
     } catch (error) {
-      console.error('Failed to generate invoice:', error);
+      console.error('Failed to create invoice:', error);
+      alert('Failed to create invoice. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSaveDraft = async () => {
+    // Validate required fields (less strict for drafts)
+    if (!formData.clientName.trim()) {
+      alert('Please enter client name to save draft');
+      return;
+    }
+    
+    setLoading(true);
+    
+    try {
+      // Prepare the invoice data
+      const invoiceData = {
+        client_name: formData.clientName,
+        client_email: formData.clientEmail,
+        client_phone: formData.clientPhone,
+        service_type: formData.serviceType,
+        service_description: formData.description,
+        amount: formData.amount || '0',
+        payment_terms: formData.paymentTerms,
+        due_date: formData.dueDate || new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+        status: 'draft',
+        payment_status: 'pending'
+      };
+
+      // Submit to API
+      const response = await fetch('/api/admin/invoices', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(invoiceData),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to save draft');
+      }
+
+      const result = await response.json();
+      console.log('Draft saved:', result);
+      
+      // Redirect to invoices list
+      router.push('/admin/invoices');
+    } catch (error) {
+      console.error('Failed to save draft:', error);
+      alert('Failed to save draft. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -233,8 +331,10 @@ export default function NewInvoicePage() {
                 type="button" 
                 variant="ghost" 
                 size="md"
+                onClick={handleSaveDraft}
+                disabled={loading}
               >
-                Save Draft
+                {loading ? 'Saving...' : 'Save Draft'}
               </Button>
               <Button 
                 type="submit" 

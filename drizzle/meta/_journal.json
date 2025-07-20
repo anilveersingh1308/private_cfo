@@ -22,6 +22,27 @@
       "when": 1753006523172,
       "tag": "0002_tan_ultimates",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1753031198976,
+      "tag": "0003_sturdy_morlocks",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1753039796191,
+      "tag": "0004_broken_maddog",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1753043288304,
+      "tag": "0005_windy_demogoblin",
+      "breakpoints": true
     }
   ]
 }

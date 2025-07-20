@@ -28,7 +28,9 @@ interface Consultation {
 
 export default function AdminConsultations() {
   const [consultations, setConsultations] = useState<Consultation[]>([]);
+  const [consultants, setConsultants] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [consultantsLoading, setConsultantsLoading] = useState(false);
   const [error, setError] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
   const [filterStatus, setFilterStatus] = useState<string>('all');
@@ -49,8 +51,8 @@ export default function AdminConsultations() {
     service_type: '',
     status: 'scheduled' as Consultation['status'],
     scheduled_date: '',
-    duration: 60,
-    amount: 0,
+    duration: '60',
+    amount: '',
     payment_status: 'pending' as Consultation['payment_status'],
     consultant: '',
     meeting_link: '',
@@ -59,86 +61,79 @@ export default function AdminConsultations() {
 
   useEffect(() => {
     fetchConsultations();
-  }, []);
+    fetchConsultants(); // Pre-load consultants when page loads
+  }, [filterStatus, filterService]);
 
   const fetchConsultations = async () => {
     try {
-      // Enhanced mock data for consultations
-      setConsultations([
-        {
-          id: 1,
-          client_name: 'Rajesh Kumar',
-          client_email: 'rajesh.kumar@email.com',
-          service_type: 'Financial Planning',
-          status: 'scheduled',
-          scheduled_date: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString(),
-          duration: 60,
-          amount: 5000,
-          payment_status: 'paid',
-          created_at: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
-          consultant: 'Dr. Sharma',
-          meeting_link: 'https://meet.google.com/abc-defg-hij'
-        },
-        {
-          id: 2,
-          client_name: 'Priya Patel',
-          client_email: 'priya.patel@email.com',
-          service_type: 'Tax Consulting',
-          status: 'completed',
-          scheduled_date: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
-          duration: 45,
-          amount: 3500,
-          payment_status: 'paid',
-          created_at: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
-          consultant: 'CA Verma',
-          notes: 'Discussed tax optimization strategies for FY 2024-25'
-        },
-        {
-          id: 3,
-          client_name: 'Amit Singh',
-          client_email: 'amit.singh@email.com',
-          service_type: 'Investment Advice',
-          status: 'ongoing',
-          scheduled_date: new Date().toISOString(),
-          duration: 90,
-          amount: 7500,
-          payment_status: 'paid',
-          created_at: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
-          consultant: 'Mr. Gupta',
-          meeting_link: 'https://zoom.us/j/123456789'
-        },
-        {
-          id: 4,
-          client_name: 'Sneha Reddy',
-          client_email: 'sneha.reddy@email.com',
-          service_type: 'Retirement Planning',
-          status: 'pending',
-          scheduled_date: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000).toISOString(),
-          duration: 60,
-          amount: 4500,
-          payment_status: 'pending',
-          created_at: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
-          consultant: 'Dr. Sharma'
-        },
-        {
-          id: 5,
-          client_name: 'Vikram Joshi',
-          client_email: 'vikram.joshi@email.com',
-          service_type: 'Business Consulting',
-          status: 'cancelled',
-          scheduled_date: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
-          duration: 120,
-          amount: 10000,
-          payment_status: 'failed',
-          created_at: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
-          consultant: 'Mr. Agarwal',
-          notes: 'Client requested cancellation due to scheduling conflict'
-        }
-      ]);
+      setLoading(true);
+      setError('');
+      
+      // Build query parameters
+      const params = new URLSearchParams();
+      if (filterStatus !== 'all') params.append('status', filterStatus);
+      if (filterService !== 'all') params.append('service_type', filterService);
+      
+      const response = await fetch(`/api/admin/consultations?${params.toString()}`);
+      
+      if (!response.ok) {
+        throw new Error('Failed to fetch consultations');
+      }
+      
+      const result = await response.json();
+      
+      if (!result.success) {
+        throw new Error(result.error || 'Failed to fetch consultations');
+      }
+      
+      // Transform API data to match interface
+      const transformedData: Consultation[] = result.data.map((item: any) => ({
+        id: item.id,
+        client_name: item.client_name,
+        client_email: item.client_email,
+        service_type: item.service_type,
+        status: item.status,
+        scheduled_date: item.scheduled_date,
+        duration: item.duration || 60,
+        amount: parseFloat(item.amount || '0'),
+        payment_status: item.payment_status,
+        created_at: item.created_at,
+        consultant: item.consultant,
+        meeting_link: item.meeting_link,
+        notes: item.notes
+      }));
+      
+      setConsultations(transformedData);
     } catch (err) {
-      setError('Failed to fetch consultations');
+      console.error('Error fetching consultations:', err);
+      setError(err instanceof Error ? err.message : 'Failed to fetch consultations');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchConsultants = async () => {
+    try {
+      setConsultantsLoading(true);
+      
+      const response = await fetch('/api/admin/consultants');
+      
+      if (!response.ok) {
+        throw new Error('Failed to fetch consultants');
+      }
+      
+      const result = await response.json();
+      
+      if (result.success) {
+        console.log('Fetched consultants:', result.data); // Debug log
+        setConsultants(result.data);
+      } else {
+        console.error('Failed to fetch consultants:', result.error);
+      }
+    } catch (err) {
+      console.error('Error fetching consultants:', err);
+    } finally {
+      setConsultantsLoading(false);
     }
   };
 
@@ -193,14 +188,16 @@ export default function AdminConsultations() {
       service_type: consultation.service_type,
       status: consultation.status,
       scheduled_date: consultation.scheduled_date,
-      duration: consultation.duration,
-      amount: consultation.amount,
+      duration: consultation.duration.toString(),
+      amount: consultation.amount.toString(),
       payment_status: consultation.payment_status,
       consultant: consultation.consultant || '',
       meeting_link: consultation.meeting_link || '',
       notes: consultation.notes || ''
     });
     setShowEditModal(true);
+    // Fetch consultants when modal opens
+    fetchConsultants();
   };
 
   const handleScheduleNew = () => {
@@ -210,14 +207,17 @@ export default function AdminConsultations() {
       service_type: 'Financial Planning',
       status: 'scheduled',
       scheduled_date: '',
-      duration: 60,
-      amount: 5000,
+      duration: '60',
+      amount: '5000',
       payment_status: 'pending',
       consultant: '',
       meeting_link: '',
       notes: ''
     });
     setShowScheduleModal(true);
+    // Fetch consultants when modal opens
+    console.log('Opening Schedule Modal, fetching consultants...');
+    fetchConsultants();
   };
 
   const handleJoinMeeting = (meetingLink: string) => {
@@ -235,27 +235,55 @@ export default function AdminConsultations() {
 
   const handleCreateConsultation = async () => {
     try {
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      const newConsultation: Consultation = {
-        id: Math.max(...consultations.map(c => c.id)) + 1,
-        client_name: formData.client_name,
-        client_email: formData.client_email,
-        service_type: formData.service_type,
-        status: formData.status,
-        scheduled_date: formData.scheduled_date,
-        duration: formData.duration,
-        amount: formData.amount,
-        payment_status: formData.payment_status,
-        consultant: formData.consultant,
-        meeting_link: formData.meeting_link,
-        notes: formData.notes,
-        created_at: new Date().toISOString()
-      };
+      // Validate required fields
+      if (!formData.client_name || !formData.client_email || !formData.service_type || 
+          !formData.scheduled_date || !formData.amount || !formData.consultant) {
+        alert('Please fill in all required fields including consultant selection.');
+        return;
+      }
 
-      setConsultations(prev => [newConsultation, ...prev]);
-      setShowScheduleModal(false);
-      console.log('Consultation created:', newConsultation);
+      const response = await fetch('/api/admin/consultations', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          client_name: formData.client_name,
+          client_email: formData.client_email,
+          service_type: formData.service_type,
+          scheduled_date: formData.scheduled_date,
+          duration: parseInt(formData.duration) || 60,
+          amount: parseFloat(formData.amount),
+          consultant: formData.consultant,
+          meeting_link: formData.meeting_link,
+          notes: formData.notes
+        })
+      });
+
+      const result = await response.json();
+      
+      if (result.success) {
+        // Refresh consultations list
+        await fetchConsultations();
+        setShowScheduleModal(false);
+        // Reset form
+        setFormData({
+          client_name: '',
+          client_email: '',
+          service_type: '',
+          status: 'scheduled',
+          scheduled_date: '',
+          duration: '60',
+          amount: '',
+          payment_status: 'pending',
+          consultant: '',
+          meeting_link: '',
+          notes: ''
+        });
+        console.log('Consultation created successfully:', result.data);
+      } else {
+        console.error('Failed to create consultation:', result.error);
+      }
     } catch (error) {
       console.error('Failed to create consultation:', error);
     }
@@ -265,29 +293,37 @@ export default function AdminConsultations() {
     if (!selectedConsultation) return;
     
     try {
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      const response = await fetch('/api/admin/consultations', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          id: selectedConsultation.id,
+          client_name: formData.client_name,
+          client_email: formData.client_email,
+          service_type: formData.service_type,
+          status: formData.status,
+          scheduled_date: formData.scheduled_date,
+          duration: parseInt(formData.duration) || 60,
+          amount: parseFloat(formData.amount),
+          payment_status: formData.payment_status,
+          consultant: formData.consultant,
+          meeting_link: formData.meeting_link,
+          notes: formData.notes
+        })
+      });
+
+      const result = await response.json();
       
-      setConsultations(prev => prev.map(consultation => 
-        consultation.id === selectedConsultation.id 
-          ? {
-              ...consultation,
-              client_name: formData.client_name,
-              client_email: formData.client_email,
-              service_type: formData.service_type,
-              status: formData.status,
-              scheduled_date: formData.scheduled_date,
-              duration: formData.duration,
-              amount: formData.amount,
-              payment_status: formData.payment_status,
-              consultant: formData.consultant,
-              meeting_link: formData.meeting_link,
-              notes: formData.notes
-            }
-          : consultation
-      ));
-      
-      setShowEditModal(false);
-      console.log('Consultation updated:', selectedConsultation.id);
+      if (result.success) {
+        // Refresh consultations list
+        await fetchConsultations();
+        setShowEditModal(false);
+        console.log('Consultation updated successfully:', result.data);
+      } else {
+        console.error('Failed to update consultation:', result.error);
+      }
     } catch (error) {
       console.error('Failed to update consultation:', error);
     }
@@ -297,16 +333,37 @@ export default function AdminConsultations() {
     if (!selectedConsultation) return;
     
     try {
-      await new Promise(resolve => setTimeout(resolve, 500));
+      const response = await fetch('/api/admin/consultations', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          id: selectedConsultation.id,
+          client_name: selectedConsultation.client_name,
+          client_email: selectedConsultation.client_email,
+          service_type: selectedConsultation.service_type,
+          status: selectedConsultation.status,
+          scheduled_date: selectedConsultation.scheduled_date,
+          duration: selectedConsultation.duration,
+          amount: selectedConsultation.amount,
+          payment_status: selectedConsultation.payment_status,
+          consultant: selectedConsultation.consultant,
+          meeting_link: selectedConsultation.meeting_link,
+          notes: formData.notes
+        })
+      });
+
+      const result = await response.json();
       
-      setConsultations(prev => prev.map(consultation => 
-        consultation.id === selectedConsultation.id 
-          ? { ...consultation, notes: formData.notes }
-          : consultation
-      ));
-      
-      setShowNotesModal(false);
-      console.log('Notes saved for consultation:', selectedConsultation.id);
+      if (result.success) {
+        // Refresh consultations list
+        await fetchConsultations();
+        setShowNotesModal(false);
+        console.log('Notes saved successfully for consultation:', selectedConsultation.id);
+      } else {
+        console.error('Failed to save notes:', result.error);
+      }
     } catch (error) {
       console.error('Failed to save notes:', error);
     }
@@ -632,13 +689,26 @@ export default function AdminConsultations() {
     <div className="admin-consultations">
       <PageHeader
         title="Consultation Management"
-        subtitle="Track and manage all consultation sessions"
+        subtitle={`Track and manage all consultation sessions • ${consultants.length} consultant${consultants.length !== 1 ? 's' : ''} available`}
         breadcrumb={[
           { label: 'Admin', href: '/admin' },
           { label: 'Consultations' }
         ]}
         actions={
-          <div style={{ display: 'flex', gap: '0.75rem' }}>
+          <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
+            {consultants.length > 0 && (
+              <span style={{ 
+                color: '#10b981', 
+                fontSize: '0.875rem', 
+                fontWeight: '500',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.25rem'
+              }}>
+                <i className="fas fa-users" style={{ fontSize: '0.75rem' }}></i>
+                {consultants.length} Active Consultant{consultants.length !== 1 ? 's' : ''}
+              </span>
+            )}
             <Button 
               variant="secondary" 
               size="sm" 
@@ -951,18 +1021,55 @@ export default function AdminConsultations() {
                   </select>
                 </div>
                 <div className="form-group">
-                  <label>Consultant</label>
+                  <label>Consultant *</label>
                   <select
                     name="consultant"
                     value={formData.consultant}
                     onChange={handleInputChange}
+                    disabled={consultantsLoading}
+                    className="consultant-select"
+                    required
                   >
-                    <option value="">Select Consultant</option>
-                    <option value="Dr. Sharma">Dr. Sharma</option>
-                    <option value="CA Verma">CA Verma</option>
-                    <option value="Mr. Gupta">Mr. Gupta</option>
-                    <option value="Mr. Agarwal">Mr. Agarwal</option>
+                    <option value="">
+                      {consultantsLoading ? 'Loading consultants...' : `Select Consultant (${consultants.length} available)`}
+                    </option>
+                    {consultants.map(consultant => (
+                      <option key={consultant.id} value={consultant.name}>
+                        {consultant.name} • Active: {consultant.stats.active} • Upcoming: {consultant.stats.upcoming} • Total: {consultant.stats.total}
+                      </option>
+                    ))}
                   </select>
+                  {consultants.length === 0 && !consultantsLoading && (
+                    <small style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.25rem' }}>
+                      ⚠️ No active consultants found. Please add consultant users first.
+                    </small>
+                  )}
+                  {consultantsLoading && (
+                    <small style={{ color: '#0ea5e9', fontSize: '0.75rem', marginTop: '0.25rem' }}>
+                      🔄 Loading consultant data...
+                    </small>
+                  )}
+                  {formData.consultant && consultants.length > 0 && (
+                    <div className="consultant-info">
+                      {(() => {
+                        const selectedConsultant = consultants.find(c => c.name === formData.consultant);
+                        if (selectedConsultant) {
+                          return (
+                            <div className="consultant-stats">
+                              <small>
+                                <strong>{selectedConsultant.name}</strong> - 
+                                Active: <span className="stat-badge active">{selectedConsultant.stats.active}</span>
+                                Upcoming: <span className="stat-badge upcoming">{selectedConsultant.stats.upcoming}</span>
+                                Completed: <span className="stat-badge completed">{selectedConsultant.stats.completed}</span>
+                                Total: <span className="stat-badge total">{selectedConsultant.stats.total}</span>
+                              </small>
+                            </div>
+                          );
+                        }
+                        return null;
+                      })()}
+                    </div>
+                  )}
                 </div>
                 <div className="form-group">
                   <label>Scheduled Date & Time *</label>
@@ -1106,18 +1213,55 @@ export default function AdminConsultations() {
                   </select>
                 </div>
                 <div className="form-group">
-                  <label>Consultant</label>
+                  <label>Consultant *</label>
                   <select
                     name="consultant"
                     value={formData.consultant}
                     onChange={handleInputChange}
+                    disabled={consultantsLoading}
+                    className="consultant-select"
+                    required
                   >
-                    <option value="">Select Consultant</option>
-                    <option value="Dr. Sharma">Dr. Sharma</option>
-                    <option value="CA Verma">CA Verma</option>
-                    <option value="Mr. Gupta">Mr. Gupta</option>
-                    <option value="Mr. Agarwal">Mr. Agarwal</option>
+                    <option value="">
+                      {consultantsLoading ? 'Loading consultants...' : `Select Consultant (${consultants.length} available)`}
+                    </option>
+                    {consultants.map(consultant => (
+                      <option key={consultant.id} value={consultant.name}>
+                        {consultant.name} • Active: {consultant.stats.active} • Upcoming: {consultant.stats.upcoming} • Total: {consultant.stats.total}
+                      </option>
+                    ))}
                   </select>
+                  {consultants.length === 0 && !consultantsLoading && (
+                    <small style={{ color: '#ef4444', fontSize: '0.75rem', marginTop: '0.25rem' }}>
+                      ⚠️ No active consultants found. Please add consultant users first.
+                    </small>
+                  )}
+                  {consultantsLoading && (
+                    <small style={{ color: '#0ea5e9', fontSize: '0.75rem', marginTop: '0.25rem' }}>
+                      🔄 Loading consultant data...
+                    </small>
+                  )}
+                  {formData.consultant && consultants.length > 0 && (
+                    <div className="consultant-info">
+                      {(() => {
+                        const selectedConsultant = consultants.find(c => c.name === formData.consultant);
+                        if (selectedConsultant) {
+                          return (
+                            <div className="consultant-stats">
+                              <small>
+                                <strong>{selectedConsultant.name}</strong> - 
+                                Active: <span className="stat-badge active">{selectedConsultant.stats.active}</span>
+                                Upcoming: <span className="stat-badge upcoming">{selectedConsultant.stats.upcoming}</span>
+                                Completed: <span className="stat-badge completed">{selectedConsultant.stats.completed}</span>
+                                Total: <span className="stat-badge total">{selectedConsultant.stats.total}</span>
+                              </small>
+                            </div>
+                          );
+                        }
+                        return null;
+                      })()}
+                    </div>
+                  )}
                 </div>
                 <div className="form-group">
                   <label>Scheduled Date & Time</label>
@@ -2371,6 +2515,65 @@ export default function AdminConsultations() {
           .details-grid {
             grid-template-columns: 1fr;
           }
+        }
+
+        /* Consultant Selection Styles */
+        .consultant-select {
+          font-family: 'Inter', sans-serif;
+        }
+
+        .consultant-info {
+          margin-top: 0.75rem;
+          padding: 0.75rem;
+          background: rgba(14, 165, 233, 0.05);
+          border-radius: 6px;
+          border: 1px solid rgba(14, 165, 233, 0.2);
+        }
+
+        .consultant-stats {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          flex-wrap: wrap;
+        }
+
+        .consultant-stats small {
+          color: #cbd5e1;
+          font-size: 0.75rem;
+          line-height: 1.4;
+        }
+
+        .stat-badge {
+          display: inline-block;
+          padding: 0.125rem 0.375rem;
+          border-radius: 4px;
+          font-weight: 600;
+          font-size: 0.6875rem;
+          margin: 0 0.25rem;
+        }
+
+        .stat-badge.active {
+          background: rgba(14, 165, 233, 0.2);
+          color: #0ea5e9;
+          border: 1px solid rgba(14, 165, 233, 0.3);
+        }
+
+        .stat-badge.upcoming {
+          background: rgba(249, 115, 22, 0.2);
+          color: #f97316;
+          border: 1px solid rgba(249, 115, 22, 0.3);
+        }
+
+        .stat-badge.completed {
+          background: rgba(34, 197, 94, 0.2);
+          color: #22c55e;
+          border: 1px solid rgba(34, 197, 94, 0.3);
+        }
+
+        .stat-badge.total {
+          background: rgba(168, 85, 247, 0.2);
+          color: #a855f7;
+          border: 1px solid rgba(168, 85, 247, 0.3);
         }
       `}</style>
     </div>
