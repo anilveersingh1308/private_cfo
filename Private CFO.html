@@ -1,0 +1,1327 @@
+<!DOCTYPE html>
+<!-- saved from url=(0039)http://127.0.0.1:5000/consultation-form -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Private CFO</title>
+    <link rel="stylesheet" href="./Private CFO_files/co_code.css">
+    
+    <link rel="stylesheet" href="./Private CFO_files/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com/">
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
+    <link href="./Private CFO_files/css2" rel="stylesheet">
+    <link href="./Private CFO_files/css2(1)" rel="stylesheet">
+    
+    
+        
+    
+        
+</head>
+<body class="">
+
+    <!-- Header -->
+    <header class="site-header">
+        <div class="container">
+            <a href="http://127.0.0.1:5000/" class="logo">Private <span class="logo-gradient">CFO</span></a>
+            <nav class="main-nav">
+                <ul>
+                    
+                        <li class=" ">
+                            
+                                <a href="http://127.0.0.1:5000/about-us">About</a>
+                            
+                        </li>
+                    
+                        <li class=" ">
+                            
+                                <a href="http://127.0.0.1:5000/why-us">Why us?</a>
+                            
+                        </li>
+                    
+                        <li class=" ">
+                            
+                                <a href="http://127.0.0.1:5000/calculator-intro">Calculator</a>
+                            
+                        </li>
+                    
+                        <li class=" has-submenu">
+                            
+                                <a href="http://127.0.0.1:5000/consultation-form#" class="dropdown-toggle">Services   <i class="fas fa-chevron-down"></i></a>
+                                <ul class="submenu">
+                                    
+                                        <li>
+                                            
+                                                <a href="http://127.0.0.1:5000/services?type=individual">Individual</a>
+                                            
+                                        </li>
+                                    
+                                        <li>
+                                            
+                                                <a href="http://127.0.0.1:5000/services?type=business">Business</a>
+                                            
+                                        </li>
+                                    
+                                </ul>
+                            
+                        </li>
+                    
+                </ul>
+            </nav>
+            <button class="menu-toggle" aria-label="Toggle menu">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </header>
+      
+
+    <style>
+        :root {
+    --bg-dark-blue: #0A1121;
+    --form-bg: rgba(22, 33, 58, 0.5);
+    --form-border: rgba(128, 128, 128, 0.2);
+    --primary-blue: linear-gradient(90deg,rgba(70, 199, 255, 0.88) 10%,rgb(0, 98, 196) 90%);
+    --text-white: #FFFFFF;
+    --text-light-gray: #B0B5C1;
+    --input-bg: #E8E8E8;
+    --highlight-yellow: #FFD700;
+    --footer-bg: #343A46;
+}
+
+
+.page-container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+    flex-grow: 1;
+}
+
+/* Main Content */
+.content-wrapper {
+    display: flex;
+    margin-top: 100px;
+    gap: 4rem;
+    padding: 2rem 0;
+}
+
+.intro-text {
+    flex: 1;
+    padding-right: 2rem;
+}
+
+.intro-text h1 {
+    font-size: 3.5rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+}
+
+.intro-text .highlight {
+    color: var(--highlight-yellow);
+}
+
+.intro-text h2 {
+    font-size: 2.5rem;
+    font-weight: 600;
+    line-height: 1.2;
+    margin-bottom: 2rem;
+}
+
+.intro-text p {
+    color: var(--text-light-gray);
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+/* Form */
+/* --- Form Styling to Match Reference Image --- */
+.form-container {
+    flex: 1;
+    background: rgba(22, 33, 58, 0.34);
+    padding: 2.5rem 2rem;
+    border-radius: 18px;
+    border: 1.5px solid rgba(128, 128, 128, 0.18);
+    box-shadow: 0 2px 24px 0 rgba(0,0,0,0.10);
+    max-width: 420px;
+    margin-left: auto;
+    margin-right: 0;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.form-group {
+    margin-bottom: 1.1rem;
+}
+
+.form-group label,
+.checkbox-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.3rem;
+    font-size: 0.98rem;
+    color: #b0c4d8;
+    background: none;
+    -webkit-background-clip: initial;
+    -webkit-text-fill-color: initial;
+    background-clip: initial;
+    text-fill-color: initial;
+    border: none;
+    letter-spacing: 0.01em;
+}
+
+.form-group input[type="text"],
+.form-group input[type="tel"],
+.form-group input[type="email"],
+.form-group input[type="number"],
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 0.45rem 0.7rem;
+    background: #f5f7fa;
+    border: none;
+    border-radius: 6px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.98rem;
+    color: #222;
+    margin-bottom: 0.1rem;
+    box-shadow: 0 1px 2px 0 rgba(0,0,0,0.03);
+    transition: box-shadow 0.2s;
+    resize: vertical;
+}
+
+.form-group input[type="text"]:focus,
+.form-group input[type="tel"]:focus,
+.form-group input[type="email"]:focus,
+.form-group input[type="number"]:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px #00B2FF33;
+}
+
+.form-group select {
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%2300B2FF' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 0.7rem center;
+    background-size: 16px 12px;
+}
+
+/* Form Validation Styles */
+.form-group input:invalid,
+.form-group select:invalid {
+    border: 1px solid #ff6b6b;
+}
+
+.form-group input:valid,
+.form-group select:valid {
+    border: 1px solid #28a745;
+}
+
+.error-message {
+    color: #ff6b6b;
+    font-size: 0.85rem;
+    margin-top: 0.25rem;
+    display: none;
+}
+
+.required-field::after {
+    content: " *";
+    color: #ff6b6b;
+    font-weight: bold;
+}
+
+/* Success message styling */
+.alert {
+    padding: 0.75rem 1rem;
+    border-radius: 6px;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.alert-success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.alert-error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.form-row {
+    display: flex;
+    gap: 1rem;
+}
+
+.form-row .form-group {
+    flex: 1;
+    margin-bottom: 0;
+}
+
+/* --- Advanced Checkbox Styling & Font Consistency --- */
+.checkbox-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+    font-size: 0.92rem;
+    color: #b0c4d8;
+}
+
+.checkbox-group input[type="checkbox"] {
+    width: 15px;
+    height: 15px;
+    accent-color: #00B2FF;
+    border-radius: 3px;
+    margin-right: 0.3rem;
+}
+
+.checkbox-group label {
+    margin-bottom: 0;
+    font-weight: 400;
+    font-size: 0.92rem;
+    color: #b0c4d8;
+    background: none;
+    -webkit-background-clip: initial;
+    -webkit-text-fill-color: initial;
+    background-clip: initial;
+    text-fill-color: initial;
+    cursor: pointer;
+    user-select: none;
+}
+
+.checkbox-group a {
+    color: #00B2FF;
+    text-decoration: underline;
+    font-size: 0.92rem;
+}
+
+/* Submit Button */
+/* --- Submit Button: Exact Match to Reference Image --- */
+.submit-btn {
+    width: 160px;
+    max-width: 100%;
+    display: block;
+    margin: 1.2rem auto 0 auto;
+    padding: 0.6rem 0;
+    background: linear-gradient(90deg, #00458a 0%, #0076c6 100%);
+    color: #fff;
+    border: none;
+    border-radius: 20px;
+    font-size: 1.08rem;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 2px 8px 0 rgba(0,178,255,0.08);
+    letter-spacing: 0.01em;
+    transition: transform 0.2s, box-shadow 0.2s;
+    text-align: center;
+}
+
+.submit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 169, 224, 0.13);
+}
+
+.form-row {
+    margin-bottom: 0.5rem;
+}
+
+/* Footer */
+.main-footer-bottom {
+    background-color: var(--footer-bg);
+    text-align: center;
+    padding: 1.5rem 0;
+    width: 100%;
+}
+
+.main-footer-bottom p {
+    color: var(--text-white);
+    font-size: 0.9rem;
+}
+
+
+/* --- Responsive Design --- */
+
+/* Tablet */
+@media (max-width: 992px) {
+    .page-container {
+        width: 95%;
+    }
+
+    .content-wrapper {
+        flex-direction: column;
+        gap: 3rem;
+    }
+
+    .intro-text {
+        padding-right: 0;
+        text-align: center;
+    }
+    
+    .intro-text h2 {
+        font-size: 2.2rem;
+    }
+
+    .form-container {
+        max-width: 100%;
+        margin: 0 auto;
+    }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    .intro-text h1 {
+        font-size: 3rem;
+    }
+
+    .intro-text h2 {
+        font-size: 1.8rem;
+    }
+
+    .intro-text p {
+        font-size: 0.95rem;
+    }
+
+    .form-container {
+        padding: 1.5rem 0.5rem;
+    }
+    
+    .form-row {
+        flex-direction: column;
+        gap: 0;
+    }
+    
+    .form-row .form-group {
+        margin-bottom: 1rem;
+    }
+}
+    </style>
+
+    <div class="container">
+        <main class="content-wrapper">
+            <section class="intro-text">
+                <h1>Welcome<span class="highlight">!</span></h1>
+                <h2>Let's Build a Stronger<br>Financial Future</h2>
+                <p>
+                    considering us as your strategic finance partner.
+                    Whether you're navigating growth, looking to raise
+                    capital, or need clarity on your financial operations,
+                    you're in the right place.
+                </p>
+                <p>
+                    Our Virtual CFOs work with startups, MSMEs, and
+                    scaling businesses to unlock efficiency, ensure
+                    compliance, and enable smart decision-making.
+                </p>
+                <p>
+                    Simply fill out the form and we'll schedule your free
+                    1-on-1 consultation with our expert team.
+                </p>
+            </section>
+
+            <section class="form-container">
+                
+                
+                <form action="http://127.0.0.1:5000/consultation-form" method="post" novalidate="">
+                    <input type="hidden" name="csrfmiddlewaretoken" value="4DMYTFBhi1S72UaWoGe218FlqiYJULEnMZTpi2CyNa5MX1ZtzQ7eXPwTzgGIiB8i">
+                    <div class="form-group">
+                        <label for="name" class="required-field">Name</label>
+                        <input type="text" id="name" name="name" required="" placeholder="Enter your full name" maxlength="100">
+                    </div>
+                    <div class="form-group">
+                        <label for="phone" class="required-field">Phone Number</label>
+                        <input type="tel" id="phone" name="phone" required="" placeholder="XXXXX XXXXX" pattern="[0-9\s]{10,11}" maxlength="11">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="age">Age</label>
+                            <input type="number" id="age" name="age" min="18" max="100" placeholder="25">
+                        </div>
+                        <div class="form-group">
+                            <label for="city" class="required-field">City</label>
+                            <select id="city" name="city" required="">
+                                
+                                    <option value="" disabled="" selected="">Select City</option>
+                                
+                                    <option value="mumbai">Mumbai</option>
+                                
+                                    <option value="delhi">Delhi</option>
+                                
+                                    <option value="bangalore">Bangalore</option>
+                                
+                                    <option value="hyderabad">Hyderabad</option>
+                                
+                                    <option value="chennai">Chennai</option>
+                                
+                                    <option value="kolkata">Kolkata</option>
+                                
+                                    <option value="pune">Pune</option>
+                                
+                                    <option value="ahmedabad">Ahmedabad</option>
+                                
+                                    <option value="jaipur">Jaipur</option>
+                                
+                                    <option value="surat">Surat</option>
+                                
+                                    <option value="lucknow">Lucknow</option>
+                                
+                                    <option value="kanpur">Kanpur</option>
+                                
+                                    <option value="nagpur">Nagpur</option>
+                                
+                                    <option value="indore">Indore</option>
+                                
+                                    <option value="thane">Thane</option>
+                                
+                                    <option value="bhopal">Bhopal</option>
+                                
+                                    <option value="visakhapatnam">Visakhapatnam</option>
+                                
+                                    <option value="pimpri_chinchwad">Pimpri-Chinchwad</option>
+                                
+                                    <option value="patna">Patna</option>
+                                
+                                    <option value="vadodara">Vadodara</option>
+                                
+                                    <option value="ghaziabad">Ghaziabad</option>
+                                
+                                    <option value="ludhiana">Ludhiana</option>
+                                
+                                    <option value="agra">Agra</option>
+                                
+                                    <option value="nashik">Nashik</option>
+                                
+                                    <option value="faridabad">Faridabad</option>
+                                
+                                    <option value="meerut">Meerut</option>
+                                
+                                    <option value="rajkot">Rajkot</option>
+                                
+                                    <option value="kalyan_dombivali">Kalyan-Dombivali</option>
+                                
+                                    <option value="vasai_virar">Vasai-Virar</option>
+                                
+                                    <option value="varanasi">Varanasi</option>
+                                
+                                    <option value="srinagar">Srinagar</option>
+                                
+                                    <option value="aurangabad">Aurangabad</option>
+                                
+                                    <option value="dhanbad">Dhanbad</option>
+                                
+                                    <option value="amritsar">Amritsar</option>
+                                
+                                    <option value="navi_mumbai">Navi Mumbai</option>
+                                
+                                    <option value="allahabad">Allahabad</option>
+                                
+                                    <option value="ranchi">Ranchi</option>
+                                
+                                    <option value="howrah">Howrah</option>
+                                
+                                    <option value="coimbatore">Coimbatore</option>
+                                
+                                    <option value="jabalpur">Jabalpur</option>
+                                
+                                    <option value="gwalior">Gwalior</option>
+                                
+                                    <option value="vijayawada">Vijayawada</option>
+                                
+                                    <option value="jodhpur">Jodhpur</option>
+                                
+                                    <option value="madurai">Madurai</option>
+                                
+                                    <option value="raipur">Raipur</option>
+                                
+                                    <option value="kota">Kota</option>
+                                
+                                    <option value="guwahati">Guwahati</option>
+                                
+                                    <option value="chandigarh">Chandigarh</option>
+                                
+                                    <option value="solapur">Solapur</option>
+                                
+                                    <option value="hubballi_dharwad">Hubballi-Dharwad</option>
+                                
+                                    <option value="tiruchirappalli">Tiruchirappalli</option>
+                                
+                                    <option value="bareilly">Bareilly</option>
+                                
+                                    <option value="mysore">Mysore</option>
+                                
+                                    <option value="tiruppur">Tiruppur</option>
+                                
+                                    <option value="gurgaon">Gurgaon</option>
+                                
+                                    <option value="aligarh">Aligarh</option>
+                                
+                                    <option value="jalandhar">Jalandhar</option>
+                                
+                                    <option value="bhubaneswar">Bhubaneswar</option>
+                                
+                                    <option value="salem">Salem</option>
+                                
+                                    <option value="warangal">Warangal</option>
+                                
+                                    <option value="mira_bhayandar">Mira-Bhayandar</option>
+                                
+                                    <option value="thiruvananthapuram">Thiruvananthapuram</option>
+                                
+                                    <option value="bhiwandi">Bhiwandi</option>
+                                
+                                    <option value="saharanpur">Saharanpur</option>
+                                
+                                    <option value="guntur">Guntur</option>
+                                
+                                    <option value="amravati">Amravati</option>
+                                
+                                    <option value="bikaner">Bikaner</option>
+                                
+                                    <option value="noida">Noida</option>
+                                
+                                    <option value="jamshedpur">Jamshedpur</option>
+                                
+                                    <option value="bhilai_nagar">Bhilai Nagar</option>
+                                
+                                    <option value="cuttack">Cuttack</option>
+                                
+                                    <option value="firozabad">Firozabad</option>
+                                
+                                    <option value="kochi">Kochi</option>
+                                
+                                    <option value="bhavnagar">Bhavnagar</option>
+                                
+                                    <option value="dehradun">Dehradun</option>
+                                
+                                    <option value="durgapur">Durgapur</option>
+                                
+                                    <option value="asansol">Asansol</option>
+                                
+                                    <option value="nanded_waghala">Nanded-Waghala</option>
+                                
+                                    <option value="kolhapur">Kolhapur</option>
+                                
+                                    <option value="ajmer">Ajmer</option>
+                                
+                                    <option value="akola">Akola</option>
+                                
+                                    <option value="gulbarga">Gulbarga</option>
+                                
+                                    <option value="jamnagar">Jamnagar</option>
+                                
+                                    <option value="ujjain">Ujjain</option>
+                                
+                                    <option value="loni">Loni</option>
+                                
+                                    <option value="siliguri">Siliguri</option>
+                                
+                                    <option value="jhansi">Jhansi</option>
+                                
+                                    <option value="ulhasnagar">Ulhasnagar</option>
+                                
+                                    <option value="nellore">Nellore</option>
+                                
+                                    <option value="jammu">Jammu</option>
+                                
+                                    <option value="sangli_miraj_kupwad">Sangli-Miraj-Kupwad</option>
+                                
+                                    <option value="belgaum">Belgaum</option>
+                                
+                                    <option value="mangalore">Mangalore</option>
+                                
+                                    <option value="ambattur">Ambattur</option>
+                                
+                                    <option value="tirunelveli">Tirunelveli</option>
+                                
+                                    <option value="malegaon">Malegaon</option>
+                                
+                                    <option value="gaya">Gaya</option>
+                                
+                                    <option value="jalgaon">Jalgaon</option>
+                                
+                                    <option value="udaipur">Udaipur</option>
+                                
+                                    <option value="maheshtala">Maheshtala</option>
+                                
+                                    <option value="other">Other</option>
+                                
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="occupation" class="required-field">Occupation</label>
+                        <select id="occupation" name="occupation" required="">
+                            
+                                <option value="" disabled="" selected="">Select Occupation</option>
+                            
+                                <option value="student">Student</option>
+                            
+                                <option value="salaried_employee">Salaried Employee</option>
+                            
+                                <option value="business_owner">Business Owner</option>
+                            
+                                <option value="entrepreneur">Entrepreneur</option>
+                            
+                                <option value="freelancer">Freelancer</option>
+                            
+                                <option value="consultant">Consultant</option>
+                            
+                                <option value="professional">Professional (Doctor, Lawyer, CA, etc.)</option>
+                            
+                                <option value="government_employee">Government Employee</option>
+                            
+                                <option value="teacher_professor">Teacher/Professor</option>
+                            
+                                <option value="engineer">Engineer</option>
+                            
+                                <option value="software_developer">Software Developer</option>
+                            
+                                <option value="manager">Manager/Executive</option>
+                            
+                                <option value="sales_marketing">Sales &amp; Marketing</option>
+                            
+                                <option value="finance_banking">Finance &amp; Banking</option>
+                            
+                                <option value="healthcare">Healthcare Professional</option>
+                            
+                                <option value="creative_artist">Creative/Artist</option>
+                            
+                                <option value="real_estate">Real Estate</option>
+                            
+                                <option value="manufacturing">Manufacturing</option>
+                            
+                                <option value="retail">Retail</option>
+                            
+                                <option value="hospitality">Hospitality</option>
+                            
+                                <option value="transportation">Transportation</option>
+                            
+                                <option value="agriculture">Agriculture</option>
+                            
+                                <option value="retired">Retired</option>
+                            
+                                <option value="homemaker">Homemaker</option>
+                            
+                                <option value="unemployed">Unemployed</option>
+                            
+                                <option value="other">Other</option>
+                            
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="guidance">Service Interested In</label>
+                        <select id="guidance" name="guidance">
+                            
+                                <option value="" disabled="" selected="">What type of service are you interested in?</option>
+                            
+                                <option value="individual_financial_planning">Individual Financial Planning</option>
+                            
+                                <option value="tax_planning_filing">Tax Planning &amp; Filing</option>
+                            
+                                <option value="investment_advisory">Investment Advisory</option>
+                            
+                                <option value="retirement_planning">Retirement Planning</option>
+                            
+                                <option value="debt_management">Debt Management</option>
+                            
+                                <option value="business_cfo_services">Business/Virtual CFO Services</option>
+                            
+                                <option value="startup_financial_planning">Startup Financial Planning</option>
+                            
+                                <option value="fundraising_support">Fundraising Support</option>
+                            
+                                <option value="compliance_reporting">Compliance &amp; Reporting</option>
+                            
+                                <option value="financial_analysis">Financial Analysis</option>
+                            
+                                <option value="estate_planning">Estate Planning</option>
+                            
+                                <option value="insurance_review">Insurance Portfolio Review</option>
+                            
+                                <option value="other">Other</option>
+                            
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="industry">Industry</label>
+                        <select id="industry" name="industry">
+                            
+                                <option value="" disabled="" selected="">Select Industry</option>
+                            
+                                <option value="technology">Technology &amp; Software</option>
+                            
+                                <option value="finance_banking">Finance &amp; Banking</option>
+                            
+                                <option value="healthcare">Healthcare &amp; Pharmaceuticals</option>
+                            
+                                <option value="education">Education &amp; Training</option>
+                            
+                                <option value="manufacturing">Manufacturing</option>
+                            
+                                <option value="retail_ecommerce">Retail &amp; E-commerce</option>
+                            
+                                <option value="real_estate">Real Estate &amp; Construction</option>
+                            
+                                <option value="hospitality_tourism">Hospitality &amp; Tourism</option>
+                            
+                                <option value="transportation_logistics">Transportation &amp; Logistics</option>
+                            
+                                <option value="agriculture_food">Agriculture &amp; Food Processing</option>
+                            
+                                <option value="energy_utilities">Energy &amp; Utilities</option>
+                            
+                                <option value="telecommunications">Telecommunications</option>
+                            
+                                <option value="media_entertainment">Media &amp; Entertainment</option>
+                            
+                                <option value="automotive">Automotive</option>
+                            
+                                <option value="aerospace_defense">Aerospace &amp; Defense</option>
+                            
+                                <option value="chemicals_materials">Chemicals &amp; Materials</option>
+                            
+                                <option value="textiles_apparel">Textiles &amp; Apparel</option>
+                            
+                                <option value="mining_metals">Mining &amp; Metals</option>
+                            
+                                <option value="consulting">Consulting Services</option>
+                            
+                                <option value="legal_services">Legal Services</option>
+                            
+                                <option value="government_public">Government &amp; Public Sector</option>
+                            
+                                <option value="non_profit">Non-Profit &amp; NGO</option>
+                            
+                                <option value="sports_fitness">Sports &amp; Fitness</option>
+                            
+                                <option value="beauty_wellness">Beauty &amp; Wellness</option>
+                            
+                                <option value="environmental">Environmental Services</option>
+                            
+                                <option value="research_development">Research &amp; Development</option>
+                            
+                                <option value="insurance">Insurance</option>
+                            
+                                <option value="advertising_marketing">Advertising &amp; Marketing</option>
+                            
+                                <option value="architecture_design">Architecture &amp; Design</option>
+                            
+                                <option value="other">Other</option>
+                            
+                        </select>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="income">Annual Income</label>
+                            <select id="income" name="income">
+                                
+                                    <option value="" disabled="" selected="">Select Income Range</option>
+                                
+                                    <option value="below_3_lakh">Below ₹3 Lakh</option>
+                                
+                                    <option value="3_5_lakh">₹3 - ₹5 Lakh</option>
+                                
+                                    <option value="5_10_lakh">₹5 - ₹10 Lakh</option>
+                                
+                                    <option value="10_15_lakh">₹10 - ₹15 Lakh</option>
+                                
+                                    <option value="15_25_lakh">₹15 - ₹25 Lakh</option>
+                                
+                                    <option value="25_50_lakh">₹25 - ₹50 Lakh</option>
+                                
+                                    <option value="50_1_crore">₹50 Lakh - ₹1 Crore</option>
+                                
+                                    <option value="1_2_crore">₹1 - ₹2 Crore</option>
+                                
+                                    <option value="2_5_crore">₹2 - ₹5 Crore</option>
+                                
+                                    <option value="above_5_crore">Above ₹5 Crore</option>
+                                
+                                    <option value="prefer_not_to_say">Prefer not to say</option>
+                                
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="preferred_communication">Preferred Contact</label>
+                            <select id="preferred_communication" name="preferred_communication">
+                                
+                                    <option value="" disabled="" selected="">Preferred Communication Method</option>
+                                
+                                    <option value="phone">Phone Call</option>
+                                
+                                    <option value="email">Email</option>
+                                
+                                    <option value="video_call">Video Call</option>
+                                
+                                    <option value="whatsapp">WhatsApp</option>
+                                
+                                    <option value="in_person">In-Person Meeting</option>
+                                
+                                    <option value="no_preference">No Preference</option>
+                                
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="consultation_timing">Preferred Consultation Time</label>
+                        <select id="consultation_timing" name="consultation_timing">
+                            
+                                <option value="" disabled="" selected="">Preferred Consultation Time</option>
+                            
+                                <option value="morning_9_12">Morning (9 AM - 12 PM)</option>
+                            
+                                <option value="afternoon_12_4">Afternoon (12 PM - 4 PM)</option>
+                            
+                                <option value="evening_4_7">Evening (4 PM - 7 PM)</option>
+                            
+                                <option value="night_7_9">Evening (7 PM - 9 PM)</option>
+                            
+                                <option value="weekend">Weekend</option>
+                            
+                                <option value="flexible">Flexible</option>
+                            
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="email" class="required-field">Email</label>
+                        <input type="email" id="email" name="email" required="" placeholder="your.email@example.com" maxlength="100">
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Additional Message (Optional)</label>
+                        <textarea id="message" name="message" rows="3" placeholder="Tell us more about your financial goals or specific questions..." maxlength="500"></textarea>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="privacy" name="privacy" required="">
+                        <label for="privacy" class="required-field">I have read and agree to the <a href="http://127.0.0.1:5000/consultation-form#" target="_blank">Privacy Policy</a></label>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="not-job" name="not_job" required="">
+                        <label for="not-job" class="required-field">I confirm this is not a job application.</label>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="marketing" name="marketing_consent">
+                        <label for="marketing">I agree to receive marketing communications and updates about services.</label>
+                    </div>
+
+                    <button type="submit" class="submit-btn">Schedule Consultation</button>
+                </form>
+            </section>
+        </main>
+    </div>
+    
+
+    <script>
+        // Form validation and enhancement
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.querySelector('form');
+            const phoneInput = document.getElementById('phone');
+            const emailInput = document.getElementById('email');
+            const nameInput = document.getElementById('name');
+            
+            // Phone number formatting
+            phoneInput.addEventListener('input', function(e) {
+                let value = e.target.value.replace(/\D/g, '');
+                if (value.length > 10) {
+                    value = value.substring(0, 10);
+                }
+                if (value.length >= 6) {
+                    value = value.replace(/(\d{5})(\d{5})/, '$1 $2');
+                } else if (value.length >= 1) {
+                    value = value.replace(/(\d{5})/, '$1');
+                }
+                e.target.value = value;
+            });
+            
+            // Name validation (only letters and spaces)
+            nameInput.addEventListener('input', function(e) {
+                e.target.value = e.target.value.replace(/[^a-zA-Z\s]/g, '');
+            });
+            
+            // Email validation feedback
+            emailInput.addEventListener('blur', function(e) {
+                const email = e.target.value;
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (email && !emailRegex.test(email)) {
+                    e.target.style.borderColor = '#ff6b6b';
+                } else if (email) {
+                    e.target.style.borderColor = '#28a745';
+                }
+            });
+            
+            // Form submission validation
+            form.addEventListener('submit', function(e) {
+                const requiredFields = form.querySelectorAll('[required]');
+                let isValid = true;
+                
+                requiredFields.forEach(field => {
+                    if (!field.value.trim()) {
+                        field.style.borderColor = '#ff6b6b';
+                        isValid = false;
+                    } else {
+                        field.style.borderColor = '#28a745';
+                    }
+                });
+                
+                if (!isValid) {
+                    e.preventDefault();
+                    alert('Please fill in all required fields.');
+                }
+            });
+            
+            // Auto-hide success messages after 5 seconds
+            const successAlerts = document.querySelectorAll('.alert-success');
+            successAlerts.forEach(alert => {
+                setTimeout(() => {
+                    alert.style.transition = 'opacity 0.5s';
+                    alert.style.opacity = '0';
+                    setTimeout(() => alert.remove(), 500);
+                }, 5000);
+            });
+        });
+    </script>
+
+
+
+    
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-content">
+                <!-- Newsletter Subscription -->
+                <div class="footer-section newsletter-section">
+                    <h3>Stay Updated with Financial Insights</h3>
+                    <p>Get expert tips, market updates, and exclusive financial guidance delivered to your inbox.</p>
+                    <form class="newsletter-form" id="newsletter-form" action="http://127.0.0.1:5000/api/newsletter/subscribe" method="POST">
+                        <input type="hidden" name="csrfmiddlewaretoken" value="4DMYTFBhi1S72UaWoGe218FlqiYJULEnMZTpi2CyNa5MX1ZtzQ7eXPwTzgGIiB8i">
+                        <div class="input-group">
+                            <input type="email" name="email" placeholder="Enter your email address" required="">
+                            <button type="submit" class="subscribe-btn">
+                                <i class="fas fa-paper-plane"></i>
+                                Subscribe Now
+                            </button>
+                        </div>
+                        <div class="newsletter-categories">
+                            
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="categories" value="all" checked="">
+                                    <span class="checkmark"></span>
+                                    All Updates
+                                </label>
+                            
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="categories" value="financial_tips">
+                                    <span class="checkmark"></span>
+                                    Financial Tips
+                                </label>
+                            
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="categories" value="market_updates">
+                                    <span class="checkmark"></span>
+                                    Market Updates
+                                </label>
+                            
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="categories" value="tax_planning">
+                                    <span class="checkmark"></span>
+                                    Tax Planning
+                                </label>
+                            
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="categories" value="investment_insights">
+                                    <span class="checkmark"></span>
+                                    Investment Insights
+                                </label>
+                            
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="categories" value="business_finance">
+                                    <span class="checkmark"></span>
+                                    Business Finance
+                                </label>
+                            
+                        </div>
+                        <div class="newsletter-message" id="newsletter-message" style="display: none;"></div>
+                    </form>
+                </div>
+
+                <!-- Company Information -->
+                <div class="footer-section company-section">
+                    <div class="company-info">
+                        <h3>Private CFO CLUB</h3>
+                        <p class="tagline">SMART MONEY MANAGEMENT</p>
+                        <p class="parent-company">(Unit of GIGAFACTORY INNOVATIONS)</p>
+                        
+                        <div class="address">
+                            <h4><i class="fas fa-map-marker-alt"></i> Our Address</h4>
+                            <p>B-80, SECTOR-65, NOIDA</p>
+                            <p>UP-201301</p>
+                            <p><i class="fas fa-phone"></i> +91-XXXXXXXXXX</p>
+                            <p><i class="fas fa-envelope"></i> info@privatecfo.com</p>
+                        </div>
+
+                        <div class="social-media">
+                            <h4>Follow Us</h4>
+                            <div class="social-links">
+                                <a href="http://127.0.0.1:5000/consultation-form#" target="_blank" aria-label="Facebook">
+                                    <i class="fab fa-facebook-f"></i>
+                                </a>
+                                <a href="http://127.0.0.1:5000/consultation-form#" target="_blank" aria-label="Twitter">
+                                    <i class="fab fa-twitter"></i>
+                                </a>
+                                <a href="http://127.0.0.1:5000/consultation-form#" target="_blank" aria-label="LinkedIn">
+                                    <i class="fab fa-linkedin-in"></i>
+                                </a>
+                                <a href="http://127.0.0.1:5000/consultation-form#" target="_blank" aria-label="Instagram">
+                                    <i class="fab fa-instagram"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Map Section -->
+                <div class="footer-section map-section">
+                    <h3>Find Us</h3>
+                    <div class="map-container">
+                        <iframe src="./Private CFO_files/embed.html" width="100%" height="250" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Private CFO Office Location - Sector 65, Noida">
+                        </iframe>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer Bottom -->
+            <div class="footer-bottom">
+                <div class="footer-links">
+                    
+                        <a href="http://127.0.0.1:5000/consultation-form#">Privacy Policy</a>
+                    
+                        <a href="http://127.0.0.1:5000/consultation-form#">Terms of Service</a>
+                    
+                        <a href="http://127.0.0.1:5000/consultation-form#">Contact Us</a>
+                    
+                </div>
+                <p class="copyright">© 2025 | Private CFO | All rights reserved</p>
+            </div>
+        </div>
+    </footer>
+        
+    <script src="./Private CFO_files/code.js.download"></script>
+    
+    <script>
+        // Mobile menu toggle functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const menuToggle = document.querySelector('.menu-toggle');
+            const mainNav = document.querySelector('.main-nav');
+            const dropdownToggles = document.querySelectorAll('.dropdown-toggle');
+            
+            // Mobile menu toggle
+            if (menuToggle && mainNav) {
+                menuToggle.addEventListener('click', function() {
+                    mainNav.classList.toggle('active');
+                    
+                    // Toggle between hamburger and close icon
+                    const icon = this.querySelector('i');
+                    if (mainNav.classList.contains('active')) {
+                        icon.classList.remove('fa-bars');
+                        icon.classList.add('fa-times');
+                    } else {
+                        icon.classList.remove('fa-times');
+                        icon.classList.add('fa-bars');
+                        
+                        // Close all submenus when closing main menu
+                        const activeItems = mainNav.querySelectorAll('.has-submenu.active');
+                        activeItems.forEach(item => {
+                            item.classList.remove('active');
+                        });
+                    }
+                });
+                
+                // Handle dropdown toggles on mobile
+                dropdownToggles.forEach(toggle => {
+                    toggle.addEventListener('click', function(e) {
+                        // Only prevent default and toggle on mobile
+                        if (window.innerWidth <= 768) {
+                            e.preventDefault();
+                            const parentItem = this.closest('.has-submenu');
+                            
+                            // Close other open submenus
+                            const otherActiveItems = mainNav.querySelectorAll('.has-submenu.active');
+                            otherActiveItems.forEach(item => {
+                                if (item !== parentItem) {
+                                    item.classList.remove('active');
+                                }
+                            });
+                            
+                            // Toggle current submenu
+                            parentItem.classList.toggle('active');
+                        }
+                    });
+                });
+                
+                // Close menu when clicking outside
+                document.addEventListener('click', function(e) {
+                    if (!mainNav.contains(e.target) && !menuToggle.contains(e.target)) {
+                        mainNav.classList.remove('active');
+                        const icon = menuToggle.querySelector('i');
+                        icon.classList.remove('fa-times');
+                        icon.classList.add('fa-bars');
+                        
+                        // Close all submenus
+                        const activeItems = mainNav.querySelectorAll('.has-submenu.active');
+                        activeItems.forEach(item => {
+                            item.classList.remove('active');
+                        });
+                    }
+                });
+                
+                // Close menu when window is resized to desktop size
+                window.addEventListener('resize', function() {
+                    if (window.innerWidth > 768) {
+                        mainNav.classList.remove('active');
+                        const icon = menuToggle.querySelector('i');
+                        icon.classList.remove('fa-times');
+                        icon.classList.add('fa-bars');
+                        
+                        // Close all submenus
+                        const activeItems = mainNav.querySelectorAll('.has-submenu.active');
+                        activeItems.forEach(item => {
+                            item.classList.remove('active');
+                        });
+                    }
+                });
+            }
+        });
+
+        // Enhanced Newsletter subscription form handler
+        document.addEventListener('DOMContentLoaded', function() {
+            const newsletterForm = document.getElementById('newsletter-form');
+            
+            if (newsletterForm) {
+                // Add form validation
+                const emailInput = newsletterForm.querySelector('input[type="email"]');
+                const submitBtn = newsletterForm.querySelector('.subscribe-btn');
+                const messageDiv = document.getElementById('newsletter-message');
+                
+                // Email validation function
+                function validateEmail(email) {
+                    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    return re.test(email);
+                }
+                
+                // Real-time email validation
+                if (emailInput) {
+                    emailInput.addEventListener('input', function() {
+                        const email = this.value.trim();
+                        if (email && !validateEmail(email)) {
+                            this.setCustomValidity('Please enter a valid email address');
+                        } else {
+                            this.setCustomValidity('');
+                        }
+                    });
+                }
+                
+                // Form submission handler
+                newsletterForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    const form = this;
+                    const formData = new FormData(form);
+                    const email = formData.get('email');
+                    const categories = formData.getAll('categories');
+                    
+                    // Validate email before submission
+                    if (!email || !validateEmail(email)) {
+                        showMessage('Please enter a valid email address.', 'error');
+                        return;
+                    }
+                    
+                    // Show loading state
+                    setLoadingState(true);
+                    
+                    // Get CSRF token
+                    const csrfToken = form.querySelector('[name=csrfmiddlewaretoken]').value;
+                    
+                    // Submit form
+                    fetch(form.action, {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'X-CSRFToken': csrfToken
+                        }
+                    })
+                    .then(response => {
+                        return response.json().then(data => {
+                            // Always use the exact message from the backend
+                            if (response.ok && data.success) {
+                                showMessage(data.message, 'success');
+                                form.reset();
+                                
+                                // Optional: Track successful subscription
+                                if (typeof gtag !== 'undefined') {
+                                    gtag('event', 'newsletter_subscribe', {
+                                        'event_category': 'engagement',
+                                        'event_label': 'footer_form'
+                                    });
+                                }
+                            } else {
+                                // Display exact error message from backend
+                                showMessage(data.message || 'Subscription failed. Please try again or try again with another email.', 'error');
+                            }
+                        });
+                    })
+                    .catch(error => {
+                        console.error('Newsletter subscription error:', error);
+                        // Only show generic message if no server response
+                        showMessage('Network error. Please check your connection and try again.', 'error');
+                    })
+                    .finally(() => {
+                        setLoadingState(false);
+                    });
+                });
+                
+                // Helper function to show messages
+                function showMessage(message, type) {
+                    if (messageDiv) {
+                        messageDiv.style.display = 'block';
+                        messageDiv.className = `newsletter-message ${type}`;
+                        messageDiv.innerHTML = `
+                            <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i> 
+                            ${message}
+                        `;
+                        
+                        // Auto-hide success messages after 5 seconds
+                        if (type === 'success') {
+                            setTimeout(() => {
+                                messageDiv.style.display = 'none';
+                            }, 5000);
+                        }
+                    }
+                }
+                
+                // Helper function to manage loading state
+                function setLoadingState(isLoading) {
+                    if (submitBtn) {
+                        submitBtn.disabled = isLoading;
+                        if (isLoading) {
+                            submitBtn.dataset.originalText = submitBtn.innerHTML;
+                            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Subscribing...';
+                        } else {
+                            submitBtn.innerHTML = submitBtn.dataset.originalText || submitBtn.innerHTML;
+                        }
+                    }
+                }
+                
+                // Clear message when user starts typing
+                if (emailInput) {
+                    emailInput.addEventListener('focus', function() {
+                        if (messageDiv) {
+                            messageDiv.style.display = 'none';
+                        }
+                    });
+                }
+            }
+        });
+    </script>
+
+</body></html>

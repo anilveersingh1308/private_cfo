@@ -1,0 +1,94 @@
+/* --- CSS VARIABLES & BASIC SETUP --- */
+:root {
+    --color-card-bg: #161726;
+    --color-cta-card-bg: #0f172a;
+    --color-card-border: rgba(255, 255, 255, 0.1);
+}
+
+/* --- GRADIENT TEXT UTILITIES --- */
+.gradient-text-sip, .gradient-text-lumpsum, .gradient-text-fd, .gradient-text-mutual, .gradient-text-simple, .gradient-text-compound, .gradient-text-cta-heading {
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    display: inline-block;
+}
+
+.gradient-text-sip { background-image: var(--gradient-sip); }
+.gradient-text-lumpsum { background-image: var(--gradient-lumpsum); }
+.gradient-text-fd { background-image: var(--gradient-purple-pink); }
+.gradient-text-mutual { background-image: var(--gradient-mutual); }
+.gradient-text-simple { background-image: var(--gradient-teal); }
+.gradient-text-compound { background-image: var(--gradient-compound); }
+.gradient-text-cta-heading { background-image: var(--gradient-yellow); }
+
+/* --- HERO SECTION --- */
+
+.hero-calculators {
+     background-image: url('../assets/cal_intro_hero_image.png');
+     background-size: cover;
+     background-position: center;
+}
+
+/* --- CALCULATORS SECTION --- */
+.calculators-section {
+    padding: 4rem 0;
+}
+
+.calculators-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2.5rem;
+}
+
+.calculator-card {
+    background-color: var(--color-card-bg);
+    border: 1px solid var(--color-card-border);
+    padding: 2.5rem 2rem;
+    border-radius: 1rem;
+    transition: transform 0.3s ease, border-color 0.3s ease;
+    font-family: var(--font-primary) !important;
+}
+
+.calculator-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--color-active-link);
+}
+
+.calculator-card h3 {
+    margin-bottom: 1rem;
+}
+
+.calculator-card p {
+    margin-bottom: 0;
+    font-size: 1rem;
+    font-weight: 400 !important;
+    color: #a0a0a0;
+}
+
+/* --- RESPONSIVE DESIGN --- */
+
+@media (max-width: 992px) {
+    h1 { font-size: 3rem; }
+    h2 { font-size: 2rem; }
+    h3 { font-size: 1.6rem; }
+    .calculators-grid { gap: 1.5rem; }
+    .cta-section .cta-bottom {
+        flex-direction: column;
+    }
+    .cta-section h2, .cta-section p {width: 100%;}
+    .cta-section p, .calculators-section p { text-align: justify;}
+}
+
+@media (max-width: 768px) {
+    .calculators-grid {
+        grid-template-columns: 1fr;
+    }
+    .cta-card {
+        padding: 2rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .cta-card h3 { font-size: 1.3rem; }
+    
+}
