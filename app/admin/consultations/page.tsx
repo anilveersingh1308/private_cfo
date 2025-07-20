@@ -34,6 +34,28 @@ export default function AdminConsultations() {
   const [filterStatus, setFilterStatus] = useState<string>('all');
   const [filterService, setFilterService] = useState<string>('all');
   const [dateRange, setDateRange] = useState<string>('all');
+  
+  // Modal states
+  const [showViewModal, setShowViewModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [showScheduleModal, setShowScheduleModal] = useState(false);
+  const [showNotesModal, setShowNotesModal] = useState(false);
+  const [showStatsModal, setShowStatsModal] = useState(false);
+  const [selectedStatsType, setSelectedStatsType] = useState<string>('');
+  const [selectedConsultation, setSelectedConsultation] = useState<Consultation | null>(null);
+  const [formData, setFormData] = useState({
+    client_name: '',
+    client_email: '',
+    service_type: '',
+    status: 'scheduled' as Consultation['status'],
+    scheduled_date: '',
+    duration: 60,
+    amount: 0,
+    payment_status: 'pending' as Consultation['payment_status'],
+    consultant: '',
+    meeting_link: '',
+    notes: ''
+  });
 
   useEffect(() => {
     fetchConsultations();
@@ -157,9 +179,189 @@ export default function AdminConsultations() {
     }).format(amount);
   };
 
+  // Action handlers
+  const handleViewConsultation = (consultation: Consultation) => {
+    setSelectedConsultation(consultation);
+    setShowViewModal(true);
+  };
+
+  const handleEditConsultation = (consultation: Consultation) => {
+    setSelectedConsultation(consultation);
+    setFormData({
+      client_name: consultation.client_name,
+      client_email: consultation.client_email,
+      service_type: consultation.service_type,
+      status: consultation.status,
+      scheduled_date: consultation.scheduled_date,
+      duration: consultation.duration,
+      amount: consultation.amount,
+      payment_status: consultation.payment_status,
+      consultant: consultation.consultant || '',
+      meeting_link: consultation.meeting_link || '',
+      notes: consultation.notes || ''
+    });
+    setShowEditModal(true);
+  };
+
+  const handleScheduleNew = () => {
+    setFormData({
+      client_name: '',
+      client_email: '',
+      service_type: 'Financial Planning',
+      status: 'scheduled',
+      scheduled_date: '',
+      duration: 60,
+      amount: 5000,
+      payment_status: 'pending',
+      consultant: '',
+      meeting_link: '',
+      notes: ''
+    });
+    setShowScheduleModal(true);
+  };
+
+  const handleJoinMeeting = (meetingLink: string) => {
+    window.open(meetingLink, '_blank');
+  };
+
+  const handleAddNotes = (consultation: Consultation) => {
+    setSelectedConsultation(consultation);
+    setFormData(prev => ({
+      ...prev,
+      notes: consultation.notes || ''
+    }));
+    setShowNotesModal(true);
+  };
+
+  const handleCreateConsultation = async () => {
+    try {
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      const newConsultation: Consultation = {
+        id: Math.max(...consultations.map(c => c.id)) + 1,
+        client_name: formData.client_name,
+        client_email: formData.client_email,
+        service_type: formData.service_type,
+        status: formData.status,
+        scheduled_date: formData.scheduled_date,
+        duration: formData.duration,
+        amount: formData.amount,
+        payment_status: formData.payment_status,
+        consultant: formData.consultant,
+        meeting_link: formData.meeting_link,
+        notes: formData.notes,
+        created_at: new Date().toISOString()
+      };
+
+      setConsultations(prev => [newConsultation, ...prev]);
+      setShowScheduleModal(false);
+      console.log('Consultation created:', newConsultation);
+    } catch (error) {
+      console.error('Failed to create consultation:', error);
+    }
+  };
+
+  const handleUpdateConsultation = async () => {
+    if (!selectedConsultation) return;
+    
+    try {
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      setConsultations(prev => prev.map(consultation => 
+        consultation.id === selectedConsultation.id 
+          ? {
+              ...consultation,
+              client_name: formData.client_name,
+              client_email: formData.client_email,
+              service_type: formData.service_type,
+              status: formData.status,
+              scheduled_date: formData.scheduled_date,
+              duration: formData.duration,
+              amount: formData.amount,
+              payment_status: formData.payment_status,
+              consultant: formData.consultant,
+              meeting_link: formData.meeting_link,
+              notes: formData.notes
+            }
+          : consultation
+      ));
+      
+      setShowEditModal(false);
+      console.log('Consultation updated:', selectedConsultation.id);
+    } catch (error) {
+      console.error('Failed to update consultation:', error);
+    }
+  };
+
+  const handleSaveNotes = async () => {
+    if (!selectedConsultation) return;
+    
+    try {
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
+      setConsultations(prev => prev.map(consultation => 
+        consultation.id === selectedConsultation.id 
+          ? { ...consultation, notes: formData.notes }
+          : consultation
+      ));
+      
+      setShowNotesModal(false);
+      console.log('Notes saved for consultation:', selectedConsultation.id);
+    } catch (error) {
+      console.error('Failed to save notes:', error);
+    }
+  };
+
+  const handleStatsCardClick = (statsType: string) => {
+    setSelectedStatsType(statsType);
+    setShowStatsModal(true);
+  };
+
+  const handleExportData = () => {
+    const csvContent = convertToCSV(filteredConsultations);
+    const dataBlob = new Blob([csvContent], { type: 'text/csv' });
+    const url = URL.createObjectURL(dataBlob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `consultations-${new Date().toISOString().split('T')[0]}.csv`;
+    link.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const convertToCSV = (data: Consultation[]) => {
+    const headers = ['ID', 'Client Name', 'Email', 'Service', 'Status', 'Date', 'Duration', 'Amount', 'Payment', 'Consultant'];
+    const csvContent = [
+      headers.join(','),
+      ...data.map(item => [
+        item.id,
+        `"${item.client_name}"`,
+        `"${item.client_email}"`,
+        `"${item.service_type}"`,
+        `"${item.status}"`,
+        `"${new Date(item.scheduled_date).toISOString()}"`,
+        item.duration,
+        item.amount,
+        `"${item.payment_status}"`,
+        `"${item.consultant || 'Not assigned'}"`
+      ].join(','))
+    ].join('\n');
+    return csvContent;
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: name === 'duration' || name === 'amount' ? Number(value) : value
+    }));
+  };
+
   const getUpcomingConsultations = () => {
     const now = new Date();
-    return consultations.filter(c => new Date(c.scheduled_date) > now && c.status === 'scheduled').length;
+    return consultations.filter(c => {
+      const consultationDate = new Date(c.scheduled_date);
+      return consultationDate > now && (c.status === 'scheduled' || c.status === 'pending');
+    }).length;
   };
 
   const getTotalRevenue = () => {
@@ -169,9 +371,57 @@ export default function AdminConsultations() {
   };
 
   const getCompletionRate = () => {
-    const completed = consultations.filter(c => c.status === 'completed').length;
+    const totalConsultations = consultations.length;
+    if (totalConsultations === 0) return 0;
+    
+    const completedConsultations = consultations.filter(c => c.status === 'completed').length;
+    return Math.round((completedConsultations / totalConsultations) * 100);
+  };
+
+  const getPendingRevenue = () => {
+    return consultations
+      .filter(c => c.payment_status === 'pending')
+      .reduce((sum, c) => sum + c.amount, 0);
+  };
+
+  const getActiveConsultations = () => {
+    return consultations.filter(c => c.status === 'ongoing').length;
+  };
+
+  const getConsultationsByStatus = () => {
+    return {
+      scheduled: consultations.filter(c => c.status === 'scheduled').length,
+      completed: consultations.filter(c => c.status === 'completed').length,
+      ongoing: consultations.filter(c => c.status === 'ongoing').length,
+      pending: consultations.filter(c => c.status === 'pending').length,
+      cancelled: consultations.filter(c => c.status === 'cancelled').length
+    };
+  };
+
+  const getRevenueByStatus = () => {
+    return {
+      paid: consultations.filter(c => c.payment_status === 'paid').reduce((sum, c) => sum + c.amount, 0),
+      pending: consultations.filter(c => c.payment_status === 'pending').reduce((sum, c) => sum + c.amount, 0),
+      failed: consultations.filter(c => c.payment_status === 'failed').reduce((sum, c) => sum + c.amount, 0)
+    };
+  };
+
+  const getConsultationStats = () => {
     const total = consultations.length;
-    return total > 0 ? Math.round((completed / total) * 100) : 0;
+    const completed = consultations.filter(c => c.status === 'completed').length;
+    const upcoming = getUpcomingConsultations();
+    const revenue = getTotalRevenue();
+    const completionRate = getCompletionRate();
+    
+    return {
+      total,
+      completed,
+      upcoming,
+      revenue,
+      completionRate,
+      pendingRevenue: getPendingRevenue(),
+      activeConsultations: getActiveConsultations()
+    };
   };
 
   // Filter logic
@@ -281,7 +531,7 @@ export default function AdminConsultations() {
             variant="ghost" 
             size="sm" 
             icon="fas fa-eye"
-            onClick={() => console.log('View consultation', row.id)}
+            onClick={() => handleViewConsultation(row)}
           >
             View
           </Button>
@@ -290,7 +540,7 @@ export default function AdminConsultations() {
               variant="ghost" 
               size="sm" 
               icon="fas fa-video"
-              onClick={() => window.open(row.meeting_link, '_blank')}
+              onClick={() => handleJoinMeeting(row.meeting_link!)}
             >
               Join
             </Button>
@@ -299,13 +549,21 @@ export default function AdminConsultations() {
             variant="ghost" 
             size="sm" 
             icon="fas fa-edit"
-            onClick={() => console.log('Edit consultation', row.id)}
+            onClick={() => handleEditConsultation(row)}
           >
             Edit
           </Button>
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            icon="fas fa-sticky-note"
+            onClick={() => handleAddNotes(row)}
+          >
+            Notes
+          </Button>
         </div>
       ),
-      width: '180px'
+      width: '220px'
     }
   ];
 
@@ -381,10 +639,20 @@ export default function AdminConsultations() {
         ]}
         actions={
           <div style={{ display: 'flex', gap: '0.75rem' }}>
-            <Button variant="secondary" size="sm" icon="fas fa-calendar-plus">
+            <Button 
+              variant="secondary" 
+              size="sm" 
+              icon="fas fa-calendar-plus"
+              onClick={handleScheduleNew}
+            >
               Schedule New
             </Button>
-            <Button variant="primary" size="sm" icon="fas fa-download">
+            <Button 
+              variant="primary" 
+              size="sm" 
+              icon="fas fa-download"
+              onClick={handleExportData}
+            >
               Export Data
             </Button>
           </div>
@@ -393,42 +661,77 @@ export default function AdminConsultations() {
 
       {/* Stats Cards */}
       <div className="stats-grid">
-        <StatsCard
-          title="Total Consultations"
-          value={consultations.length.toString()}
-          icon="fas fa-calendar-check"
-          trend="up"
-          trendValue="12%"
-          trendText="vs last month"
-          color="blue"
-        />
-        <StatsCard
-          title="Upcoming Sessions"
-          value={getUpcomingConsultations().toString()}
-          icon="fas fa-clock"
-          trend="neutral"
-          trendText="Next 7 days"
-          color="orange"
-        />
-        <StatsCard
-          title="Completion Rate"
-          value={`${getCompletionRate()}%`}
-          icon="fas fa-chart-line"
-          trend="up"
-          trendValue="5%"
-          trendText="vs last month"
-          color="green"
-        />
-        <StatsCard
-          title="Total Revenue"
-          value={formatCurrency(getTotalRevenue())}
-          icon="fas fa-rupee-sign"
-          trend="up"
-          trendValue="18%"
-          trendText="vs last month"
-          color="purple"
-        />
+        <div onClick={() => handleStatsCardClick('total')} className="stats-card-clickable">
+          <StatsCard
+            title="Total Consultations"
+            value={consultations.length.toString()}
+            icon="fas fa-calendar-check"
+            trend={{ value: 12, isPositive: true }}
+            color="blue"
+          />
+        </div>
+        <div onClick={() => handleStatsCardClick('upcoming')} className="stats-card-clickable">
+          <StatsCard
+            title="Upcoming Sessions"
+            value={getUpcomingConsultations().toString()}
+            icon="fas fa-clock"
+            color="orange"
+          />
+        </div>
+        <div onClick={() => handleStatsCardClick('completion')} className="stats-card-clickable">
+          <StatsCard
+            title="Completion Rate"
+            value={`${getCompletionRate()}%`}
+            icon="fas fa-chart-line"
+            trend={{ value: 5, isPositive: true }}
+            color="green"
+          />
+        </div>
+        <div onClick={() => handleStatsCardClick('revenue')} className="stats-card-clickable">
+          <StatsCard
+            title="Total Revenue"
+            value={formatCurrency(getTotalRevenue())}
+            icon="fas fa-rupee-sign"
+            trend={{ value: 18, isPositive: true }}
+            color="purple"
+          />
+        </div>
       </div>
+
+      {/* Additional Stats Row */}
+      <div className="stats-grid secondary-stats">
+        <div className="stat-summary">
+          <div className="stat-item" onClick={() => handleStatsCardClick('active')}>
+            <span className="stat-label">Active Sessions</span>
+            <span className="stat-value">{getActiveConsultations()}</span>
+          </div>
+          <div className="stat-item" onClick={() => handleStatsCardClick('pending-revenue')}>
+            <span className="stat-label">Pending Revenue</span>
+            <span className="stat-value">{formatCurrency(getPendingRevenue())}</span>
+          </div>
+          <div className="stat-item" onClick={() => handleStatsCardClick('cancelled')}>
+            <span className="stat-label">Cancelled</span>
+            <span className="stat-value">{getConsultationsByStatus().cancelled}</span>
+          </div>
+          <div className="stat-item" onClick={() => handleStatsCardClick('success-rate')}>
+            <span className="stat-label">Success Rate</span>
+            <span className="stat-value">{consultations.length > 0 ? Math.round(((consultations.filter(c => c.status === 'completed').length) / consultations.length) * 100) : 0}%</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Detailed Breakdown */}
+      <Card className="breakdown-card">
+        <div className="breakdown-header">
+          <h3>
+            <i className="fas fa-chart-pie" style={{ marginRight: '0.5rem', color: '#0ea5e9' }}></i>
+            Quick Overview
+          </h3>
+          <p style={{ color: '#94a3b8', fontSize: '0.875rem', margin: '0.5rem 0 0 0' }}>
+            Click on any stat card above to view detailed breakdown and analytics
+          </p>
+        </div>
+      </Card>
 
       {/* Filters */}
       <Card className="filters-card">
@@ -485,8 +788,891 @@ export default function AdminConsultations() {
         columns={consultationColumns}
         data={filteredConsultations}
         loading={loading}
-        onRowClick={(consultation) => console.log('View consultation details:', consultation)}
+        onRowClick={(consultation) => handleViewConsultation(consultation)}
       />
+
+      {/* View Consultation Modal */}
+      {showViewModal && selectedConsultation && (
+        <div className="modal-overlay" onClick={() => setShowViewModal(false)}>
+          <div className="modal-content large" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h3>Consultation Details</h3>
+              <button className="modal-close" onClick={() => setShowViewModal(false)}>
+                <i className="fas fa-times"></i>
+              </button>
+            </div>
+            <div className="modal-body">
+              <div className="consultation-header">
+                <div className="consultation-avatar">
+                  <i className="fas fa-user-tie"></i>
+                </div>
+                <div className="consultation-info">
+                  <h4>{selectedConsultation.client_name}</h4>
+                  <p>{selectedConsultation.client_email}</p>
+                  <div className="consultation-badges">
+                    {getStatusBadge(selectedConsultation.status)}
+                    {getPaymentBadge(selectedConsultation.payment_status)}
+                    <Badge variant="info" size="sm">{selectedConsultation.service_type}</Badge>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="details-grid">
+                <div className="detail-item">
+                  <label>Consultation ID</label>
+                  <span>#{selectedConsultation.id}</span>
+                </div>
+                <div className="detail-item">
+                  <label>Service Type</label>
+                  <span>{selectedConsultation.service_type}</span>
+                </div>
+                <div className="detail-item">
+                  <label>Consultant</label>
+                  <span>{selectedConsultation.consultant || 'Not assigned'}</span>
+                </div>
+                <div className="detail-item">
+                  <label>Scheduled Date</label>
+                  <span>{formatDate(selectedConsultation.scheduled_date)}</span>
+                </div>
+                <div className="detail-item">
+                  <label>Duration</label>
+                  <span>{selectedConsultation.duration} minutes</span>
+                </div>
+                <div className="detail-item">
+                  <label>Amount</label>
+                  <span>{formatCurrency(selectedConsultation.amount)}</span>
+                </div>
+                <div className="detail-item">
+                  <label>Status</label>
+                  <span>{selectedConsultation.status}</span>
+                </div>
+                <div className="detail-item">
+                  <label>Payment Status</label>
+                  <span>{selectedConsultation.payment_status}</span>
+                </div>
+              </div>
+
+              {selectedConsultation.meeting_link && (
+                <div style={{ marginTop: '1.5rem', padding: '1rem', background: 'rgba(14, 165, 233, 0.1)', borderRadius: '8px', border: '1px solid rgba(14, 165, 233, 0.2)' }}>
+                  <h4 style={{ color: '#f8fafc', marginBottom: '0.5rem', fontSize: '1rem' }}>
+                    <i className="fas fa-video" style={{ marginRight: '0.5rem', color: '#0ea5e9' }}></i>
+                    Meeting Link
+                  </h4>
+                  <p style={{ color: '#94a3b8', fontSize: '0.875rem', marginBottom: '1rem' }}>
+                    {selectedConsultation.meeting_link}
+                  </p>
+                  <Button 
+                    variant="primary" 
+                    size="sm" 
+                    icon="fas fa-external-link-alt"
+                    onClick={() => handleJoinMeeting(selectedConsultation.meeting_link!)}
+                  >
+                    Join Meeting
+                  </Button>
+                </div>
+              )}
+
+              {selectedConsultation.notes && (
+                <div style={{ marginTop: '1.5rem' }}>
+                  <h4 style={{ color: '#f8fafc', marginBottom: '1rem', fontSize: '1rem' }}>
+                    <i className="fas fa-sticky-note" style={{ marginRight: '0.5rem', color: '#0ea5e9' }}></i>
+                    Notes
+                  </h4>
+                  <div style={{ padding: '1rem', background: 'rgba(15, 23, 42, 0.6)', borderRadius: '8px', border: '1px solid rgba(59, 130, 246, 0.2)' }}>
+                    <p style={{ color: '#e2e8f0', fontSize: '0.875rem', lineHeight: '1.6', margin: 0 }}>
+                      {selectedConsultation.notes}
+                    </p>
+                  </div>
+                </div>
+              )}
+            </div>
+            <div className="modal-footer">
+              <Button variant="secondary" size="sm" onClick={() => setShowViewModal(false)}>
+                Close
+              </Button>
+              <Button variant="ghost" size="sm" onClick={() => {
+                setShowViewModal(false);
+                handleEditConsultation(selectedConsultation);
+              }}>
+                Edit Consultation
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Schedule New Consultation Modal */}
+      {showScheduleModal && (
+        <div className="modal-overlay" onClick={() => setShowScheduleModal(false)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h3>Schedule New Consultation</h3>
+              <button className="modal-close" onClick={() => setShowScheduleModal(false)}>
+                <i className="fas fa-times"></i>
+              </button>
+            </div>
+            <div className="modal-body">
+              <div className="form-grid">
+                <div className="form-group">
+                  <label>Client Name *</label>
+                  <input
+                    type="text"
+                    name="client_name"
+                    value={formData.client_name}
+                    onChange={handleInputChange}
+                    placeholder="Enter client name"
+                    required
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Client Email *</label>
+                  <input
+                    type="email"
+                    name="client_email"
+                    value={formData.client_email}
+                    onChange={handleInputChange}
+                    placeholder="client@example.com"
+                    required
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Service Type *</label>
+                  <select
+                    name="service_type"
+                    value={formData.service_type}
+                    onChange={handleInputChange}
+                    required
+                  >
+                    <option value="Financial Planning">Financial Planning</option>
+                    <option value="Tax Consulting">Tax Consulting</option>
+                    <option value="Investment Advice">Investment Advice</option>
+                    <option value="Retirement Planning">Retirement Planning</option>
+                    <option value="Business Consulting">Business Consulting</option>
+                  </select>
+                </div>
+                <div className="form-group">
+                  <label>Consultant</label>
+                  <select
+                    name="consultant"
+                    value={formData.consultant}
+                    onChange={handleInputChange}
+                  >
+                    <option value="">Select Consultant</option>
+                    <option value="Dr. Sharma">Dr. Sharma</option>
+                    <option value="CA Verma">CA Verma</option>
+                    <option value="Mr. Gupta">Mr. Gupta</option>
+                    <option value="Mr. Agarwal">Mr. Agarwal</option>
+                  </select>
+                </div>
+                <div className="form-group">
+                  <label>Scheduled Date & Time *</label>
+                  <input
+                    type="datetime-local"
+                    name="scheduled_date"
+                    value={formData.scheduled_date}
+                    onChange={handleInputChange}
+                    required
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Duration (minutes)</label>
+                  <select
+                    name="duration"
+                    value={formData.duration.toString()}
+                    onChange={handleInputChange}
+                  >
+                    <option value="30">30 minutes</option>
+                    <option value="45">45 minutes</option>
+                    <option value="60">60 minutes</option>
+                    <option value="90">90 minutes</option>
+                    <option value="120">120 minutes</option>
+                  </select>
+                </div>
+                <div className="form-group">
+                  <label>Amount (₹)</label>
+                  <input
+                    type="number"
+                    name="amount"
+                    value={formData.amount}
+                    onChange={handleInputChange}
+                    placeholder="5000"
+                    min="0"
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Payment Status</label>
+                  <select
+                    name="payment_status"
+                    value={formData.payment_status}
+                    onChange={handleInputChange}
+                  >
+                    <option value="pending">Pending</option>
+                    <option value="paid">Paid</option>
+                    <option value="failed">Failed</option>
+                  </select>
+                </div>
+                <div className="form-group full-width">
+                  <label>Meeting Link</label>
+                  <input
+                    type="url"
+                    name="meeting_link"
+                    value={formData.meeting_link}
+                    onChange={handleInputChange}
+                    placeholder="https://meet.google.com/abc-defg-hij"
+                  />
+                </div>
+                <div className="form-group full-width">
+                  <label>Initial Notes</label>
+                  <textarea
+                    name="notes"
+                    value={formData.notes}
+                    onChange={handleInputChange}
+                    placeholder="Add any initial notes or special requirements..."
+                    rows={3}
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="modal-footer">
+              <Button variant="secondary" size="sm" onClick={() => setShowScheduleModal(false)}>
+                Cancel
+              </Button>
+              <Button variant="primary" size="sm" onClick={handleCreateConsultation}>
+                Schedule Consultation
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Edit Consultation Modal */}
+      {showEditModal && selectedConsultation && (
+        <div className="modal-overlay" onClick={() => setShowEditModal(false)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h3>Edit Consultation</h3>
+              <button className="modal-close" onClick={() => setShowEditModal(false)}>
+                <i className="fas fa-times"></i>
+              </button>
+            </div>
+            <div className="modal-body">
+              <div className="form-grid">
+                <div className="form-group">
+                  <label>Client Name *</label>
+                  <input
+                    type="text"
+                    name="client_name"
+                    value={formData.client_name}
+                    onChange={handleInputChange}
+                    required
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Client Email *</label>
+                  <input
+                    type="email"
+                    name="client_email"
+                    value={formData.client_email}
+                    onChange={handleInputChange}
+                    required
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Service Type</label>
+                  <select
+                    name="service_type"
+                    value={formData.service_type}
+                    onChange={handleInputChange}
+                  >
+                    <option value="Financial Planning">Financial Planning</option>
+                    <option value="Tax Consulting">Tax Consulting</option>
+                    <option value="Investment Advice">Investment Advice</option>
+                    <option value="Retirement Planning">Retirement Planning</option>
+                    <option value="Business Consulting">Business Consulting</option>
+                  </select>
+                </div>
+                <div className="form-group">
+                  <label>Status</label>
+                  <select
+                    name="status"
+                    value={formData.status}
+                    onChange={handleInputChange}
+                  >
+                    <option value="scheduled">Scheduled</option>
+                    <option value="ongoing">Ongoing</option>
+                    <option value="completed">Completed</option>
+                    <option value="pending">Pending</option>
+                    <option value="cancelled">Cancelled</option>
+                  </select>
+                </div>
+                <div className="form-group">
+                  <label>Consultant</label>
+                  <select
+                    name="consultant"
+                    value={formData.consultant}
+                    onChange={handleInputChange}
+                  >
+                    <option value="">Select Consultant</option>
+                    <option value="Dr. Sharma">Dr. Sharma</option>
+                    <option value="CA Verma">CA Verma</option>
+                    <option value="Mr. Gupta">Mr. Gupta</option>
+                    <option value="Mr. Agarwal">Mr. Agarwal</option>
+                  </select>
+                </div>
+                <div className="form-group">
+                  <label>Scheduled Date & Time</label>
+                  <input
+                    type="datetime-local"
+                    name="scheduled_date"
+                    value={formData.scheduled_date}
+                    onChange={handleInputChange}
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Duration (minutes)</label>
+                  <select
+                    name="duration"
+                    value={formData.duration.toString()}
+                    onChange={handleInputChange}
+                  >
+                    <option value="30">30 minutes</option>
+                    <option value="45">45 minutes</option>
+                    <option value="60">60 minutes</option>
+                    <option value="90">90 minutes</option>
+                    <option value="120">120 minutes</option>
+                  </select>
+                </div>
+                <div className="form-group">
+                  <label>Amount (₹)</label>
+                  <input
+                    type="number"
+                    name="amount"
+                    value={formData.amount}
+                    onChange={handleInputChange}
+                    min="0"
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Payment Status</label>
+                  <select
+                    name="payment_status"
+                    value={formData.payment_status}
+                    onChange={handleInputChange}
+                  >
+                    <option value="pending">Pending</option>
+                    <option value="paid">Paid</option>
+                    <option value="failed">Failed</option>
+                  </select>
+                </div>
+                <div className="form-group full-width">
+                  <label>Meeting Link</label>
+                  <input
+                    type="url"
+                    name="meeting_link"
+                    value={formData.meeting_link}
+                    onChange={handleInputChange}
+                    placeholder="https://meet.google.com/abc-defg-hij"
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="modal-footer">
+              <Button variant="secondary" size="sm" onClick={() => setShowEditModal(false)}>
+                Cancel
+              </Button>
+              <Button variant="primary" size="sm" onClick={handleUpdateConsultation}>
+                Update Consultation
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Notes Modal */}
+      {showNotesModal && selectedConsultation && (
+        <div className="modal-overlay" onClick={() => setShowNotesModal(false)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h3>Consultation Notes</h3>
+              <button className="modal-close" onClick={() => setShowNotesModal(false)}>
+                <i className="fas fa-times"></i>
+              </button>
+            </div>
+            <div className="modal-body">
+              <div style={{ marginBottom: '1.5rem', padding: '1rem', background: 'rgba(14, 165, 233, 0.1)', borderRadius: '8px', border: '1px solid rgba(14, 165, 233, 0.2)' }}>
+                <h4 style={{ color: '#f8fafc', margin: 0, fontSize: '1rem' }}>
+                  {selectedConsultation.client_name} - {selectedConsultation.service_type}
+                </h4>
+                <p style={{ color: '#94a3b8', fontSize: '0.875rem', margin: '0.5rem 0 0 0' }}>
+                  {formatDate(selectedConsultation.scheduled_date)}
+                </p>
+              </div>
+              
+              <div className="form-group">
+                <label>Notes</label>
+                <textarea
+                  name="notes"
+                  value={formData.notes}
+                  onChange={handleInputChange}
+                  placeholder="Add consultation notes, key discussion points, action items..."
+                  rows={8}
+                  style={{
+                    width: '100%',
+                    padding: '0.75rem',
+                    background: 'rgba(15, 23, 42, 0.8)',
+                    border: '1px solid rgba(59, 130, 246, 0.3)',
+                    borderRadius: '8px',
+                    color: '#f8fafc',
+                    fontSize: '0.875rem',
+                    resize: 'vertical',
+                    lineHeight: '1.5'
+                  }}
+                />
+              </div>
+            </div>
+            <div className="modal-footer">
+              <Button variant="secondary" size="sm" onClick={() => setShowNotesModal(false)}>
+                Cancel
+              </Button>
+              <Button variant="primary" size="sm" onClick={handleSaveNotes}>
+                Save Notes
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Stats Details Modal */}
+      {showStatsModal && (
+        <div className="modal-overlay" onClick={() => setShowStatsModal(false)}>
+          <div className="modal-content large" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h3>
+                {selectedStatsType === 'total' && 'Total Consultations Details'}
+                {selectedStatsType === 'upcoming' && 'Upcoming Sessions Details'}
+                {selectedStatsType === 'completion' && 'Completion Rate Analysis'}
+                {selectedStatsType === 'revenue' && 'Revenue Breakdown'}
+                {selectedStatsType === 'active' && 'Active Sessions Details'}
+                {selectedStatsType === 'pending-revenue' && 'Pending Revenue Analysis'}
+                {selectedStatsType === 'cancelled' && 'Cancelled Consultations'}
+                {selectedStatsType === 'success-rate' && 'Success Rate Breakdown'}
+              </h3>
+              <button className="modal-close" onClick={() => setShowStatsModal(false)}>
+                <i className="fas fa-times"></i>
+              </button>
+            </div>
+            <div className="modal-body">
+              {/* Total Consultations Details */}
+              {selectedStatsType === 'total' && (
+                <div className="stats-details">
+                  <div className="stats-overview">
+                    <div className="overview-card">
+                      <h4>Total Consultations: {consultations.length}</h4>
+                      <p>Complete overview of all consultation sessions</p>
+                    </div>
+                  </div>
+                  
+                  <div className="breakdown-section">
+                    <h4>Status Distribution</h4>
+                    <div className="breakdown-grid">
+                      <div className="breakdown-item">
+                        <span className="breakdown-label">Scheduled</span>
+                        <span className="breakdown-value">{getConsultationsByStatus().scheduled}</span>
+                        <span className="breakdown-percentage">
+                          {consultations.length > 0 ? Math.round((getConsultationsByStatus().scheduled / consultations.length) * 100) : 0}%
+                        </span>
+                      </div>
+                      <div className="breakdown-item">
+                        <span className="breakdown-label">Completed</span>
+                        <span className="breakdown-value">{getConsultationsByStatus().completed}</span>
+                        <span className="breakdown-percentage">
+                          {consultations.length > 0 ? Math.round((getConsultationsByStatus().completed / consultations.length) * 100) : 0}%
+                        </span>
+                      </div>
+                      <div className="breakdown-item">
+                        <span className="breakdown-label">Ongoing</span>
+                        <span className="breakdown-value">{getConsultationsByStatus().ongoing}</span>
+                        <span className="breakdown-percentage">
+                          {consultations.length > 0 ? Math.round((getConsultationsByStatus().ongoing / consultations.length) * 100) : 0}%
+                        </span>
+                      </div>
+                      <div className="breakdown-item">
+                        <span className="breakdown-label">Pending</span>
+                        <span className="breakdown-value">{getConsultationsByStatus().pending}</span>
+                        <span className="breakdown-percentage">
+                          {consultations.length > 0 ? Math.round((getConsultationsByStatus().pending / consultations.length) * 100) : 0}%
+                        </span>
+                      </div>
+                      <div className="breakdown-item">
+                        <span className="breakdown-label">Cancelled</span>
+                        <span className="breakdown-value">{getConsultationsByStatus().cancelled}</span>
+                        <span className="breakdown-percentage">
+                          {consultations.length > 0 ? Math.round((getConsultationsByStatus().cancelled / consultations.length) * 100) : 0}%
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="consultation-list">
+                    <h4>Recent Consultations</h4>
+                    <div className="consultation-items">
+                      {consultations.slice(0, 5).map(consultation => (
+                        <div key={consultation.id} className="consultation-item">
+                          <div className="consultation-client">
+                            <span className="client-name">{consultation.client_name}</span>
+                            <span className="client-service">{consultation.service_type}</span>
+                          </div>
+                          <div className="consultation-details">
+                            <span className="consultation-date">{formatDate(consultation.scheduled_date)}</span>
+                            {getStatusBadge(consultation.status)}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Upcoming Sessions Details */}
+              {selectedStatsType === 'upcoming' && (
+                <div className="stats-details">
+                  <div className="stats-overview">
+                    <div className="overview-card">
+                      <h4>Upcoming Sessions: {getUpcomingConsultations()}</h4>
+                      <p>Sessions scheduled for future dates</p>
+                    </div>
+                  </div>
+                  
+                  <div className="consultation-list">
+                    <h4>Upcoming Schedule</h4>
+                    <div className="consultation-items">
+                      {consultations.filter(c => {
+                        const consultationDate = new Date(c.scheduled_date);
+                        const now = new Date();
+                        return consultationDate > now && (c.status === 'scheduled' || c.status === 'pending');
+                      }).map(consultation => (
+                        <div key={consultation.id} className="consultation-item upcoming">
+                          <div className="consultation-client">
+                            <span className="client-name">{consultation.client_name}</span>
+                            <span className="client-service">{consultation.service_type}</span>
+                          </div>
+                          <div className="consultation-details">
+                            <span className="consultation-date">{formatDate(consultation.scheduled_date)}</span>
+                            <span className="consultation-duration">{consultation.duration} min</span>
+                            <span className="consultation-amount">{formatCurrency(consultation.amount)}</span>
+                          </div>
+                        </div>
+                      ))}
+                      {getUpcomingConsultations() === 0 && (
+                        <div className="empty-state">
+                          <i className="fas fa-calendar-check"></i>
+                          <p>No upcoming sessions scheduled</p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Completion Rate Analysis */}
+              {selectedStatsType === 'completion' && (
+                <div className="stats-details">
+                  <div className="stats-overview">
+                    <div className="overview-card">
+                      <h4>Completion Rate: {getCompletionRate()}%</h4>
+                      <p>Percentage of successfully completed consultations</p>
+                    </div>
+                  </div>
+                  
+                  <div className="calculation-summary">
+                    <h4>Calculation Breakdown</h4>
+                    <div className="calculation-grid">
+                      <div className="calculation-item">
+                        <span className="calculation-formula">Total Consultations:</span>
+                        <span className="calculation-details">{consultations.length}</span>
+                      </div>
+                      <div className="calculation-item">
+                        <span className="calculation-formula">Completed Consultations:</span>
+                        <span className="calculation-details">{getConsultationsByStatus().completed}</span>
+                      </div>
+                      <div className="calculation-item">
+                        <span className="calculation-formula">Completion Rate Formula:</span>
+                        <span className="calculation-details">
+                          {getConsultationsByStatus().completed} ÷ {consultations.length} × 100 = {getCompletionRate()}%
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="consultation-list">
+                    <h4>Completed Consultations</h4>
+                    <div className="consultation-items">
+                      {consultations.filter(c => c.status === 'completed').map(consultation => (
+                        <div key={consultation.id} className="consultation-item completed">
+                          <div className="consultation-client">
+                            <span className="client-name">{consultation.client_name}</span>
+                            <span className="client-service">{consultation.service_type}</span>
+                          </div>
+                          <div className="consultation-details">
+                            <span className="consultation-date">{formatDate(consultation.scheduled_date)}</span>
+                            <span className="consultation-amount">{formatCurrency(consultation.amount)}</span>
+                            {getStatusBadge(consultation.status)}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Revenue Breakdown */}
+              {selectedStatsType === 'revenue' && (
+                <div className="stats-details">
+                  <div className="stats-overview">
+                    <div className="overview-card">
+                      <h4>Total Revenue: {formatCurrency(getTotalRevenue())}</h4>
+                      <p>Complete revenue analysis across all consultations</p>
+                    </div>
+                  </div>
+                  
+                  <div className="breakdown-section">
+                    <h4>Revenue by Payment Status</h4>
+                    <div className="breakdown-grid">
+                      <div className="breakdown-item revenue">
+                        <span className="breakdown-label">Paid Revenue</span>
+                        <span className="breakdown-value">{formatCurrency(getRevenueByStatus().paid)}</span>
+                        <span className="breakdown-percentage">
+                          {(getRevenueByStatus().paid + getRevenueByStatus().pending + getRevenueByStatus().failed) > 0 ? 
+                            Math.round((getRevenueByStatus().paid / (getRevenueByStatus().paid + getRevenueByStatus().pending + getRevenueByStatus().failed)) * 100) : 0}%
+                        </span>
+                      </div>
+                      <div className="breakdown-item revenue">
+                        <span className="breakdown-label">Pending Revenue</span>
+                        <span className="breakdown-value">{formatCurrency(getRevenueByStatus().pending)}</span>
+                        <span className="breakdown-percentage">
+                          {(getRevenueByStatus().paid + getRevenueByStatus().pending + getRevenueByStatus().failed) > 0 ? 
+                            Math.round((getRevenueByStatus().pending / (getRevenueByStatus().paid + getRevenueByStatus().pending + getRevenueByStatus().failed)) * 100) : 0}%
+                        </span>
+                      </div>
+                      <div className="breakdown-item revenue">
+                        <span className="breakdown-label">Failed/Lost Revenue</span>
+                        <span className="breakdown-value">{formatCurrency(getRevenueByStatus().failed)}</span>
+                        <span className="breakdown-percentage">
+                          {(getRevenueByStatus().paid + getRevenueByStatus().pending + getRevenueByStatus().failed) > 0 ? 
+                            Math.round((getRevenueByStatus().failed / (getRevenueByStatus().paid + getRevenueByStatus().pending + getRevenueByStatus().failed)) * 100) : 0}%
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="calculation-summary">
+                    <h4>Revenue Analytics</h4>
+                    <div className="calculation-grid">
+                      <div className="calculation-item">
+                        <span className="calculation-formula">Average Revenue per Consultation:</span>
+                        <span className="calculation-details">
+                          {formatCurrency(consultations.length > 0 ? getTotalRevenue() / consultations.length : 0)}
+                        </span>
+                      </div>
+                      <div className="calculation-item">
+                        <span className="calculation-formula">Revenue Collection Rate:</span>
+                        <span className="calculation-details">
+                          {(getRevenueByStatus().paid + getRevenueByStatus().pending + getRevenueByStatus().failed) > 0 ? 
+                            Math.round((getRevenueByStatus().paid / (getRevenueByStatus().paid + getRevenueByStatus().pending + getRevenueByStatus().failed)) * 100) : 0}%
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Active Sessions Details */}
+              {selectedStatsType === 'active' && (
+                <div className="stats-details">
+                  <div className="stats-overview">
+                    <div className="overview-card">
+                      <h4>Active Sessions: {getActiveConsultations()}</h4>
+                      <p>Consultations currently in progress</p>
+                    </div>
+                  </div>
+                  
+                  <div className="consultation-list">
+                    <h4>Currently Active</h4>
+                    <div className="consultation-items">
+                      {consultations.filter(c => c.status === 'ongoing').map(consultation => (
+                        <div key={consultation.id} className="consultation-item active">
+                          <div className="consultation-client">
+                            <span className="client-name">{consultation.client_name}</span>
+                            <span className="client-service">{consultation.service_type}</span>
+                          </div>
+                          <div className="consultation-details">
+                            <span className="consultation-date">{formatDate(consultation.scheduled_date)}</span>
+                            <span className="consultation-consultant">{consultation.consultant}</span>
+                            {consultation.meeting_link && (
+                              <Button 
+                                variant="ghost" 
+                                size="sm" 
+                                icon="fas fa-video"
+                                onClick={() => handleJoinMeeting(consultation.meeting_link!)}
+                              >
+                                Join
+                              </Button>
+                            )}
+                          </div>
+                        </div>
+                      ))}
+                      {getActiveConsultations() === 0 && (
+                        <div className="empty-state">
+                          <i className="fas fa-clock"></i>
+                          <p>No active sessions at the moment</p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Pending Revenue Analysis */}
+              {selectedStatsType === 'pending-revenue' && (
+                <div className="stats-details">
+                  <div className="stats-overview">
+                    <div className="overview-card">
+                      <h4>Pending Revenue: {formatCurrency(getPendingRevenue())}</h4>
+                      <p>Revenue from consultations with pending payments</p>
+                    </div>
+                  </div>
+                  
+                  <div className="consultation-list">
+                    <h4>Pending Payments</h4>
+                    <div className="consultation-items">
+                      {consultations.filter(c => c.payment_status === 'pending').map(consultation => (
+                        <div key={consultation.id} className="consultation-item pending">
+                          <div className="consultation-client">
+                            <span className="client-name">{consultation.client_name}</span>
+                            <span className="client-service">{consultation.service_type}</span>
+                          </div>
+                          <div className="consultation-details">
+                            <span className="consultation-date">{formatDate(consultation.scheduled_date)}</span>
+                            <span className="consultation-amount pending-amount">{formatCurrency(consultation.amount)}</span>
+                            {getPaymentBadge(consultation.payment_status)}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Cancelled Consultations */}
+              {selectedStatsType === 'cancelled' && (
+                <div className="stats-details">
+                  <div className="stats-overview">
+                    <div className="overview-card">
+                      <h4>Cancelled Consultations: {getConsultationsByStatus().cancelled}</h4>
+                      <p>Consultations that were cancelled</p>
+                    </div>
+                  </div>
+                  
+                  <div className="consultation-list">
+                    <h4>Cancellation Details</h4>
+                    <div className="consultation-items">
+                      {consultations.filter(c => c.status === 'cancelled').map(consultation => (
+                        <div key={consultation.id} className="consultation-item cancelled">
+                          <div className="consultation-client">
+                            <span className="client-name">{consultation.client_name}</span>
+                            <span className="client-service">{consultation.service_type}</span>
+                          </div>
+                          <div className="consultation-details">
+                            <span className="consultation-date">{formatDate(consultation.scheduled_date)}</span>
+                            <span className="consultation-amount lost-amount">{formatCurrency(consultation.amount)}</span>
+                            {getStatusBadge(consultation.status)}
+                          </div>
+                          {consultation.notes && (
+                            <div className="consultation-notes">
+                              <small>{consultation.notes}</small>
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Success Rate Breakdown */}
+              {selectedStatsType === 'success-rate' && (
+                <div className="stats-details">
+                  <div className="stats-overview">
+                    <div className="overview-card">
+                      <h4>Success Rate: {consultations.length > 0 ? Math.round(((consultations.filter(c => c.status === 'completed').length) / consultations.length) * 100) : 0}%</h4>
+                      <p>Overall success rate of consultations</p>
+                    </div>
+                  </div>
+                  
+                  <div className="calculation-summary">
+                    <h4>Success Metrics</h4>
+                    <div className="calculation-grid">
+                      <div className="calculation-item">
+                        <span className="calculation-formula">Total Consultations:</span>
+                        <span className="calculation-details">{consultations.length}</span>
+                      </div>
+                      <div className="calculation-item">
+                        <span className="calculation-formula">Successful (Completed):</span>
+                        <span className="calculation-details">{consultations.filter(c => c.status === 'completed').length}</span>
+                      </div>
+                      <div className="calculation-item">
+                        <span className="calculation-formula">Failed (Cancelled):</span>
+                        <span className="calculation-details">{getConsultationsByStatus().cancelled}</span>
+                      </div>
+                      <div className="calculation-item">
+                        <span className="calculation-formula">Success Rate:</span>
+                        <span className="calculation-details">
+                          {consultations.filter(c => c.status === 'completed').length} ÷ {consultations.length} × 100 = {consultations.length > 0 ? Math.round(((consultations.filter(c => c.status === 'completed').length) / consultations.length) * 100) : 0}%
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="breakdown-section">
+                    <h4>Performance Analysis</h4>
+                    <div className="breakdown-grid">
+                      <div className="breakdown-item success">
+                        <span className="breakdown-label">Completed Successfully</span>
+                        <span className="breakdown-value">{consultations.filter(c => c.status === 'completed').length}</span>
+                        <span className="breakdown-percentage">
+                          {consultations.length > 0 ? Math.round((consultations.filter(c => c.status === 'completed').length / consultations.length) * 100) : 0}%
+                        </span>
+                      </div>
+                      <div className="breakdown-item warning">
+                        <span className="breakdown-label">In Progress</span>
+                        <span className="breakdown-value">{getConsultationsByStatus().ongoing + getConsultationsByStatus().scheduled + getConsultationsByStatus().pending}</span>
+                        <span className="breakdown-percentage">
+                          {consultations.length > 0 ? Math.round(((getConsultationsByStatus().ongoing + getConsultationsByStatus().scheduled + getConsultationsByStatus().pending) / consultations.length) * 100) : 0}%
+                        </span>
+                      </div>
+                      <div className="breakdown-item danger">
+                        <span className="breakdown-label">Cancelled/Failed</span>
+                        <span className="breakdown-value">{getConsultationsByStatus().cancelled}</span>
+                        <span className="breakdown-percentage">
+                          {consultations.length > 0 ? Math.round((getConsultationsByStatus().cancelled / consultations.length) * 100) : 0}%
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+            <div className="modal-footer">
+              <Button variant="secondary" size="sm" onClick={() => setShowStatsModal(false)}>
+                Close
+              </Button>
+              <Button variant="primary" size="sm" onClick={handleExportData}>
+                Export Data
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <style jsx>{`
         .admin-consultations {
@@ -499,6 +1685,377 @@ export default function AdminConsultations() {
           grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
           gap: 1.5rem;
           margin-bottom: 2rem;
+        }
+
+        .secondary-stats {
+          margin-bottom: 1.5rem;
+        }
+
+        .stat-summary {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+          gap: 1rem;
+          padding: 1.5rem;
+          background: linear-gradient(145deg, #1e293b 0%, #334155 100%);
+          border-radius: 16px;
+          border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+
+        .stat-item {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 0.5rem;
+          padding: 1rem;
+          background: rgba(15, 23, 42, 0.6);
+          border-radius: 12px;
+          border: 1px solid rgba(59, 130, 246, 0.2);
+          transition: all 0.2s ease;
+          cursor: pointer;
+        }
+
+        .stat-item:hover {
+          border-color: rgba(14, 165, 233, 0.4);
+          transform: translateY(-2px);
+          background: rgba(14, 165, 233, 0.1);
+        }
+
+        .stat-label {
+          color: #94a3b8;
+          font-size: 0.875rem;
+          font-weight: 500;
+          text-align: center;
+        }
+
+        .stat-value {
+          color: #f8fafc;
+          font-size: 1.25rem;
+          font-weight: 700;
+        }
+
+        /* Breakdown Styles */
+        .breakdown-card {
+          margin-bottom: 2rem;
+        }
+
+        .breakdown-header {
+          padding: 1.5rem 1.5rem 0 1.5rem;
+        }
+
+        .breakdown-header h3 {
+          margin: 0;
+          color: #f8fafc;
+          font-size: 1.25rem;
+          font-weight: 600;
+          display: flex;
+          align-items: center;
+        }
+
+        .breakdown-content {
+          padding: 1.5rem;
+        }
+
+        .breakdown-section {
+          margin-bottom: 2rem;
+        }
+
+        .breakdown-section:last-child {
+          margin-bottom: 0;
+        }
+
+        .breakdown-section h4 {
+          margin: 0 0 1rem 0;
+          color: #e2e8f0;
+          font-size: 1rem;
+          font-weight: 600;
+        }
+
+        .breakdown-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+          gap: 1rem;
+        }
+
+        .breakdown-item {
+          display: flex;
+          flex-direction: column;
+          gap: 0.5rem;
+          padding: 1rem;
+          background: rgba(15, 23, 42, 0.4);
+          border-radius: 8px;
+          border: 1px solid rgba(59, 130, 246, 0.1);
+          transition: all 0.2s ease;
+        }
+
+        .breakdown-item:hover {
+          border-color: rgba(14, 165, 233, 0.3);
+          transform: translateY(-1px);
+        }
+
+        .breakdown-item.revenue {
+          background: rgba(34, 197, 94, 0.05);
+          border-color: rgba(34, 197, 94, 0.2);
+        }
+
+        .breakdown-label {
+          color: #94a3b8;
+          font-size: 0.875rem;
+          font-weight: 500;
+        }
+
+        .breakdown-value {
+          color: #f8fafc;
+          font-size: 1.125rem;
+          font-weight: 700;
+        }
+
+        .breakdown-percentage {
+          color: #0ea5e9;
+          font-size: 0.75rem;
+          font-weight: 600;
+        }
+
+        /* Calculation Summary */
+        .calculation-summary {
+          margin-top: 2rem;
+          padding: 1.5rem;
+          background: rgba(14, 165, 233, 0.05);
+          border-radius: 12px;
+          border: 1px solid rgba(14, 165, 233, 0.2);
+        }
+
+        .calculation-summary h4 {
+          margin: 0 0 1rem 0;
+          color: #f8fafc;
+          font-size: 1rem;
+          font-weight: 600;
+        }
+
+        .calculation-grid {
+          display: flex;
+          flex-direction: column;
+          gap: 0.75rem;
+        }
+
+        .calculation-item {
+          display: flex;
+          flex-direction: column;
+          gap: 0.25rem;
+          padding: 0.75rem;
+          background: rgba(15, 23, 42, 0.3);
+          border-radius: 6px;
+        }
+
+        .calculation-formula {
+          color: #0ea5e9;
+          font-size: 0.875rem;
+          font-weight: 600;
+        }
+
+        .calculation-details {
+          color: #cbd5e1;
+          font-size: 0.8rem;
+          font-family: 'Courier New', monospace;
+        }
+
+        /* Stats Cards Clickable */
+        .stats-card-clickable {
+          cursor: pointer;
+          transition: all 0.2s ease;
+        }
+
+        .stats-card-clickable:hover {
+          transform: translateY(-2px);
+        }
+
+        /* Stats Details Modal Styles */
+        .stats-details {
+          overflow-y: visible;
+        }
+
+        .stats-overview {
+          margin-bottom: 2rem;
+        }
+
+        .overview-card {
+          padding: 1.5rem;
+          background: linear-gradient(135deg, rgba(14, 165, 233, 0.1), rgba(59, 130, 246, 0.1));
+          border-radius: 12px;
+          border: 1px solid rgba(14, 165, 233, 0.3);
+          text-align: center;
+        }
+
+        .overview-card h4 {
+          margin: 0 0 0.5rem 0;
+          color: #f8fafc;
+          font-size: 1.5rem;
+          font-weight: 700;
+        }
+
+        .overview-card p {
+          margin: 0;
+          color: #94a3b8;
+          font-size: 1rem;
+        }
+
+        .consultation-list {
+          margin-top: 2rem;
+        }
+
+        .consultation-list h4 {
+          margin: 0 0 1rem 0;
+          color: #e2e8f0;
+          font-size: 1rem;
+          font-weight: 600;
+        }
+
+        .consultation-items {
+          display: flex;
+          flex-direction: column;
+          gap: 0.75rem;
+        }
+
+        .consultation-item {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 1rem;
+          background: rgba(15, 23, 42, 0.4);
+          border-radius: 8px;
+          border: 1px solid rgba(59, 130, 246, 0.1);
+          transition: all 0.2s ease;
+        }
+
+        .consultation-item:hover {
+          border-color: rgba(14, 165, 233, 0.3);
+        }
+
+        .consultation-item.upcoming {
+          border-color: rgba(249, 115, 22, 0.3);
+          background: rgba(249, 115, 22, 0.05);
+        }
+
+        .consultation-item.completed {
+          border-color: rgba(34, 197, 94, 0.3);
+          background: rgba(34, 197, 94, 0.05);
+        }
+
+        .consultation-item.active {
+          border-color: rgba(14, 165, 233, 0.3);
+          background: rgba(14, 165, 233, 0.05);
+        }
+
+        .consultation-item.pending {
+          border-color: rgba(234, 179, 8, 0.3);
+          background: rgba(234, 179, 8, 0.05);
+        }
+
+        .consultation-item.cancelled {
+          border-color: rgba(239, 68, 68, 0.3);
+          background: rgba(239, 68, 68, 0.05);
+        }
+
+        .consultation-client {
+          display: flex;
+          flex-direction: column;
+          gap: 0.25rem;
+        }
+
+        .client-name {
+          color: #f8fafc;
+          font-weight: 600;
+          font-size: 0.875rem;
+        }
+
+        .client-service {
+          color: #94a3b8;
+          font-size: 0.75rem;
+        }
+
+        .consultation-details {
+          display: flex;
+          align-items: center;
+          gap: 0.75rem;
+          flex-wrap: wrap;
+        }
+
+        .consultation-date {
+          color: #cbd5e1;
+          font-size: 0.75rem;
+        }
+
+        .consultation-duration {
+          color: #94a3b8;
+          font-size: 0.75rem;
+        }
+
+        .consultation-amount {
+          color: #10b981;
+          font-weight: 600;
+          font-size: 0.875rem;
+        }
+
+        .consultation-amount.pending-amount {
+          color: #f59e0b;
+        }
+
+        .consultation-amount.lost-amount {
+          color: #ef4444;
+        }
+
+        .consultation-consultant {
+          color: #94a3b8;
+          font-size: 0.75rem;
+        }
+
+        .consultation-notes {
+          margin-top: 0.5rem;
+          padding: 0.5rem;
+          background: rgba(15, 23, 42, 0.6);
+          border-radius: 4px;
+          border-left: 3px solid rgba(239, 68, 68, 0.5);
+        }
+
+        .consultation-notes small {
+          color: #94a3b8;
+          font-size: 0.75rem;
+          font-style: italic;
+        }
+
+        .empty-state {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 1rem;
+          padding: 3rem;
+          color: #64748b;
+          text-align: center;
+        }
+
+        .empty-state i {
+          font-size: 3rem;
+          color: #475569;
+        }
+
+        .empty-state p {
+          margin: 0;
+          font-size: 1rem;
+        }
+
+        /* Enhanced Breakdown Items */
+        .breakdown-item.success {
+          border-color: rgba(34, 197, 94, 0.3);
+          background: rgba(34, 197, 94, 0.05);
+        }
+
+        .breakdown-item.warning {
+          border-color: rgba(249, 115, 22, 0.3);
+          background: rgba(249, 115, 22, 0.05);
+        }
+
+        .breakdown-item.danger {
+          border-color: rgba(239, 68, 68, 0.3);
+          background: rgba(239, 68, 68, 0.05);
         }
 
         .filters {
@@ -558,6 +2115,215 @@ export default function AdminConsultations() {
           border-color: #0ea5e9;
         }
 
+        /* Modal Styles */
+        .modal-overlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: rgba(0, 0, 0, 0.75);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          z-index: 1000;
+          backdrop-filter: blur(4px);
+          padding: 2rem;
+          overflow-y: auto;
+        }
+
+        .modal-content {
+          background: linear-gradient(145deg, #1e293b 0%, #334155 100%);
+          border-radius: 16px;
+          border: 1px solid rgba(59, 130, 246, 0.3);
+          box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+          width: 100%;
+          max-width: 600px;
+          max-height: calc(100vh - 4rem);
+          display: flex;
+          flex-direction: column;
+          margin: auto;
+        }
+
+        .modal-content.large {
+          max-width: 800px;
+        }
+
+        .modal-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 1.5rem;
+          border-bottom: 1px solid rgba(59, 130, 246, 0.2);
+          flex-shrink: 0;
+        }
+
+        .modal-header h3 {
+          margin: 0;
+          color: #f8fafc;
+          font-size: 1.25rem;
+          font-weight: 600;
+        }
+
+        .modal-close {
+          background: none;
+          border: none;
+          color: #94a3b8;
+          font-size: 1.25rem;
+          cursor: pointer;
+          padding: 0.5rem;
+          border-radius: 6px;
+          transition: all 0.2s ease;
+          flex-shrink: 0;
+        }
+
+        .modal-close:hover {
+          background: rgba(239, 68, 68, 0.1);
+          color: #ef4444;
+        }
+
+        .modal-body {
+          padding: 1.5rem;
+          overflow-y: auto;
+          flex: 1;
+          min-height: 0;
+        }
+
+        .form-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 1rem;
+        }
+
+        .form-group {
+          display: flex;
+          flex-direction: column;
+          gap: 0.5rem;
+        }
+
+        .form-group.full-width {
+          grid-column: 1 / -1;
+        }
+
+        .form-group label {
+          color: #e2e8f0;
+          font-size: 0.875rem;
+          font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+          padding: 0.75rem;
+          background: rgba(15, 23, 42, 0.8);
+          border: 1px solid rgba(59, 130, 246, 0.3);
+          border-radius: 8px;
+          color: #f8fafc;
+          font-size: 0.875rem;
+          transition: all 0.2s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+          outline: none;
+          border-color: #0ea5e9;
+          box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1);
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+          color: #64748b;
+        }
+
+        .form-group select option {
+          background: #1e293b;
+          color: #f8fafc;
+        }
+
+        .modal-footer {
+          display: flex;
+          justify-content: flex-end;
+          gap: 0.75rem;
+          padding: 1.5rem;
+          border-top: 1px solid rgba(59, 130, 246, 0.2);
+          flex-shrink: 0;
+        }
+
+        /* Consultation Header */
+        .consultation-header {
+          display: flex;
+          align-items: center;
+          gap: 1.5rem;
+          margin-bottom: 2rem;
+          padding: 1.5rem;
+          background: rgba(15, 23, 42, 0.6);
+          border-radius: 12px;
+          border: 1px solid rgba(59, 130, 246, 0.2);
+        }
+
+        .consultation-avatar {
+          width: 80px;
+          height: 80px;
+          background: linear-gradient(135deg, #0ea5e9, #3b82f6);
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: white;
+          font-size: 2rem;
+          border: 3px solid rgba(14, 165, 233, 0.3);
+        }
+
+        .consultation-info h4 {
+          margin: 0 0 0.5rem 0;
+          color: #f8fafc;
+          font-size: 1.5rem;
+          font-weight: 600;
+        }
+
+        .consultation-info p {
+          margin: 0 0 1rem 0;
+          color: #94a3b8;
+          font-size: 1rem;
+        }
+
+        .consultation-badges {
+          display: flex;
+          gap: 0.5rem;
+          flex-wrap: wrap;
+        }
+
+        .details-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+          gap: 1rem;
+        }
+
+        .detail-item {
+          display: flex;
+          flex-direction: column;
+          gap: 0.25rem;
+          padding: 1rem;
+          background: rgba(15, 23, 42, 0.4);
+          border-radius: 8px;
+          border: 1px solid rgba(59, 130, 246, 0.1);
+        }
+
+        .detail-item label {
+          color: #94a3b8;
+          font-size: 0.75rem;
+          font-weight: 500;
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
+        }
+
+        .detail-item span {
+          color: #f8fafc;
+          font-size: 0.875rem;
+          font-weight: 500;
+        }
+
         @media (max-width: 768px) {
           .admin-consultations {
             padding: 1rem;
@@ -574,6 +2340,36 @@ export default function AdminConsultations() {
 
           .search-box {
             min-width: auto;
+          }
+
+          .modal-overlay {
+            align-items: flex-start;
+            padding: 1rem;
+          }
+
+          .modal-content {
+            width: 100%;
+            margin: 0;
+            max-height: calc(100vh - 2rem);
+          }
+
+          .form-grid {
+            grid-template-columns: 1fr;
+          }
+
+          .modal-header,
+          .modal-body,
+          .modal-footer {
+            padding: 1rem;
+          }
+
+          .consultation-header {
+            flex-direction: column;
+            text-align: center;
+          }
+
+          .details-grid {
+            grid-template-columns: 1fr;
           }
         }
       `}</style>

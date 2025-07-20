@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { 
   Card, 
   Button, 
@@ -35,11 +36,15 @@ interface DashboardData {
 }
 
 export default function AdminDashboard() {
+  const router = useRouter();
   const [dashboardData, setDashboardData] = useState<DashboardData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [selectedPeriod, setSelectedPeriod] = useState<'7d' | '30d' | '90d' | '1y'>('30d');
   const [refreshing, setRefreshing] = useState(false);
+  const [showScheduleModal, setShowScheduleModal] = useState(false);
+  const [showUserModal, setShowUserModal] = useState(false);
+  const [showNewsletterModal, setShowNewsletterModal] = useState(false);
 
   useEffect(() => {
     fetchDashboardData();
@@ -133,6 +138,55 @@ export default function AdminDashboard() {
     setRefreshing(true);
     await fetchDashboardData();
     setRefreshing(false);
+  };
+
+  // Quick Action Handlers
+  const handleScheduleConsultation = () => {
+    setShowScheduleModal(true);
+  };
+
+  const handleAddUser = () => {
+    setShowUserModal(true);
+  };
+
+  const handleGenerateInvoice = () => {
+    // Navigate to invoice generation page
+    router.push('/admin/invoices/new');
+  };
+
+  const handleSendNewsletter = () => {
+    setShowNewsletterModal(true);
+  };
+
+  const handleViewAnalytics = () => {
+    // Navigate to analytics page
+    router.push('/admin/reports');
+  };
+
+  const handleSystemSettings = () => {
+    // Navigate to settings page
+    router.push('/admin/settings');
+  };
+
+  const handleScheduleSubmit = (formData: any) => {
+    // Handle consultation scheduling
+    console.log('Scheduling consultation:', formData);
+    setShowScheduleModal(false);
+    // You can add actual API call here
+  };
+
+  const handleUserSubmit = (formData: any) => {
+    // Handle user creation
+    console.log('Creating user:', formData);
+    setShowUserModal(false);
+    // You can add actual API call here
+  };
+
+  const handleNewsletterSubmit = (formData: any) => {
+    // Handle newsletter sending
+    console.log('Sending newsletter:', formData);
+    setShowNewsletterModal(false);
+    // You can add actual API call here
   };
 
   const formatCurrency = (amount: number) => {
@@ -398,27 +452,230 @@ export default function AdminDashboard() {
             </h3>
           </div>
           <div className="quick-actions">
-            <Button variant="primary" size="md" icon="fas fa-calendar-plus">
+            <Button 
+              variant="primary" 
+              size="md" 
+              icon="fas fa-calendar-plus"
+              onClick={handleScheduleConsultation}
+            >
               Schedule Consultation
             </Button>
-            <Button variant="secondary" size="md" icon="fas fa-user-plus">
+            <Button 
+              variant="secondary" 
+              size="md" 
+              icon="fas fa-user-plus"
+              onClick={handleAddUser}
+            >
               Add New User
             </Button>
-            <Button variant="secondary" size="md" icon="fas fa-file-invoice-dollar">
+            <Button 
+              variant="secondary" 
+              size="md" 
+              icon="fas fa-file-invoice-dollar"
+              onClick={handleGenerateInvoice}
+            >
               Generate Invoice
             </Button>
-            <Button variant="secondary" size="md" icon="fas fa-envelope">
+            <Button 
+              variant="secondary" 
+              size="md" 
+              icon="fas fa-envelope"
+              onClick={handleSendNewsletter}
+            >
               Send Newsletter
             </Button>
-            <Button variant="secondary" size="md" icon="fas fa-chart-bar">
+            <Button 
+              variant="secondary" 
+              size="md" 
+              icon="fas fa-chart-bar"
+              onClick={handleViewAnalytics}
+            >
               View Analytics
             </Button>
-            <Button variant="secondary" size="md" icon="fas fa-cog">
+            <Button 
+              variant="secondary" 
+              size="md" 
+              icon="fas fa-cog"
+              onClick={handleSystemSettings}
+            >
               System Settings
             </Button>
           </div>
         </Card>
       </div>
+
+      {/* Schedule Consultation Modal */}
+      {showScheduleModal && (
+        <div className="modal-overlay" onClick={() => setShowScheduleModal(false)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h3>Schedule New Consultation</h3>
+              <button className="modal-close" onClick={() => setShowScheduleModal(false)}>
+                <i className="fas fa-times"></i>
+              </button>
+            </div>
+            <div className="modal-body">
+              <div className="form-grid">
+                <div className="form-group">
+                  <label>Client Name</label>
+                  <input type="text" placeholder="Enter client name" />
+                </div>
+                <div className="form-group">
+                  <label>Email</label>
+                  <input type="email" placeholder="client@example.com" />
+                </div>
+                <div className="form-group">
+                  <label>Phone</label>
+                  <input type="tel" placeholder="+91 98765 43210" />
+                </div>
+                <div className="form-group">
+                  <label>Service Type</label>
+                  <select>
+                    <option>Financial Planning</option>
+                    <option>Tax Consulting</option>
+                    <option>Investment Advice</option>
+                    <option>Business Consulting</option>
+                    <option>Retirement Planning</option>
+                  </select>
+                </div>
+                <div className="form-group">
+                  <label>Date</label>
+                  <input type="date" />
+                </div>
+                <div className="form-group">
+                  <label>Time</label>
+                  <input type="time" />
+                </div>
+                <div className="form-group full-width">
+                  <label>Notes</label>
+                  <textarea rows={3} placeholder="Additional notes or requirements"></textarea>
+                </div>
+              </div>
+            </div>
+            <div className="modal-footer">
+              <Button variant="secondary" size="sm" onClick={() => setShowScheduleModal(false)}>
+                Cancel
+              </Button>
+              <Button variant="primary" size="sm" onClick={() => handleScheduleSubmit({})}>
+                Schedule Consultation
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Add User Modal */}
+      {showUserModal && (
+        <div className="modal-overlay" onClick={() => setShowUserModal(false)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h3>Add New User</h3>
+              <button className="modal-close" onClick={() => setShowUserModal(false)}>
+                <i className="fas fa-times"></i>
+              </button>
+            </div>
+            <div className="modal-body">
+              <div className="form-grid">
+                <div className="form-group">
+                  <label>First Name</label>
+                  <input type="text" placeholder="First name" />
+                </div>
+                <div className="form-group">
+                  <label>Last Name</label>
+                  <input type="text" placeholder="Last name" />
+                </div>
+                <div className="form-group">
+                  <label>Email</label>
+                  <input type="email" placeholder="user@example.com" />
+                </div>
+                <div className="form-group">
+                  <label>Phone</label>
+                  <input type="tel" placeholder="+91 98765 43210" />
+                </div>
+                <div className="form-group">
+                  <label>Role</label>
+                  <select>
+                    <option>Client</option>
+                    <option>Admin</option>
+                    <option>Consultant</option>
+                  </select>
+                </div>
+                <div className="form-group">
+                  <label>City</label>
+                  <input type="text" placeholder="City" />
+                </div>
+                <div className="form-group full-width">
+                  <label>Password</label>
+                  <input type="password" placeholder="Temporary password" />
+                </div>
+              </div>
+            </div>
+            <div className="modal-footer">
+              <Button variant="secondary" size="sm" onClick={() => setShowUserModal(false)}>
+                Cancel
+              </Button>
+              <Button variant="primary" size="sm" onClick={() => handleUserSubmit({})}>
+                Create User
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Newsletter Modal */}
+      {showNewsletterModal && (
+        <div className="modal-overlay" onClick={() => setShowNewsletterModal(false)}>
+          <div className="modal-content large" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h3>Send Newsletter</h3>
+              <button className="modal-close" onClick={() => setShowNewsletterModal(false)}>
+                <i className="fas fa-times"></i>
+              </button>
+            </div>
+            <div className="modal-body">
+              <div className="form-grid">
+                <div className="form-group full-width">
+                  <label>Subject</label>
+                  <input type="text" placeholder="Newsletter subject" />
+                </div>
+                <div className="form-group">
+                  <label>Recipient Group</label>
+                  <select>
+                    <option>All Subscribers</option>
+                    <option>Active Clients</option>
+                    <option>Potential Clients</option>
+                    <option>Premium Members</option>
+                  </select>
+                </div>
+                <div className="form-group">
+                  <label>Template</label>
+                  <select>
+                    <option>Investment Tips</option>
+                    <option>Market Update</option>
+                    <option>Tax Planning</option>
+                    <option>Custom Template</option>
+                  </select>
+                </div>
+                <div className="form-group full-width">
+                  <label>Content</label>
+                  <textarea rows={8} placeholder="Newsletter content..."></textarea>
+                </div>
+              </div>
+            </div>
+            <div className="modal-footer">
+              <Button variant="secondary" size="sm" onClick={() => setShowNewsletterModal(false)}>
+                Cancel
+              </Button>
+              <Button variant="ghost" size="sm">
+                Save Draft
+              </Button>
+              <Button variant="primary" size="sm" onClick={() => handleNewsletterSubmit({})}>
+                Send Newsletter
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <style jsx>{`
         .admin-dashboard {
@@ -582,6 +839,148 @@ export default function AdminDashboard() {
             flex-direction: column;
             align-items: flex-start;
             gap: 0.25rem;
+          }
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: rgba(0, 0, 0, 0.75);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          z-index: 1000;
+          backdrop-filter: blur(4px);
+        }
+
+        .modal-content {
+          background: linear-gradient(145deg, #1e293b 0%, #334155 100%);
+          border-radius: 16px;
+          border: 1px solid rgba(59, 130, 246, 0.3);
+          box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+          width: 90%;
+          max-width: 600px;
+          max-height: 90vh;
+          overflow-y: auto;
+        }
+
+        .modal-content.large {
+          max-width: 800px;
+        }
+
+        .modal-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 1.5rem;
+          border-bottom: 1px solid rgba(59, 130, 246, 0.2);
+        }
+
+        .modal-header h3 {
+          margin: 0;
+          color: #f8fafc;
+          font-size: 1.25rem;
+          font-weight: 600;
+        }
+
+        .modal-close {
+          background: none;
+          border: none;
+          color: #94a3b8;
+          font-size: 1.25rem;
+          cursor: pointer;
+          padding: 0.5rem;
+          border-radius: 6px;
+          transition: all 0.2s ease;
+        }
+
+        .modal-close:hover {
+          background: rgba(239, 68, 68, 0.1);
+          color: #ef4444;
+        }
+
+        .modal-body {
+          padding: 1.5rem;
+        }
+
+        .form-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 1rem;
+        }
+
+        .form-group {
+          display: flex;
+          flex-direction: column;
+          gap: 0.5rem;
+        }
+
+        .form-group.full-width {
+          grid-column: 1 / -1;
+        }
+
+        .form-group label {
+          color: #e2e8f0;
+          font-size: 0.875rem;
+          font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+          padding: 0.75rem;
+          background: rgba(15, 23, 42, 0.8);
+          border: 1px solid rgba(59, 130, 246, 0.3);
+          border-radius: 8px;
+          color: #f8fafc;
+          font-size: 0.875rem;
+          transition: all 0.2s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+          outline: none;
+          border-color: #0ea5e9;
+          box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1);
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+          color: #64748b;
+        }
+
+        .form-group select option {
+          background: #1e293b;
+          color: #f8fafc;
+        }
+
+        .modal-footer {
+          display: flex;
+          justify-content: flex-end;
+          gap: 0.75rem;
+          padding: 1.5rem;
+          border-top: 1px solid rgba(59, 130, 246, 0.2);
+        }
+
+        @media (max-width: 768px) {
+          .modal-content {
+            width: 95%;
+            margin: 1rem;
+          }
+
+          .form-grid {
+            grid-template-columns: 1fr;
+          }
+
+          .modal-header,
+          .modal-body,
+          .modal-footer {
+            padding: 1rem;
           }
         }
       `}</style>

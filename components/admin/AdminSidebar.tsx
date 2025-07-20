@@ -135,40 +135,31 @@ export default function AdminSidebar() {
 
         .nav-list {
           list-style: none;
-          padding: 0;
           margin: 0;
         }
 
         .nav-item {
-          margin: 0.25rem 0;
+          margin: 0.35rem 1.5rem;
+          padding: 10px 15px;
+          background: rgba(30, 41, 59, 0.2);
+          border-radius: 8px;
+          cursor: pointer;
         }
 
-        .nav-link {
-          display: flex;
-          align-items: center;
-          gap: 0.75rem;
-          padding: 0.875rem 1.5rem;
-          color: #cbd5e1;
-          text-decoration: none;
-          transition: all 0.2s ease;
-          border-radius: 0;
-          position: relative;
-          font-weight: 500;
-        }
 
-        .nav-link:hover {
+        .nav-item:hover {
           background: rgba(14, 165, 233, 0.1);
           color: #0ea5e9;
           transform: translateX(4px);
         }
 
-        .nav-link.active {
+        .nav-item.active {
           background: linear-gradient(135deg, rgba(14, 165, 233, 0.15) 0%, rgba(59, 130, 246, 0.1) 100%);
           color: #0ea5e9;
           border-right: 3px solid #0ea5e9;
         }
 
-        .nav-link.active::before {
+        .nav-item.active::before {
           content: '';
           position: absolute;
           left: 0;
