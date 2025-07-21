@@ -79,6 +79,7 @@ export default function AdminSidebar() {
     { href: '/admin/users', icon: 'fas fa-users', label: 'Users' },
     { href: '/admin/consultations', icon: 'fas fa-calendar-alt', label: 'Consultations' },
     { href: '/admin/invoices', icon: 'fas fa-file-invoice', label: 'Invoices' },
+    { href: '/admin/newsletter', icon: 'fas fa-envelope', label: 'Newsletter' },
     { href: '/admin/reports', icon: 'fas fa-chart-pie', label: 'Reports' },
   ];
 
@@ -96,7 +97,7 @@ export default function AdminSidebar() {
           z-index: 100;
           display: flex;
           flex-direction: column;
-          overflow-y: auto;
+          overflow: hidden;
           box-shadow: 4px 0 20px rgba(0, 0, 0, 0.15);
         }
 
@@ -132,11 +133,32 @@ export default function AdminSidebar() {
         .nav-section {
           flex: 1;
           padding: 1rem 0;
+          overflow-y: auto;
+          overflow-x: hidden;
+        }
+
+        .nav-section::-webkit-scrollbar {
+          width: 6px;
+        }
+
+        .nav-section::-webkit-scrollbar-track {
+          background: rgba(30, 41, 59, 0.3);
+          border-radius: 3px;
+        }
+
+        .nav-section::-webkit-scrollbar-thumb {
+          background: rgba(14, 165, 233, 0.4);
+          border-radius: 3px;
+        }
+
+        .nav-section::-webkit-scrollbar-thumb:hover {
+          background: rgba(14, 165, 233, 0.6);
         }
 
         .nav-list {
           list-style: none;
           margin: 0;
+          padding: 0;
         }
 
         .nav-item {
@@ -304,13 +326,11 @@ export default function AdminSidebar() {
         <div className="user-section">
           <div className="user-info">
             <div className="user-avatar">
-              {user?.first_name?.charAt(0)?.toUpperCase() || user?.username?.charAt(0)?.toUpperCase() || 'A'}
+              {user?.name?.charAt(0)?.toUpperCase() || 'A'}
             </div>
             <div className="user-details">
               <p className="user-name">
-                {user?.first_name && user?.last_name 
-                  ? `${user.first_name} ${user.last_name}` 
-                  : user?.username || 'Admin User'}
+                {user?.name || 'Admin User'}
               </p>
               <p className="user-role">Administrator</p>
             </div>

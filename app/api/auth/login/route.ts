@@ -31,8 +31,8 @@ export async function POST(request: NextRequest) {
 
     const userData = user[0];
 
-    // Check if user is active
-    if (!userData.is_active) {
+    // Check if user is active - using correct field name 'status'
+    if (userData.status !== 'active') {
       return NextResponse.json(
         { error: 'Account is deactivated' },
         { status: 401 }
@@ -55,14 +55,12 @@ export async function POST(request: NextRequest) {
       .set({ last_login: new Date(), updated_at: new Date() })
       .where(eq(users.id, userData.id));
 
-    // Generate JWT token
+    // Generate JWT token with correct field names
     const token = await generateToken({
       id: userData.id,
-      username: userData.username,
+      name: userData.name,
       email: userData.email,
       role: userData.role,
-      first_name: userData.first_name || undefined,
-      last_name: userData.last_name || undefined,
     });
 
     // Set cookie
@@ -72,13 +70,11 @@ export async function POST(request: NextRequest) {
       message: 'Login successful',
       user: {
         id: userData.id,
-        username: userData.username,
+        name: userData.name,
         email: userData.email,
         role: userData.role,
-        first_name: userData.first_name,
-        last_name: userData.last_name,
-        specialization: userData.specialization,
-        experience_years: userData.experience_years,
+        phone: userData.phone,
+        location: userData.location,
       },
     });
 

@@ -8,11 +8,9 @@ const SALT_ROUNDS = 10;
 
 export interface UserPayload {
   id: number;
-  username: string;
+  name: string;
   email: string;
   role: string;
-  first_name?: string;
-  last_name?: string;
 }
 
 export async function hashPassword(password: string): Promise<string> {
@@ -33,11 +31,9 @@ export function generateTokenSync(user: UserPayload): string {
   return jwt.sign(
     {
       id: user.id,
-      username: user.username,
+      name: user.name,
       email: user.email,
       role: user.role,
-      first_name: user.first_name,
-      last_name: user.last_name,
     },
     JWT_SECRET,
     { expiresIn: '7d' }

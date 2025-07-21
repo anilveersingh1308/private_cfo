@@ -33,7 +33,7 @@ interface ReportData {
     totalRevenue: number;
     monthlyGrowth: number;
     pendingPayments: number;
-    refunds: number;
+    cancelled: number;
   };
 }
 
@@ -49,6 +49,7 @@ interface ChartData {
 
 export default function AdminReports() {
   const [reportData, setReportData] = useState<ReportData | null>(null);
+  const [chartData, setChartData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [selectedPeriod, setSelectedPeriod] = useState<'week' | 'month' | 'quarter' | 'year'>('month');
@@ -62,36 +63,17 @@ export default function AdminReports() {
     try {
       setLoading(true);
       
-      // Mock data for reports - in a real app, this would come from your API
-      setReportData({
-        consultations: {
-          total: 156,
-          completed: 132,
-          upcoming: 18,
-          cancelled: 6,
-          revenue: 780000,
-          averageRating: 4.7
-        },
-        users: {
-          total: 2845,
-          active: 2156,
-          newThisMonth: 234,
-          subscribersCount: 1890
-        },
-        services: {
-          mostPopular: 'Financial Planning',
-          totalServices: 8,
-          averageDuration: 75
-        },
-        financial: {
-          totalRevenue: 780000,
-          monthlyGrowth: 12.5,
-          pendingPayments: 45000,
-          refunds: 8500
-        }
-      });
+      const response = await fetch(`/api/admin/reports?period=${selectedPeriod}`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch report data');
+      }
+      
+      const data = await response.json();
+      setReportData(data);
+      setChartData(data.chartData);
     } catch (err) {
       setError('Failed to fetch report data');
+      console.error('Error fetching reports:', err);
     } finally {
       setLoading(false);
     }
@@ -109,6 +91,17 @@ export default function AdminReports() {
   };
 
   const getRevenueChartData = (): ChartData => {
+    if (chartData?.revenue) {
+      return {
+        labels: chartData.revenue.labels,
+        datasets: [{
+          label: 'Revenue',
+          data: chartData.revenue.data,
+          backgroundColor: 'rgba(14, 165, 233, 0.1)',
+          borderColor: '#0ea5e9'
+        }]
+      };
+    }
     return {
       labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
       datasets: [{
@@ -121,6 +114,17 @@ export default function AdminReports() {
   };
 
   const getConsultationChartData = (): ChartData => {
+    if (chartData?.consultations) {
+      return {
+        labels: chartData.consultations.labels,
+        datasets: [{
+          label: 'Consultations',
+          data: chartData.consultations.data,
+          backgroundColor: 'rgba(34, 197, 94, 0.1)',
+          borderColor: '#22c55e'
+        }]
+      };
+    }
     return {
       labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
       datasets: [{
@@ -133,6 +137,17 @@ export default function AdminReports() {
   };
 
   const getUserChartData = (): ChartData => {
+    if (chartData?.users) {
+      return {
+        labels: chartData.users.labels,
+        datasets: [{
+          label: 'New Users',
+          data: chartData.users.data,
+          backgroundColor: 'rgba(168, 85, 247, 0.1)',
+          borderColor: '#a855f7'
+        }]
+      };
+    }
     return {
       labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
       datasets: [{
@@ -145,18 +160,26 @@ export default function AdminReports() {
   };
 
   const exportReport = (format: 'pdf' | 'csv' | 'excel') => {
-    // Mock export functionality
     console.log(`Exporting report as ${format.toUpperCase()}`);
     
-    // In a real application, you would generate and download the report
-    const reportContent = JSON.stringify(reportData, null, 2);
-    const blob = new Blob([reportContent], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `report-${selectedPeriod}-${Date.now()}.json`;
-    link.click();
-    URL.revokeObjectURL(url);
+    if (format === 'pdf') {
+      // Export as PDF (in a real app, you'd generate a PDF)
+      const reportContent = JSON.stringify(reportData, null, 2);
+      const blob = new Blob([reportContent], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `report-${selectedPeriod}-${Date.now()}.json`;
+      link.click();
+      URL.revokeObjectURL(url);
+    } else {
+      // Use the export API for CSV and Excel
+      const url = `/api/admin/reports/export?format=${format}&period=${selectedPeriod}&type=summary`;
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `report-${selectedPeriod}-${Date.now()}.${format}`;
+      link.click();
+    }
   };
 
   if (loading) {
@@ -267,36 +290,40 @@ export default function AdminReports() {
           title="Total Revenue"
           value={formatCurrency(reportData.financial.totalRevenue)}
           icon="fas fa-rupee-sign"
-          trend="up"
-          trendValue={formatPercentage(reportData.financial.monthlyGrowth)}
-          trendText="vs last period"
+          trend={{
+            value: Math.abs(reportData.financial.monthlyGrowth),
+            isPositive: reportData.financial.monthlyGrowth >= 0
+          }}
           color="green"
         />
         <StatsCard
           title="Consultations"
           value={reportData.consultations.total.toString()}
           icon="fas fa-calendar-check"
-          trend="up"
-          trendValue="8%"
-          trendText="vs last period"
+          trend={{
+            value: 8,
+            isPositive: true
+          }}
           color="blue"
         />
         <StatsCard
           title="Active Users"
           value={reportData.users.active.toString()}
           icon="fas fa-users"
-          trend="up"
-          trendValue="15%"
-          trendText="vs last period"
+          trend={{
+            value: 15,
+            isPositive: true
+          }}
           color="purple"
         />
         <StatsCard
           title="Completion Rate"
           value={`${Math.round((reportData.consultations.completed / reportData.consultations.total) * 100)}%`}
           icon="fas fa-chart-line"
-          trend="up"
-          trendValue="3%"
-          trendText="vs last period"
+          trend={{
+            value: 3,
+            isPositive: true
+          }}
           color="orange"
         />
       </div>
@@ -421,8 +448,8 @@ export default function AdminReports() {
               <span className="metric-value warning">{formatCurrency(reportData.financial.pendingPayments)}</span>
             </div>
             <div className="report-metric">
-              <span className="metric-label">Refunds</span>
-              <span className="metric-value danger">{formatCurrency(reportData.financial.refunds)}</span>
+              <span className="metric-label">Cancelled</span>
+              <span className="metric-value danger">{formatCurrency(reportData.financial.cancelled)}</span>
             </div>
             <div className="report-metric">
               <span className="metric-label">Avg. Order Value</span>

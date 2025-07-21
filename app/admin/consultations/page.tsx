@@ -689,7 +689,7 @@ export default function AdminConsultations() {
     <div className="admin-consultations">
       <PageHeader
         title="Consultation Management"
-        subtitle={`Track and manage all consultation sessions • ${consultants.length} consultant${consultants.length !== 1 ? 's' : ''} available`}
+        subtitle={`Track and manage all consultation sessions` }
         breadcrumb={[
           { label: 'Admin', href: '/admin' },
           { label: 'Consultations' }
@@ -757,15 +757,6 @@ export default function AdminConsultations() {
             color="green"
           />
         </div>
-        <div onClick={() => handleStatsCardClick('revenue')} className="stats-card-clickable">
-          <StatsCard
-            title="Total Revenue"
-            value={formatCurrency(getTotalRevenue())}
-            icon="fas fa-rupee-sign"
-            trend={{ value: 18, isPositive: true }}
-            color="purple"
-          />
-        </div>
       </div>
 
       {/* Additional Stats Row */}
@@ -789,19 +780,6 @@ export default function AdminConsultations() {
           </div>
         </div>
       </div>
-
-      {/* Detailed Breakdown */}
-      <Card className="breakdown-card">
-        <div className="breakdown-header">
-          <h3>
-            <i className="fas fa-chart-pie" style={{ marginRight: '0.5rem', color: '#0ea5e9' }}></i>
-            Quick Overview
-          </h3>
-          <p style={{ color: '#94a3b8', fontSize: '0.875rem', margin: '0.5rem 0 0 0' }}>
-            Click on any stat card above to view detailed breakdown and analytics
-          </p>
-        </div>
-      </Card>
 
       {/* Filters */}
       <Card className="filters-card">
