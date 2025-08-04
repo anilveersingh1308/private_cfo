@@ -10,6 +10,7 @@ import {
   consultationNotes,
   systemLogs
 } from '../lib/schema';
+import { generateUniqueUsername } from '../lib/username-utils';
 
 // Load environment variables
 config({ path: '.env.local' });
@@ -34,7 +35,9 @@ async function seedDatabase() {
 
     // Seed Users
     console.log('👥 Seeding users...');
-    const seedUsers = await db.insert(users).values([
+    
+    // Define user data without usernames first
+    const userData = [
       {
         name: 'Admin User',
         email: 'admin@privatecfo.com',
@@ -97,44 +100,29 @@ async function seedDatabase() {
         role: 'user',
         status: 'active',
         phone: '+91 98765 43211',
-        location: 'Delhi, Delhi',
-        consultations_count: 3,
-        total_spent: '15000'
-      },
-      {
-        name: 'Priya Sharma',
-        email: 'priya.sharma@email.com',
-        password_hash: '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',
-        role: 'user',
-        status: 'active',
-        phone: '+91 98765 43212',
-        location: 'Bangalore, Karnataka',
-        consultations_count: 5,
-        total_spent: '25000'
-      },
-      {
-        name: 'Sneha Patel',
-        email: 'sneha.patel@email.com',
-        password_hash: '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',
-        role: 'user',
-        status: 'pending',
-        phone: '+91 98765 43217',
-        location: 'Pune, Maharashtra',
-        consultations_count: 0,
-        total_spent: '0'
-      },
-      {
-        name: 'Vikram Singh',
-        email: 'vikram.singh@email.com',
-        password_hash: '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',
-        role: 'user',
-        status: 'inactive',
-        phone: '+91 98765 43218',
-        location: 'Kolkata, West Bengal',
-        consultations_count: 2,
-        total_spent: '8000'
+        location: 'Mumbai, Maharashtra',
+        consultations_count: 15,
+        total_spent: '125000'
       }
-    ]).returning();
+    ];
+
+    // Insert users one by one with generated usernames
+    const seedUsers = [];
+    let existingUsernames: string[] = [];
+    
+    for (const user of userData) {
+      const username = generateUniqueUsername(user.name, existingUsernames);
+      existingUsernames.push(username);
+      
+      const insertedUser = await db.insert(users).values({
+        ...user,
+        username,
+        created_at: new Date(),
+        updated_at: new Date()
+      }).returning();
+      
+      seedUsers.push(insertedUser[0]);
+    }
 
     console.log(`✅ Created ${seedUsers.length} users`);
 
@@ -353,6 +341,7 @@ async function seedDatabase() {
         invoice_number: 'INV-2024-001',
         client_name: 'Rajesh Kumar',
         client_email: 'rajesh.kumar@email.com',
+        service_type: 'Financial Planning',
         service_description: 'Financial Planning Consultation - 60 minutes',
         amount: '5000',
         tax_amount: '900',
@@ -366,6 +355,7 @@ async function seedDatabase() {
         invoice_number: 'INV-2024-002',
         client_name: 'Priya Patel',
         client_email: 'priya.patel@email.com',
+        service_type: 'Tax Consulting',
         service_description: 'Tax Consulting - 45 minutes',
         amount: '3500',
         tax_amount: '630',
@@ -379,6 +369,7 @@ async function seedDatabase() {
         invoice_number: 'INV-2024-003',
         client_name: 'Sneha Reddy',
         client_email: 'sneha.reddy@email.com',
+        service_type: 'Retirement Planning',
         service_description: 'Retirement Planning Consultation - 60 minutes',
         amount: '4500',
         tax_amount: '810',

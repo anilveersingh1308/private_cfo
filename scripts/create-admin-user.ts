@@ -2,6 +2,7 @@ import { db } from '../lib/db';
 import { users } from '../lib/schema';
 import { eq } from 'drizzle-orm';
 import bcrypt from 'bcryptjs';
+import { generateUniqueUsername } from '../lib/username-utils';
 
 async function createAdminUser() {
   try {
@@ -27,9 +28,17 @@ async function createAdminUser() {
       return existingAdmin[0];
     }
     
+    // Generate unique username for admin
+    const existingUsernames = await db
+      .select({ username: users.username })
+      .from(users);
+    
+    const username = generateUniqueUsername('System Administrator', existingUsernames.map(u => u.username));
+    
     // Create the admin user
     const adminUser = await db.insert(users).values({
       name: 'System Administrator',
+      username,
       email: 'admin@cfo.com',
       password_hash: hashedPassword,
       role: 'admin',
@@ -38,6 +47,8 @@ async function createAdminUser() {
       location: 'System',
       consultations_count: 0,
       total_spent: '0',
+      created_at: new Date(),
+      updated_at: new Date(),
     }).returning();
     
     console.log('✅ Admin user created successfully!');
@@ -45,6 +56,7 @@ async function createAdminUser() {
     console.log('🔑 LOGIN CREDENTIALS:');
     console.log('========================');
     console.log(`   User ID: ${adminUser[0].id}`);
+    console.log(`   Username: ${adminUser[0].username}`);
     console.log(`   Email: ${adminUser[0].email}`);
     console.log(`   Password: ${plainPassword}`);
     console.log(`   Role: ${adminUser[0].role}`);

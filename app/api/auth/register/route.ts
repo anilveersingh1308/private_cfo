@@ -3,26 +3,22 @@ import { db } from '@/lib/db';
 import { users } from '@/lib/schema';
 import { eq } from 'drizzle-orm';
 import { hashPassword, generateToken, setAuthCookie } from '@/lib/auth';
+import { generateUniqueUsername } from '@/lib/username-utils';
 
 export async function POST(request: NextRequest) {
   try {
     const {
-      username,
+      name,
       email,
       password,
-      first_name,
-      last_name,
       role,
-      specialization,
-      experience_years,
-      phone,
-      bio
+      phone
     } = await request.json();
 
     // Validate required fields
-    if (!username || !email || !password || !first_name || !last_name) {
+    if (!name || !email || !password) {
       return NextResponse.json(
-        { error: 'Username, email, password, first name, and last name are required' },
+        { error: 'Name, email, and password are required' },
         { status: 400 }
       );
     }
@@ -58,19 +54,12 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Check if username already exists
-    const existingUsername = await db
-      .select()
-      .from(users)
-      .where(eq(users.username, username))
-      .limit(1);
-
-    if (existingUsername.length > 0) {
-      return NextResponse.json(
-        { error: 'Username already taken' },
-        { status: 409 }
-      );
-    }
+    // Generate unique username
+    const existingUsernames = await db
+      .select({ username: users.username })
+      .from(users);
+    
+    const username = generateUniqueUsername(name, existingUsernames.map(u => u.username));
 
     // Hash password
     const hashedPassword = await hashPassword(password);
@@ -79,17 +68,13 @@ export async function POST(request: NextRequest) {
     const newUser = await db
       .insert(users)
       .values({
+        name,
         username,
         email: email.toLowerCase(),
         password_hash: hashedPassword,
-        first_name,
-        last_name,
-        role: role || 'financial_advisor',
-        specialization,
-        experience_years,
-        phone,
-        bio,
-        is_active: true,
+        role: role || 'user',
+        phone: phone || null,
+        status: 'active',
         created_at: new Date(),
         updated_at: new Date(),
       })
@@ -100,11 +85,9 @@ export async function POST(request: NextRequest) {
     // Generate JWT token
     const token = await generateToken({
       id: userData.id,
-      username: userData.username,
+      name: userData.name,
       email: userData.email,
       role: userData.role,
-      first_name: userData.first_name || undefined,
-      last_name: userData.last_name || undefined,
     });
 
     // Set cookie
@@ -115,12 +98,12 @@ export async function POST(request: NextRequest) {
       user: {
         id: userData.id,
         username: userData.username,
+        name: userData.name,
         email: userData.email,
         role: userData.role,
-        first_name: userData.first_name,
-        last_name: userData.last_name,
-        specialization: userData.specialization,
-        experience_years: userData.experience_years,
+        phone: userData.phone,
+        status: userData.status,
+        created_at: userData.created_at,
       },
     });
 

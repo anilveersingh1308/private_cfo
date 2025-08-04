@@ -4,8 +4,7 @@ import { verifyTokenEdge } from '@/lib/auth-edge';
 
 export async function middleware(request: NextRequest) {
   // Check if it's a protected route
-  const isProtectedRoute = request.nextUrl.pathname.startsWith('/dashboard') || 
-                          request.nextUrl.pathname.startsWith('/admin');
+  const isProtectedRoute = request.nextUrl.pathname.startsWith('/dashboard');
 
   // Check if it's the sign-in page
   const isSignInPage = request.nextUrl.pathname.startsWith('/sign-in');
@@ -23,10 +22,11 @@ export async function middleware(request: NextRequest) {
       return NextResponse.redirect(new URL('/sign-in', request.url));
     }
 
-    // For admin routes, check if user is admin
-    if (request.nextUrl.pathname.startsWith('/admin') && user.role !== 'admin') {
-      return NextResponse.redirect(new URL('/dashboard', request.url));
-    }
+    // For dashboard routes, allow any authenticated user
+    // (You can add specific role checks for specific dashboard paths if needed)
+    // if (request.nextUrl.pathname.startsWith('/dashboard/admin') && user.role !== 'admin') {
+    //   return NextResponse.redirect(new URL('/sign-in', request.url));
+    // }
   }
 
   // If user is authenticated and tries to access sign-in page, redirect to dashboard
@@ -46,5 +46,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/dashboard/:path*', '/admin/:path*', '/sign-in/:path*']
+  matcher: ['/dashboard/:path*', '/sign-in/:path*']
 };

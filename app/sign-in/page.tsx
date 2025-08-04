@@ -21,7 +21,7 @@ export default function SignIn() {
     if (!authLoading && user) {
       // Redirect based on role
       if (user.role === 'admin') {
-        router.push('/admin/consultations');
+        router.push('/dashboard');
       } else {
         router.push('/dashboard');
       }
