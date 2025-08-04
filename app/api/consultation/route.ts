@@ -75,24 +75,19 @@ export async function POST(request: NextRequest) {
       message: body.message ? body.message.trim() : null,
     };
 
-    // Insert into database
+    // Insert into database - map form data to consultations table structure
     const result = await db.insert(consultations).values({
-      name: trimmedBody.name,
-      phone: trimmedBody.phone,
-      country_code: '+91', // Fixed for India
-      age: trimmedBody.age,
-      city: trimmedBody.city,
-      occupation: trimmedBody.occupation,
-      guidance: trimmedBody.guidance,
-      industry: trimmedBody.industry,
-      income: trimmedBody.income,
-      preferred_communication: trimmedBody.preferred_communication,
-      consultation_timing: trimmedBody.consultation_timing,
-      email: trimmedBody.email,
-      message: trimmedBody.message,
-      privacy: body.privacy,
-      not_job: body.not_job,
-      marketing_consent: body.marketing_consent || false,
+      client_name: trimmedBody.name,
+      client_email: trimmedBody.email,
+      service_type: trimmedBody.guidance || 'General Consultation',
+      status: 'pending', // Default status for new consultation requests
+      scheduled_date: new Date(Date.now() + 24 * 60 * 60 * 1000), // Default to tomorrow
+      duration: 60, // Default 60 minutes
+      amount: '0', // Will be set later when scheduling (as string for decimal type)
+      payment_status: 'pending',
+      consultant: null, // Will be assigned later
+      meeting_link: null, // Will be set when scheduling
+      notes: `Phone: ${trimmedBody.phone}\nAge: ${trimmedBody.age || 'Not specified'}\nCity: ${trimmedBody.city}\nOccupation: ${trimmedBody.occupation}\nIndustry: ${trimmedBody.industry || 'Not specified'}\nIncome: ${trimmedBody.income || 'Not specified'}\nPreferred Communication: ${trimmedBody.preferred_communication || 'Not specified'}\nPreferred Timing: ${trimmedBody.consultation_timing || 'Not specified'}\nMessage: ${trimmedBody.message || 'None'}\nMarketing Consent: ${body.marketing_consent ? 'Yes' : 'No'}`,
       created_at: new Date(),
       updated_at: new Date(),
     }).returning();
@@ -131,7 +126,7 @@ export async function POST(request: NextRequest) {
 
 export async function GET() {
   try {
-    // Optional: Get all consultations (for admin purposes)
+    // Get all consultations (for admin purposes)
     const allConsultations = await db.select().from(consultations);
     
     return NextResponse.json({

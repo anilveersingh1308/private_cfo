@@ -128,31 +128,6 @@ export const systemLogs = pgTable('system_logs', {
   created_at: timestamp('created_at').defaultNow().notNull(),
 });
 
-// Legacy consultation form table (keeping existing structure for compatibility)
-export const consultationForms = pgTable('consultation_forms', {
-  id: serial('id').primaryKey(),
-  name: varchar('name', { length: 255 }).notNull(),
-  phone: varchar('phone', { length: 30 }).notNull(),
-  country_code: varchar('country_code', { length: 10 }).notNull().default('+91'),
-  age: varchar('age', { length: 10 }),
-  city: varchar('city', { length: 255 }).notNull(),
-  occupation: varchar('occupation', { length: 255 }).notNull(),
-  guidance: varchar('guidance', { length: 255 }),
-  industry: varchar('industry', { length: 255 }),
-  income: varchar('income', { length: 255 }),
-  preferred_communication: varchar('preferred_communication', { length: 100 }),
-  consultation_timing: varchar('consultation_timing', { length: 100 }),
-  email: varchar('email', { length: 255 }).notNull(),
-  message: text('message'),
-  privacy: boolean('privacy').notNull().default(false),
-  not_job: boolean('not_job').notNull().default(false),
-  marketing_consent: boolean('marketing_consent').default(false),
-  assigned_to: integer('assigned_to').references(() => users.id),
-  status: varchar('status', { length: 50 }).notNull().default('pending'),
-  created_at: timestamp('created_at').defaultNow().notNull(),
-  updated_at: timestamp('updated_at').defaultNow().notNull(),
-});
-
 // Consultation notes for detailed tracking
 export const consultationNotes = pgTable('consultation_notes', {
   id: serial('id').primaryKey(),
@@ -219,8 +194,6 @@ export type DashboardAnalytic = typeof dashboardAnalytics.$inferSelect;
 export type NewDashboardAnalytic = typeof dashboardAnalytics.$inferInsert;
 export type SystemLog = typeof systemLogs.$inferSelect;
 export type NewSystemLog = typeof systemLogs.$inferInsert;
-export type ConsultationForm = typeof consultationForms.$inferSelect;
-export type NewConsultationForm = typeof consultationForms.$inferInsert;
 export type ConsultationNote = typeof consultationNotes.$inferSelect;
 export type NewConsultationNote = typeof consultationNotes.$inferInsert;
 export type ConsultationSession = typeof consultationSessions.$inferSelect;

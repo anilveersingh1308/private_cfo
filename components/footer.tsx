@@ -12,10 +12,65 @@ export const Footer = () => {
     const [investmentInsights, setInvestmentInsights] = useState(false);
     const [businessFinance, setBusinessFinance] = useState(false);
 
-    const handleSubscribe = (e: React.FormEvent) => {
+    const handleSubscribe = async (e: React.FormEvent) => {
         e.preventDefault();
-        // Handle newsletter subscription
-        console.log('Subscribe with:', { email, allUpdates, financialTips, marketUpdates, taxPlanning, investmentInsights, businessFinance });
+        
+        if (!email) {
+            alert('Please enter a valid email address');
+            return;
+        }
+
+        // Prepare categories array
+        const selectedCategories = [];
+        if (allUpdates) selectedCategories.push('All Updates');
+        if (financialTips) selectedCategories.push('Financial Tips');
+        if (marketUpdates) selectedCategories.push('Market Updates');
+        if (taxPlanning) selectedCategories.push('Tax Planning');
+        if (investmentInsights) selectedCategories.push('Investment Insights');
+        if (businessFinance) selectedCategories.push('Business Finance');
+
+        // If no specific categories selected but allUpdates is checked, add default categories
+        if (selectedCategories.length === 1 && allUpdates) {
+            selectedCategories.push('Financial Planning', 'Investment Advice', 'Tax Consulting');
+        } else if (selectedCategories.length === 0) {
+            selectedCategories.push('Financial Planning'); // Default category
+        }
+
+        try {
+            const response = await fetch('/api/dashboard/subscribers', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    email: email.toLowerCase().trim(),
+                    categories: selectedCategories,
+                    source: 'Website Footer'
+                }),
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                alert('Thank you for subscribing to our newsletter! 🎉');
+                setEmail('');
+                setAllUpdates(true);
+                setFinancialTips(false);
+                setMarketUpdates(false);
+                setTaxPlanning(false);
+                setInvestmentInsights(false);
+                setBusinessFinance(false);
+            } else {
+                if (result.error && result.error.includes('already exists')) {
+                    alert('You are already subscribed to our newsletter! 📧');
+                } else {
+                    alert(result.error || 'Failed to subscribe. Please try again.');
+                }
+            }
+        } catch (error) {
+            console.error('Newsletter subscription error:', error);
+            alert('Failed to subscribe. Please check your internet connection and try again.');
+        }
     };
 
     return (
