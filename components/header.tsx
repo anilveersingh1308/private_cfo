@@ -141,15 +141,6 @@ export const Header = () => {
                                 </li>
                             </ul>
                         </li>
-                        <li>
-                            <Link 
-                                href="/sign-in" 
-                                onClick={closeMenus}
-                                className={`sign-in-btn ${isActiveLink('/sign-in') ? 'active' : ''}`}
-                            >
-                                Sign In
-                            </Link>
-                        </li>
                     </ul>
                 </nav>
                 <button 

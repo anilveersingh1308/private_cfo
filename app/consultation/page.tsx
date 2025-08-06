@@ -279,7 +279,7 @@ export default function ConsultationPage() {
       }
 
       console.log('Submission successful:', result);
-      showNotificationMessage(`Thank you! Your consultation request has been submitted successfully (ID: ${result.id}). Redirecting you back in 5 seconds...`, 'success');
+      showNotificationMessage(`Thank you! Your consultation request has been submitted successfully. Redirecting you back in 5 seconds...`, 'success');
       
       // Reset form
       setFormData({
@@ -317,7 +317,7 @@ export default function ConsultationPage() {
   };
 
   return (
-    <>
+    <div className="min-h-screen bg-[var(--color-dark-bg)]">
       <Header />
       
       {/* Top-right notification */}
@@ -332,7 +332,7 @@ export default function ConsultationPage() {
               <div>{submitMessage}</div>
               {notificationType === 'success' && isRedirecting && (
                 <div className="notification-countdown">
-                  ⏱️ Redirecting in {redirectCountdown} seconds...
+                  ⏱ Redirecting in {redirectCountdown} seconds...
                 </div>
               )}
             </div>
@@ -463,16 +463,7 @@ export default function ConsultationPage() {
                           phone: formatted
                         }));
                       }}
-                      style={{
-                        flex: 1,
-                        padding: '0.75rem',
-                        borderRadius: '8px',
-                        border: phoneError ? '1px solid #ff6b6b' : '1px solid rgba(255, 255, 255, 0.2)',
-                        backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                        color: 'white',
-                        fontSize: '1rem',
-                        outline: 'none'
-                      }}
+                      style={{ flex: 1 }}
                     />
                   </div>
                   {phoneError && (
@@ -495,7 +486,7 @@ export default function ConsultationPage() {
                       name="age"
                       min="18"
                       max="100"
-                      placeholder="25"
+                      placeholder="Min. age 18"
                       value={formData.age}
                       onChange={handleInputChange}
                     />
@@ -662,7 +653,7 @@ export default function ConsultationPage() {
                     value={formData.guidance}
                     onChange={handleInputChange}
                   >
-                    <option value="" disabled>What type of service are you interested in?</option>
+                    <option value="" disabled>Type of service interested in?</option>
                     <option value="individual_financial_planning">Individual Financial Planning</option>
                     <option value="tax_planning_filing">Tax Planning & Filing</option>
                     <option value="investment_advisory">Investment Advisory</option>
@@ -730,7 +721,7 @@ export default function ConsultationPage() {
                       value={formData.income}
                       onChange={handleInputChange}
                     >
-                      <option value="" disabled>Select Income Range</option>
+                      <option value="" disabled>Select Income</option>
                       <option value="below_3_lakh">Below ₹3 Lakh</option>
                       <option value="3_5_lakh">₹3 - ₹5 Lakh</option>
                       <option value="5_10_lakh">₹5 - ₹10 Lakh</option>
@@ -752,7 +743,7 @@ export default function ConsultationPage() {
                       value={formData.preferred_communication}
                       onChange={handleInputChange}
                     >
-                      <option value="" disabled>Preferred Communication Method</option>
+                      <option value="" disabled>Preferred method</option>
                       <option value="phone">Phone Call</option>
                       <option value="email">Email</option>
                       <option value="video_call">Video Call</option>
@@ -819,7 +810,7 @@ export default function ConsultationPage() {
                     onChange={handleInputChange}
                   />
                   <label htmlFor="privacy" className="required-field">
-                    I have read and agree to the <a href="#" target="_blank">Privacy Policy</a>
+                    I have read and agree to the <a href="/privacy-policy" target="_blank">Privacy Policy</a>
                   </label>
                 </div>
 
@@ -864,6 +855,6 @@ export default function ConsultationPage() {
       </div>
 
       <Footer />
-    </>
+    </div>
   );
 }

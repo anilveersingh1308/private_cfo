@@ -39,20 +39,23 @@ export default function AboutPage() {
               backgroundPosition: 'center'
             }}
           />
-          <div className="container relative z-10 text-center text-white">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 max-w-4xl mx-auto leading-tight">
+          <div className="hero-content container relative z-10 text-center text-white">
+            <h1 className="base-hero-h1 text-4xl md:text-5xl lg:text-6xl font-bold mb-6 max-w-4xl mx-auto leading-tight">
               Beyond the Balance Sheet
             </h1>
-            <p className="text-xl md:text-2xl font-semibold mb-6 text-[#e0e0e0]">
+            <p className="subtitle text-xl md:text-2xl font-semibold mb-6 text-[#e0e0e0]">
               The Story of Your Financial Partner
             </p>
-            <p className="text-base md:text-lg max-w-4xl mx-auto mb-8 text-[#b0b0b0] leading-relaxed">
+            <p className="description text-base md:text-lg max-w-4xl mx-auto mb-8 text-[#b0b0b0] leading-relaxed">
               We believe that strategic financial leadership shouldn't be reserved for large corporations. 
               At Private CFO, we're dedicated to bringing the clarity, foresight, and strategic power of a 
               Chief Financial Officer directly to you—whether you're an individual navigating the complexities 
               of personal wealth or a business owner driving for sustainable growth. We're not just accountants; 
               we are your dedicated financial partners.
             </p>
+            <Link href="/consultation" className="btn btn-primary inline-flex items-center justify-center px-8 py-4 bg-gradient-to-r from-[#3b4d66] to-[#003A8C] text-white font-semibold rounded-full transition-all duration-300 hover:transform hover:-translate-y-1 hover:shadow-lg">
+              Book a free consultation
+            </Link>
           </div>
         </section>
 

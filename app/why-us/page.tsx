@@ -31,7 +31,7 @@ export default function WhyUsPage() {
       <main>
         {/* Hero Section */}
         <section className="hero relative min-h-[80vh] flex items-center justify-center bg-cover bg-center pt-40 pb-16">
-          <div 
+          <div
             className="absolute inset-0 bg-gradient-to-t from-[rgba(13,14,27,1)] via-[rgba(13,14,27,0.7)] to-[rgba(13,14,27,0.3)]"
             style={{
               backgroundImage: `url('/images/hero/why_us_hero_image.png')`,
@@ -39,18 +39,21 @@ export default function WhyUsPage() {
               backgroundPosition: 'center'
             }}
           />
-          <div className="container relative z-10 text-center text-white">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 max-w-4xl mx-auto leading-tight">
+          <div className="hero-content container relative z-10 text-center text-white flex flex-col items-center">
+            <h1 className="base-hero-h1 text-4xl md:text-5xl lg:text-6xl font-bold mb-6 max-w-4xl mx-auto leading-tight">
               Why Choose Private CFO?
             </h1>
-            <p className="text-xl md:text-2xl font-semibold mb-6 text-[#e0e0e0]">
+            <p className="subtitle text-xl md:text-2xl font-semibold mb-6 text-[#e0e0e0]">
               More Than a CFO. We're Your Financial Partner.
             </p>
-            <p className="text-base md:text-lg max-w-4xl mx-auto mb-8 text-[#b0b0b0] leading-relaxed text-justify">
+            <p className="description text-base md:text-lg max-w-4xl mx-auto mb-8 text-[#b0b0b0] leading-relaxed text-justify">
               At Private CFO, we believe that true financial control isn't found in a spreadsheet—it's found in a partnership. 
               We combine decades of high-level financial expertise with a deeply personal, data-driven approach. We don't just 
               manage your finances; we clarify them, strategize for them, and empower you to build a more secure and prosperous future.
             </p>
+            <Link href="/consultation" className="btn btn-primary inline-flex items-center justify-center px-8 py-4 bg-gradient-to-r from-[#3b4d66] to-[#003A8C] text-white font-semibold rounded-full transition-all duration-300 hover:transform hover:-translate-y-1 hover:shadow-lg gap-2">
+              Book a free consultation
+            </Link>
           </div>
         </section>
 

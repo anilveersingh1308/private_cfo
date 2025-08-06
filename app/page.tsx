@@ -102,7 +102,7 @@ export default function HomePage() {
   }, []);
 
   return (
-    <>
+    <div className="min-h-screen bg-[var(--color-dark-bg)]">
       <Header />
       
       {/* Hero Section */}
@@ -215,7 +215,7 @@ export default function HomePage() {
                 Our Financial Health Score is more than a number—it's a CFO-calibrated assessment designed to reveal the true condition of your finances. Whether you're growing personal wealth or managing a business, this score tells you what's strong, what's at risk, and what to do next.
               </p>
               <p className="sub-group">Your finances are talking. It's time to understand what they're saying.</p>
-              <Link href="/consultation" className="btn btn-secondary">
+              <Link href="/consultation" className="btn btn-secondary mt-0">
                 Check My <br />Financial Health
                 <svg style={{ float: 'right', marginTop: '5px' }} xmlns="http://www.w3.org/2000/svg" width="20" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -248,6 +248,6 @@ export default function HomePage() {
       </section>
 
       <Footer />
-    </>
+    </div>
   );
 }

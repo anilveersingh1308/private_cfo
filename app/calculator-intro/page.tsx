@@ -45,7 +45,7 @@ export default function CalculatorIntroPage() {
   ];
 
   return (
-    <>
+    <div className="min-h-screen bg-[var(--color-dark-bg)]">
       <Header />
       
       {/* Hero Section */}
@@ -100,6 +100,6 @@ export default function CalculatorIntroPage() {
       </section>
 
       <Footer />
-    </>
+    </div>
   );
 }

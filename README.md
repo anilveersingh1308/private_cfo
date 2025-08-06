@@ -78,15 +78,6 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 After running `npm run db:init`, you can use these credentials:
 
-**Admin User:**
-- Username: `admin`
-- Password: `admin123`
-
-**CFO Providers:**
-- Username: `john_doe` | Password: `password123`
-- Username: `jane_smith` | Password: `password123`
-- Username: `mike_wilson` | Password: `password123`
-
 ⚠️ **Important**: Change these passwords in production!
 
 ## 📚 Available Scripts
