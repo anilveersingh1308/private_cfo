@@ -439,11 +439,6 @@ export default function SignIn() {
               <Link href="/">← Back to website</Link>
             </div>
 
-            <div className="demo-credentials">
-              <p className="font-medium">Demo Credentials:</p>
-              <p>Admin: admin@privatecfo.com / admin123</p>
-              <p className="text-warning">Change password after first login!</p>
-            </div>
           </div>
         </div>
       </div>

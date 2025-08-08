@@ -1,0 +1,59 @@
+/* Calculator Styles for Next.js Implementation */
+/* @import url('../../calculate.css'); */
+
+/* Additional Next.js specific styles */
+.calculator-container {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #0d1026 0%, #1a2850 100%);
+    padding: 2rem 1rem;
+}
+
+.hero-section {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.hero-section h1 {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.hero-section p {
+    color: var(--text-secondary);
+    font-size: 1.125rem;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Override for Next.js components */
+.calculator-widget {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Tab button specific styles */
+.tab-btn {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Responsive adjustments for Next.js */
+@media (max-width: 768px) {
+    .hero-section h1 {
+        font-size: 2rem;
+    }
+    
+    .calculator-widget {
+        grid-template-columns: 1fr;
+    }
+    
+    .calculator-input-area {
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+    }
+}
