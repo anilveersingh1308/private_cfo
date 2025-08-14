@@ -11,6 +11,48 @@
 /* Calculator Styles */
 @import "../calculate.css";
 
+/* Additional CSS Reset for Cross-Browser Consistency */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* Ensure consistent text rendering across browsers */
+body, input, textarea, select, button {
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Remove default button and input styling */
+button, input, select, textarea {
+    background: transparent;
+    border: none;
+    font-family: inherit;
+    font-size: inherit;
+    color: inherit;
+}
+
+/* Ensure images are responsive by default */
+img, picture, video, canvas, svg {
+    display: block;
+    max-width: 100%;
+    height: auto;
+}
+
+/* Remove list styling by default */
+ol, ul {
+    list-style: none;
+}
+
+/* Ensure consistent table behavior */
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
 /* CSS Variables & Basic Setup */
 :root {
     --color-dark-bg: #0d0e1b;
@@ -31,6 +73,54 @@
     
     --font-primary: 'Montserrat', sans-serif;
     --font-secondary: 'Mooli', sans-serif;
+
+    /* Calculator Variables */
+    --bg-dark-end: #0d1026;
+    --card-bg: rgba(24, 44, 78, 0.4);
+    --text-secondary: #a3b8d5;
+    --accent-cyan: #00bcd4;
+    --accent-white: #ffffff;
+    --accent-green: #54DD0A;
+    --slider-track: #2a416b;
+    --accent-sip: #ff6b6b;
+    --accent-lumpsum: #4ecdc4;
+    --accent-fd: #9b59b6;
+    --accent-mutual: #f39c12;
+    --accent-simple: #1abc9c;
+    --accent-compound: #e74c3c;
+    --accent-yellow: #f1c40f;
+
+    /* Gradient Variables */
+    --gradient-sip: linear-gradient(90deg, #ff6b6b 0%, #ee5a24 100%);
+    --gradient-lumpsum: linear-gradient(90deg, #4ecdc4 0%, #44a08d 100%);
+    --gradient-purple-pink: linear-gradient(90deg, #9b59b6 0%, #e91e63 100%);
+    --gradient-mutual: linear-gradient(90deg, #f39c12 0%, #e67e22 100%);
+    --gradient-teal: linear-gradient(90deg, #1abc9c 0%, #16a085 100%);
+    --gradient-compound: linear-gradient(90deg, #e74c3c 0%, #c0392b 100%);
+    --gradient-yellow: linear-gradient(90deg, #f1c40f 0%, #f39c12 100%);
+    --gradient-green: linear-gradient(90deg, #ffffff 0%, var(--accent-green) 100%);
+
+    /* Shadcn/UI Variables */
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 84% 4.9%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+    --radius: 0.5rem;
 }
 
 /* Base styles */
@@ -253,7 +343,7 @@
     text-shadow: 0 0 10px rgba(239, 68, 68, 0.5);
 }
 
-/* Enhanced Input Styling */
+/* Enhanced Form Input Styling with better cross-browser support */
 .form-group input, .form-group .phone-input-container input,
 .form-group select,
 .form-group textarea {
@@ -263,7 +353,6 @@
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     backdrop-filter: blur(10px);
     font-family: var(--font-primary);
-
     padding: 0.45rem 0.7rem;
     background: rgba(15, 23, 42, 0.6);
     border: 1px solid rgba(0, 178, 255, 0.3);
@@ -272,9 +361,19 @@
     margin-bottom: 0.1rem;
     resize: vertical;
     letter-spacing: 1px;
+    
+    /* Enhanced cross-browser compatibility */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    
+    /* Better focus handling */
+    outline: none;
+    outline-offset: 2px;
 }
 
 .form-group input[type='number'] {
+    appearance: textfield;
     -moz-appearance: textfield;
 }
 
@@ -390,9 +489,9 @@
     font-size: 0.92rem;
     color: #b0c4d8;
     background: none;
-    -webkit-background-clip: initial;
-    -webkit-text-fill-color: initial;
     background-clip: initial;
+    -webkit-background-clip: initial;
+    color: #b0c4d8; /* Fallback color */
     cursor: pointer;
     user-select: none;
 }
@@ -490,8 +589,8 @@
     font-size: 0.98rem;
     color: #b0c4d8;
     background: none;
+    background-clip: initial;
     -webkit-background-clip: initial;
-    -webkit-text-fill-color: initial;
     border: none;
     letter-spacing: 0.01em;
 }
@@ -1490,8 +1589,61 @@
     box-sizing: border-box;
 }
 
-html {
-    scroll-behavior: smooth;
+/* Comprehensive Focus Management for Accessibility */
+button:focus,
+a:focus,
+input:focus,
+select:focus,
+textarea:focus,
+.tab-btn:focus,
+.submit-btn:focus {
+    outline: 2px solid var(--primary-blue);
+    outline-offset: 2px;
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    :root {
+        --border-color: #ffffff;
+        --color-text: #ffffff;
+        --color-text-dim: #e0e0e0;
+    }
+}
+
+/* Print styles */
+@media print {
+    *,
+    *::before,
+    *::after {
+        background: transparent !important;
+        color: black !important;
+        box-shadow: none !important;
+        text-shadow: none !important;
+    }
+    
+    body {
+        font-size: 12pt;
+        line-height: 1.5;
+    }
+    
+    .site-header,
+    .footer,
+    .notification-enhanced,
+    .redirect-modal {
+        display: none !important;
+    }
 }
 
 body {
@@ -1501,6 +1653,12 @@ body {
     background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1IiBoZWlnaHQ9IjUiPgo8cmVjdCB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSIjMGQwZTFiIj48L3JlY3Q+CjxyZWN0IHdpZHRoPSIxIiBoZWlnaHQ9IjEiIGZpbGw9IiMxNDE1MjQiPjwvcmVjdD4KPC9zdmc+');
     font-size: 16px;
     line-height: 1.7;
+    /* Cross-browser font rendering */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    font-feature-settings: "kern" 1;
+    font-kerning: normal;
 }
 
 h1, h2, h3, h4, h5, h6 {

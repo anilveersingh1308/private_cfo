@@ -78,9 +78,7 @@ export default function SignIn() {
             transform: rotate(360deg);
           }
         }
-      `}</style>
-
-      <style jsx>{`
+      
         .login-container {
           min-height: 100vh;
           display: flex;

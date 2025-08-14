@@ -645,3 +645,167 @@ export const Badge: React.FC<BadgeProps> = ({
     </span>
   );
 };
+
+// FormField Component
+interface FormFieldProps {
+  label: string;
+  children: React.ReactNode;
+  error?: string;
+  required?: boolean;
+}
+
+export const FormField: React.FC<FormFieldProps> = ({
+  label,
+  children,
+  error,
+  required = false
+}) => {
+  return (
+    <div className="form-field">
+      <label className="form-label">
+        {label}
+        {required && <span className="required">*</span>}
+      </label>
+      <div className="form-input-wrapper">
+        {children}
+      </div>
+      {error && <div className="form-error">{error}</div>}
+      <style jsx>{`
+        .form-field {
+          display: flex;
+          flex-direction: column;
+          gap: 0.5rem;
+        }
+
+        .form-label {
+          color: #e2e8f0;
+          font-size: 0.875rem;
+          font-weight: 500;
+          display: flex;
+          align-items: center;
+          gap: 0.25rem;
+        }
+
+        .required {
+          color: #ef4444;
+          font-weight: 600;
+        }
+
+        .form-input-wrapper {
+          position: relative;
+        }
+
+        .form-input-wrapper :global(input),
+        .form-input-wrapper :global(select),
+        .form-input-wrapper :global(textarea) {
+          width: 100%;
+          padding: 0.75rem;
+          background: rgba(15, 23, 42, 0.8);
+          border: 1px solid rgba(59, 130, 246, 0.3);
+          border-radius: 8px;
+          color: #f8fafc;
+          font-size: 0.875rem;
+          transition: all 0.2s ease;
+        }
+
+        .form-input-wrapper :global(input:focus),
+        .form-input-wrapper :global(select:focus),
+        .form-input-wrapper :global(textarea:focus) {
+          outline: none;
+          border-color: #0ea5e9;
+          box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1);
+        }
+
+        .form-input-wrapper :global(input::placeholder),
+        .form-input-wrapper :global(textarea::placeholder) {
+          color: #64748b;
+        }
+
+        .form-input-wrapper :global(input:disabled),
+        .form-input-wrapper :global(select:disabled),
+        .form-input-wrapper :global(textarea:disabled) {
+          opacity: 0.6;
+          cursor: not-allowed;
+        }
+
+        .form-error {
+          color: #ef4444;
+          font-size: 0.75rem;
+          font-weight: 500;
+        }
+      `}</style>
+    </div>
+  );
+};
+
+// Alert Component
+interface AlertProps {
+  children: React.ReactNode;
+  variant?: 'success' | 'warning' | 'error' | 'info';
+  className?: string;
+}
+
+export const Alert: React.FC<AlertProps> = ({
+  children,
+  variant = 'info',
+  className = ''
+}) => {
+  const variants = {
+    success: { 
+      bg: 'rgba(34, 197, 94, 0.1)', 
+      color: '#22c55e', 
+      border: 'rgba(34, 197, 94, 0.3)',
+      icon: 'fas fa-check-circle'
+    },
+    warning: { 
+      bg: 'rgba(251, 146, 60, 0.1)', 
+      color: '#fb923c', 
+      border: 'rgba(251, 146, 60, 0.3)',
+      icon: 'fas fa-exclamation-triangle'
+    },
+    error: { 
+      bg: 'rgba(239, 68, 68, 0.1)', 
+      color: '#ef4444', 
+      border: 'rgba(239, 68, 68, 0.3)',
+      icon: 'fas fa-exclamation-circle'
+    },
+    info: { 
+      bg: 'rgba(14, 165, 233, 0.1)', 
+      color: '#0ea5e9', 
+      border: 'rgba(14, 165, 233, 0.3)',
+      icon: 'fas fa-info-circle'
+    }
+  };
+
+  return (
+    <div className={`alert ${variant} ${className}`}>
+      <i className={variants[variant].icon}></i>
+      <div className="alert-content">{children}</div>
+      <style jsx>{`
+        .alert {
+          display: flex;
+          align-items: flex-start;
+          gap: 0.75rem;
+          padding: 1rem;
+          border-radius: 8px;
+          border: 1px solid;
+          background: ${variants[variant].bg};
+          color: ${variants[variant].color};
+          border-color: ${variants[variant].border};
+          font-size: 0.875rem;
+          line-height: 1.5;
+        }
+
+        .alert i {
+          flex-shrink: 0;
+          margin-top: 0.125rem;
+          font-size: 1rem;
+        }
+
+        .alert-content {
+          flex: 1;
+        }
+      `}</style>
+    </div>
+  );
+};

@@ -3,7 +3,7 @@
 import { useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 
-export default function LegacyEditRedirect() {
+export default function LegacyInvoiceRedirect() {
   const router = useRouter();
   const params = useParams();
   const id = params.id as string;
@@ -11,15 +11,16 @@ export default function LegacyEditRedirect() {
   useEffect(() => {
     const redirectToNewRoute = async () => {
       try {
-        // Fetch the invoice number for this ID
+        // Fetch the redirect information for this ID
         const response = await fetch(`/api/dashboard/invoices/${id}`);
         if (response.ok) {
           const data = await response.json();
-          // Check if this is a redirect response
-          if (data.redirect) {
-            router.replace(data.redirect);
+          // Check if this is an actual invoice or redirect info
+          if (data.invoice_number) {
+            // Redirect to the new invoice number-based route
+            router.replace(`/dashboard/invoices/${data.invoice_number}`);
           } else {
-            // This shouldn't happen with the new API, but fallback
+            // If not found, redirect to invoices list
             router.replace('/dashboard/invoices');
           }
         } else {
@@ -43,7 +44,7 @@ export default function LegacyEditRedirect() {
       <div className="redirect-content">
         <i className="fas fa-spinner fa-spin"></i>
         <h3>Redirecting...</h3>
-        <p>The invoice editing system has been updated. You're being redirected to the new interface.</p>
+        <p>The invoice system has been updated. You're being redirected to the new interface.</p>
       </div>
       <style jsx>{`
         .redirect-container {

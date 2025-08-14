@@ -5,24 +5,23 @@ import { eq } from 'drizzle-orm';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ invoiceNumber: string }> }
 ) {
   try {
-    const { id } = await params;
-    const invoiceId = parseInt(id);
+    const { invoiceNumber } = await params;
     
-    if (isNaN(invoiceId)) {
+    if (!invoiceNumber) {
       return NextResponse.json(
-        { error: 'Invalid invoice ID' },
+        { error: 'Invalid invoice number' },
         { status: 400 }
       );
     }
 
-    // Fetch the invoice from database
+    // Fetch the invoice from database by invoice number
     const result = await db
       .select()
       .from(invoices)
-      .where(eq(invoices.id, invoiceId))
+      .where(eq(invoices.invoice_number, invoiceNumber))
       .limit(1);
 
     if (result.length === 0) {
@@ -48,7 +47,7 @@ export async function GET(
 
     return NextResponse.json(formattedInvoice);
   } catch (error) {
-    console.error('Error fetching invoice:', error);
+    console.error('Error fetching invoice by number:', error);
     return NextResponse.json(
       { error: 'Failed to fetch invoice' },
       { status: 500 }
@@ -58,15 +57,14 @@ export async function GET(
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ invoiceNumber: string }> }
 ) {
   try {
-    const { id } = await params;
-    const invoiceId = parseInt(id);
+    const { invoiceNumber } = await params;
     
-    if (isNaN(invoiceId)) {
+    if (!invoiceNumber) {
       return NextResponse.json(
-        { error: 'Invalid invoice ID' },
+        { error: 'Invalid invoice number' },
         { status: 400 }
       );
     }
@@ -86,7 +84,7 @@ export async function PUT(
     const taxAmount = amount * 0.18; // 18% GST
     const totalAmount = amount + taxAmount;
 
-    // Update the invoice
+    // Update the invoice by invoice number
     const result = await db
       .update(invoices)
       .set({
@@ -103,7 +101,7 @@ export async function PUT(
         status: data.status || 'draft',
         updated_at: new Date()
       })
-      .where(eq(invoices.id, invoiceId))
+      .where(eq(invoices.invoice_number, invoiceNumber))
       .returning();
 
     if (result.length === 0) {
@@ -132,7 +130,7 @@ export async function PUT(
       invoice: formattedInvoice
     });
   } catch (error) {
-    console.error('Error updating invoice:', error);
+    console.error('Error updating invoice by number:', error);
     return NextResponse.json(
       { error: 'Failed to update invoice' },
       { status: 500 }
@@ -142,23 +140,22 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ invoiceNumber: string }> }
 ) {
   try {
-    const { id } = await params;
-    const invoiceId = parseInt(id);
+    const { invoiceNumber } = await params;
     
-    if (isNaN(invoiceId)) {
+    if (!invoiceNumber) {
       return NextResponse.json(
-        { error: 'Invalid invoice ID' },
+        { error: 'Invalid invoice number' },
         { status: 400 }
       );
     }
 
-    // Delete the invoice
+    // Delete the invoice by invoice number
     const result = await db
       .delete(invoices)
-      .where(eq(invoices.id, invoiceId))
+      .where(eq(invoices.invoice_number, invoiceNumber))
       .returning();
 
     if (result.length === 0) {
@@ -172,7 +169,7 @@ export async function DELETE(
       message: 'Invoice deleted successfully'
     });
   } catch (error) {
-    console.error('Error deleting invoice:', error);
+    console.error('Error deleting invoice by number:', error);
     return NextResponse.json(
       { error: 'Failed to delete invoice' },
       { status: 500 }

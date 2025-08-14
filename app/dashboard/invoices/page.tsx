@@ -71,7 +71,7 @@ export default function AdminInvoices() {
   };
 
   const handleEditInvoice = (invoice: Invoice) => {
-    router.push(`/dashboard/invoices/${invoice.id}/edit`);
+    router.push(`/dashboard/invoices/${invoice.invoice_number}?edit=true`);
   };
 
   const handleDeleteInvoice = (invoice: Invoice) => {
@@ -468,7 +468,7 @@ export default function AdminInvoices() {
         title="Invoice Management"
         subtitle={`Manage invoices and billing for ${filteredInvoices.length} record(s)`}
         breadcrumb={[
-          { label: 'Admin', href: '/admin' },
+          { label: 'Dashboard', href: '/dashboard' },
           { label: 'Invoices' }
         ]}
         actions={
@@ -673,7 +673,7 @@ export default function AdminInvoices() {
               </Button>
               <Button variant="ghost" size="sm" onClick={() => {
                 setShowViewModal(false);
-                handleEditInvoice(selectedInvoice);
+                router.push(`/dashboard/invoices/${selectedInvoice.invoice_number}?edit=true`);
               }}>
                 Edit Invoice
               </Button>
