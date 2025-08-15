@@ -49,3 +49,39 @@ export async function verifyTokenEdge(token: string): Promise<UserPayload | null
     return null;
   }
 }
+
+// Helper function to verify auth from request
+export async function verifyAuth(request: Request): Promise<{ success: boolean; user?: UserPayload }> {
+  try {
+    const authHeader = request.headers.get('authorization');
+    let token = authHeader?.replace('Bearer ', '');
+    
+    // If no auth header, try to get from cookies
+    if (!token) {
+      const cookieHeader = request.headers.get('cookie');
+      if (cookieHeader) {
+        const cookies = Object.fromEntries(
+          cookieHeader.split('; ').map(c => {
+            const [key, ...v] = c.split('=');
+            return [key, decodeURIComponent(v.join('='))];
+          })
+        );
+        token = cookies.auth_token;
+      }
+    }
+    
+    if (!token) {
+      return { success: false };
+    }
+    
+    const user = await verifyTokenEdge(token);
+    if (!user) {
+      return { success: false };
+    }
+    
+    return { success: true, user };
+  } catch (error) {
+    console.error('Auth verification failed:', error);
+    return { success: false };
+  }
+}

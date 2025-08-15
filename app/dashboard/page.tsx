@@ -56,7 +56,6 @@ export default function Dashboard() {
   const [selectedPeriod, setSelectedPeriod] = useState<'7d' | '30d' | '90d' | '1y'>('30d');
   const [refreshing, setRefreshing] = useState(false);
   const [showScheduleModal, setShowScheduleModal] = useState(false);
-  const [showUserModal, setShowUserModal] = useState(false);
   const [showNewsletterModal, setShowNewsletterModal] = useState(false);
   const [consultationForm, setConsultationForm] = useState({
     client_name: '',
@@ -66,13 +65,6 @@ export default function Dashboard() {
     scheduled_date: '',
     scheduled_time: '',
     notes: ''
-  });
-  const [userForm, setUserForm] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    role: 'user',
-    location: ''
   });
 
   useEffect(() => {
@@ -137,7 +129,7 @@ export default function Dashboard() {
   };
 
   const handleAddUser = () => {
-    setShowUserModal(true);
+    router.push('/dashboard/users/new');
   };
 
   const handleGenerateInvoice = () => {
@@ -209,44 +201,6 @@ export default function Dashboard() {
     } catch (error) {
       console.error('Error scheduling consultation:', error);
       alert('An error occurred while scheduling the consultation');
-    }
-  };
-
-  const handleUserSubmit = async () => {
-    try {
-      if (!userForm.name || !userForm.email || !userForm.role) {
-        alert('Please fill in all required fields');
-        return;
-      }
-
-      const response = await fetch('/api/dashboard/users', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(userForm),
-      });
-
-      const result = await response.json();
-
-      if (result.success) {
-        setShowUserModal(false);
-        setUserForm({
-          name: '',
-          email: '',
-          phone: '',
-          role: 'user',
-          location: ''
-        });
-        // Refresh dashboard data
-        await fetchDashboardData();
-        alert('User created successfully!');
-      } else {
-        alert('Failed to create user: ' + result.error);
-      }
-    } catch (error) {
-      console.error('Error creating user:', error);
-      alert('An error occurred while creating the user');
     }
   };
 
@@ -706,79 +660,6 @@ export default function Dashboard() {
         </div>
       )}
 
-      {/* Add User Modal */}
-      {showUserModal && (
-        <div className="modal-overlay" onClick={() => setShowUserModal(false)}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-header">
-              <h3>Add New User</h3>
-              <button className="modal-close" onClick={() => setShowUserModal(false)}>
-                <i className="fas fa-times"></i>
-              </button>
-            </div>
-            <div className="modal-body">
-              <div className="form-grid">
-                <div className="form-group full-width">
-                  <label>Full Name</label>
-                  <input 
-                    type="text" 
-                    placeholder="Full name" 
-                    value={userForm.name}
-                    onChange={(e) => setUserForm(prev => ({ ...prev, name: e.target.value }))}
-                  />
-                </div>
-                <div className="form-group">
-                  <label>Email</label>
-                  <input 
-                    type="email" 
-                    placeholder="user@example.com" 
-                    value={userForm.email}
-                    onChange={(e) => setUserForm(prev => ({ ...prev, email: e.target.value }))}
-                  />
-                </div>
-                <div className="form-group">
-                  <label>Phone</label>
-                  <input 
-                    type="tel" 
-                    placeholder="+91 98765 43210" 
-                    value={userForm.phone}
-                    onChange={(e) => setUserForm(prev => ({ ...prev, phone: e.target.value }))}
-                  />
-                </div>
-                <div className="form-group">
-                  <label>Role</label>
-                  <select
-                    value={userForm.role}
-                    onChange={(e) => setUserForm(prev => ({ ...prev, role: e.target.value }))}
-                  >
-                    <option value="user">Client</option>
-                    <option value="admin">Admin</option>
-                    <option value="consultant">Consultant</option>
-                  </select>
-                </div>
-                <div className="form-group">
-                  <label>Location</label>
-                  <input 
-                    type="text" 
-                    placeholder="City, State" 
-                    value={userForm.location}
-                    onChange={(e) => setUserForm(prev => ({ ...prev, location: e.target.value }))}
-                  />
-                </div>
-              </div>
-            </div>
-            <div className="modal-footer">
-              <Button variant="secondary" size="sm" onClick={() => setShowUserModal(false)}>
-                Cancel
-              </Button>
-              <Button variant="primary" size="sm" onClick={handleUserSubmit}>
-                Create User
-              </Button>
-            </div>
-          </div>
-        </div>
-      )}
-
       {/* Newsletter Modal */}
       {showNewsletterModal && (
         <div className="modal-overlay" onClick={() => setShowNewsletterModal(false)}>
@@ -1004,18 +885,140 @@ export default function Dashboard() {
 
           .stats-grid {
             grid-template-columns: 1fr;
+            gap: 1rem;
+          }
+
+          .content-grid {
+            gap: 1.5rem;
           }
 
           .activity-item {
             flex-direction: column;
             align-items: stretch;
             gap: 0.75rem;
+            padding: 0.75rem 0;
           }
 
           .activity-meta {
             flex-direction: column;
             align-items: flex-start;
             gap: 0.25rem;
+          }
+
+          .activity-icon {
+            width: 32px;
+            height: 32px;
+            font-size: 0.75rem;
+          }
+
+          .activity-title {
+            font-size: 0.8rem;
+          }
+
+          .activity-description {
+            font-size: 0.8rem;
+          }
+
+          .card-header {
+            padding: 1rem 1rem 0.75rem;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.5rem;
+          }
+
+          .card-header h3 {
+            font-size: 1rem;
+          }
+
+          .activity-list {
+            padding: 1rem;
+            max-height: 400px;
+          }
+
+          .quick-actions {
+            padding: 1rem;
+            gap: 0.75rem;
+          }
+
+          .period-select {
+            min-width: 120px;
+            font-size: 0.8rem;
+            padding: 0.4rem 0.75rem;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .dashboard-page {
+            padding: 0.75rem;
+          }
+
+          .stats-grid {
+            gap: 0.75rem;
+          }
+
+          .content-grid {
+            gap: 1rem;
+          }
+
+          .activity-item {
+            padding: 0.5rem 0;
+          }
+
+          .activity-icon {
+            width: 28px;
+            height: 28px;
+            font-size: 0.7rem;
+          }
+
+          .activity-title {
+            font-size: 0.75rem;
+            margin-bottom: 0.15rem;
+          }
+
+          .activity-description {
+            font-size: 0.75rem;
+            margin-bottom: 0.375rem;
+          }
+
+          .activity-time,
+          .activity-amount {
+            font-size: 0.65rem;
+          }
+
+          .card-header {
+            padding: 0.75rem 0.75rem 0.5rem;
+          }
+
+          .card-header h3 {
+            font-size: 0.875rem;
+          }
+
+          .activity-list {
+            padding: 0.75rem;
+            max-height: 350px;
+          }
+
+          .quick-actions {
+            padding: 0.75rem;
+            gap: 0.5rem;
+          }
+
+          .period-select {
+            min-width: 100px;
+            font-size: 0.75rem;
+            padding: 0.375rem 0.5rem;
+          }
+
+          .empty-state {
+            padding: 2rem 0.75rem;
+          }
+
+          .empty-state i {
+            font-size: 1.5rem;
+          }
+
+          .empty-state p {
+            font-size: 0.8rem;
           }
         }
 
@@ -1148,16 +1151,79 @@ export default function Dashboard() {
           .modal-content {
             width: 95%;
             margin: 1rem;
+            max-height: 85vh;
           }
 
           .form-grid {
             grid-template-columns: 1fr;
+            gap: 0.75rem;
           }
 
           .modal-header,
           .modal-body,
           .modal-footer {
             padding: 1rem;
+          }
+
+          .modal-header h3 {
+            font-size: 1.125rem;
+          }
+
+          .form-group label {
+            font-size: 0.8rem;
+          }
+
+          .form-group input,
+          .form-group select,
+          .form-group textarea {
+            padding: 0.625rem;
+            font-size: 0.8rem;
+          }
+
+          .modal-footer {
+            flex-direction: column-reverse;
+            gap: 0.5rem;
+          }
+
+          .modal-footer :global(.admin-btn) {
+            width: 100%;
+            justify-content: center;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .modal-content {
+            width: 95%;
+            margin: 0.5rem;
+            max-height: 90vh;
+            border-radius: 12px;
+          }
+
+          .modal-header,
+          .modal-body,
+          .modal-footer {
+            padding: 0.75rem;
+          }
+
+          .modal-header h3 {
+            font-size: 1rem;
+          }
+
+          .modal-close {
+            padding: 0.375rem;
+            font-size: 1.125rem;
+          }
+
+          .form-group label {
+            font-size: 0.75rem;
+          }
+
+          .form-group input,
+          .form-group select,
+          .form-group textarea {
+            padding: 0.5rem;
+            font-size: 0.75rem;
+            border-radius: 6px;
           }
         }
       `}</style>

@@ -1,9 +1,9 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useAuth } from '@/lib/auth-context';
 import { useRouter } from 'next/navigation';
-import DashboardSidebar from '@/components/dashboard/DashboardSidebar';
+import ResponsiveDashboardSidebar from '@/components/dashboard/ResponsiveDashboardSidebar';
 
 export default function DashboardLayout({
   children,
@@ -12,6 +12,18 @@ export default function DashboardLayout({
 }) {
   const { user, loading: authLoading } = useAuth();
   const router = useRouter();
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Check if device is mobile
+  useEffect(() => {
+    const checkIsMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    checkIsMobile();
+    window.addEventListener('resize', checkIsMobile);
+    return () => window.removeEventListener('resize', checkIsMobile);
+  }, []);
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -104,7 +116,7 @@ export default function DashboardLayout({
 
       <style jsx>{`
         .main-content {
-          margin-left: 280px;
+          margin-left: ${isMobile ? '0' : '280px'};
           min-height: 100vh;
           transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
           padding: 0;
@@ -125,15 +137,24 @@ export default function DashboardLayout({
           z-index: -1;
         }
 
+        /* Mobile Content Padding */
         @media (max-width: 768px) {
           .main-content {
             margin-left: 0;
+            padding-top: 4rem; /* Space for mobile menu button */
+          }
+        }
+
+        /* Tablet Styles */
+        @media (max-width: 1024px) and (min-width: 769px) {
+          .main-content {
+            margin-left: 240px;
           }
         }
       `}</style>
 
-      {/* Dashboard Sidebar */}
-      <DashboardSidebar />
+      {/* Responsive Dashboard Sidebar */}
+      <ResponsiveDashboardSidebar />
 
       {/* Main Content */}
       <main className="main-content">

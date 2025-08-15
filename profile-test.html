@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Page Test</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .tab-active {
+            @apply bg-blue-600 text-white;
+        }
+        .tab-inactive {
+            @apply bg-gray-200 text-gray-700 hover:bg-gray-300;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <div class="max-w-4xl mx-auto">
+            <!-- Header -->
+            <div class="mb-8">
+                <h1 class="text-3xl font-bold text-gray-900">Profile Settings</h1>
+                <p class="text-gray-600 mt-2">Manage your account preferences and security settings</p>
+            </div>
+
+            <!-- Tabs -->
+            <div class="mb-6">
+                <div class="flex space-x-2 bg-gray-200 p-1 rounded-lg">
+                    <button onclick="switchTab('profile')" id="tab-profile" class="px-4 py-2 rounded-md font-medium transition-colors tab-active">
+                        Profile
+                    </button>
+                    <button onclick="switchTab('security')" id="tab-security" class="px-4 py-2 rounded-md font-medium transition-colors tab-inactive">
+                        Security
+                    </button>
+                    <button onclick="switchTab('notifications')" id="tab-notifications" class="px-4 py-2 rounded-md font-medium transition-colors tab-inactive">
+                        Notifications
+                    </button>
+                    <button onclick="switchTab('preferences')" id="tab-preferences" class="px-4 py-2 rounded-md font-medium transition-colors tab-inactive">
+                        Preferences
+                    </button>
+                </div>
+            </div>
+
+            <!-- Profile Tab -->
+            <div id="content-profile" class="tab-content">
+                <div class="bg-white rounded-lg shadow p-6">
+                    <h2 class="text-xl font-semibold mb-6">Profile Information</h2>
+                    <form class="space-y-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
+                                <input type="text" value="Test User" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                                <input type="email" value="test@example.com" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Phone</label>
+                                <input type="tel" value="+91-9876543210" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Location</label>
+                                <input type="text" value="Mumbai, India" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Bio</label>
+                            <textarea rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">Professional CFO consultant with 10+ years of experience...</textarea>
+                        </div>
+                        <button type="button" onclick="testApiCall('profile')" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors">
+                            Update Profile
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Security Tab -->
+            <div id="content-security" class="tab-content hidden">
+                <div class="space-y-6">
+                    <!-- Change Password -->
+                    <div class="bg-white rounded-lg shadow p-6">
+                        <h2 class="text-xl font-semibold mb-6">Change Password</h2>
+                        <form class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Current Password</label>
+                                <input type="password" id="currentPassword" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">New Password</label>
+                                <input type="password" id="newPassword" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Confirm New Password</label>
+                                <input type="password" id="confirmPassword" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                            <button type="button" onclick="testPasswordChange()" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors">
+                                Change Password
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Security Settings -->
+                    <div class="bg-white rounded-lg shadow p-6">
+                        <h2 class="text-xl font-semibold mb-6">Security Settings</h2>
+                        <div class="space-y-4">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <h3 class="font-medium">Two-Factor Authentication</h3>
+                                    <p class="text-sm text-gray-600">Add an extra layer of security to your account</p>
+                                </div>
+                                <input type="checkbox" id="twoFactor" class="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <h3 class="font-medium">Login Alerts</h3>
+                                    <p class="text-sm text-gray-600">Get notified of new login attempts</p>
+                                </div>
+                                <input type="checkbox" id="loginAlerts" checked class="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Session Timeout (minutes)</label>
+                                <select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    <option value="30">30 minutes</option>
+                                    <option value="60" selected>1 hour</option>
+                                    <option value="120">2 hours</option>
+                                    <option value="480">8 hours</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Notifications Tab -->
+            <div id="content-notifications" class="tab-content hidden">
+                <div class="bg-white rounded-lg shadow p-6">
+                    <div class="flex items-center justify-between mb-6">
+                        <h2 class="text-xl font-semibold">Notification Settings</h2>
+                        <button onclick="requestNotificationPermission()" class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition-colors text-sm">
+                            Enable Desktop Notifications
+                        </button>
+                    </div>
+                    
+                    <div class="space-y-6">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h3 class="font-medium">Email Notifications</h3>
+                                <p class="text-sm text-gray-600">Receive notifications via email</p>
+                            </div>
+                            <input type="checkbox" id="emailNotifications" checked onchange="testApiCall('notifications')" class="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                        </div>
+                        
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h3 class="font-medium">Desktop Notifications</h3>
+                                <p class="text-sm text-gray-600">Show desktop notifications in your browser</p>
+                            </div>
+                            <input type="checkbox" id="desktopNotifications" onchange="toggleDesktopNotifications(this)" class="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                        </div>
+                        
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h3 class="font-medium">Push Notifications</h3>
+                                <p class="text-sm text-gray-600">Receive push notifications on your devices</p>
+                            </div>
+                            <input type="checkbox" id="pushNotifications" checked class="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                        </div>
+                        
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h3 class="font-medium">Invoice Reminders</h3>
+                                <p class="text-sm text-gray-600">Get reminded about pending invoices</p>
+                            </div>
+                            <input type="checkbox" id="invoiceReminders" checked class="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                        </div>
+                        
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h3 class="font-medium">Consultation Alerts</h3>
+                                <p class="text-sm text-gray-600">Alerts for upcoming consultations</p>
+                            </div>
+                            <input type="checkbox" id="consultationAlerts" checked class="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                        </div>
+                        
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h3 class="font-medium">Marketing Emails</h3>
+                                <p class="text-sm text-gray-600">Receive updates about new features and offers</p>
+                            </div>
+                            <input type="checkbox" id="marketingEmails" class="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                        </div>
+                    </div>
+                    
+                    <div class="mt-6">
+                        <button onclick="testNotificationSave()" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors">
+                            Save Notification Settings
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Preferences Tab -->
+            <div id="content-preferences" class="tab-content hidden">
+                <div class="bg-white rounded-lg shadow p-6">
+                    <h2 class="text-xl font-semibold mb-6">User Preferences</h2>
+                    <form class="space-y-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Theme</label>
+                                <select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    <option value="light">Light</option>
+                                    <option value="dark" selected>Dark</option>
+                                    <option value="auto">Auto</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Language</label>
+                                <select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    <option value="en" selected>English</option>
+                                    <option value="hi">Hindi</option>
+                                    <option value="es">Spanish</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Timezone</label>
+                                <select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    <option value="Asia/Kolkata" selected>Asia/Kolkata (IST)</option>
+                                    <option value="America/New_York">America/New_York (EST)</option>
+                                    <option value="Europe/London">Europe/London (GMT)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Currency</label>
+                                <select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    <option value="INR" selected>Indian Rupee (₹)</option>
+                                    <option value="USD">US Dollar ($)</option>
+                                    <option value="EUR">Euro (€)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button type="button" onclick="testApiCall('preferences')" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors">
+                            Save Preferences
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Success/Error Messages -->
+            <div id="message-container" class="mt-4"></div>
+        </div>
+    </div>
+
+    <script>
+        // Tab switching functionality
+        function switchTab(tabName) {
+            // Hide all tab contents
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(content => content.classList.add('hidden'));
+            
+            // Remove active class from all tabs
+            const tabs = document.querySelectorAll('[id^="tab-"]');
+            tabs.forEach(tab => {
+                tab.className = tab.className.replace('tab-active', 'tab-inactive');
+            });
+            
+            // Show selected tab content
+            document.getElementById(`content-${tabName}`).classList.remove('hidden');
+            
+            // Add active class to selected tab
+            document.getElementById(`tab-${tabName}`).className = 
+                document.getElementById(`tab-${tabName}`).className.replace('tab-inactive', 'tab-active');
+        }
+
+        // Show message function
+        function showMessage(type, text) {
+            const container = document.getElementById('message-container');
+            const bgColor = type === 'success' ? 'bg-green-100 text-green-800 border-green-300' : 'bg-red-100 text-red-800 border-red-300';
+            
+            container.innerHTML = `
+                <div class="border rounded-md p-4 ${bgColor}">
+                    ${text}
+                </div>
+            `;
+            
+            setTimeout(() => {
+                container.innerHTML = '';
+            }, 5000);
+        }
+
+        // Test API calls
+        async function testApiCall(endpoint) {
+            showMessage('success', `✅ ${endpoint} functionality tested successfully! API call would be made here.`);
+            
+            // Simulate API call
+            console.log(`Testing ${endpoint} endpoint...`);
+            
+            if (endpoint === 'profile') {
+                console.log('Profile update would be sent to: /api/dashboard/profile/update');
+            } else if (endpoint === 'notifications') {
+                console.log('Notification settings would be sent to: /api/dashboard/profile/notifications');
+            } else if (endpoint === 'preferences') {
+                console.log('Preferences would be sent to: /api/dashboard/profile/settings');
+            }
+        }
+
+        // Test password change
+        function testPasswordChange() {
+            const current = document.getElementById('currentPassword').value;
+            const newPass = document.getElementById('newPassword').value;
+            const confirm = document.getElementById('confirmPassword').value;
+            
+            if (!current || !newPass || !confirm) {
+                showMessage('error', '❌ Please fill in all password fields');
+                return;
+            }
+            
+            if (newPass !== confirm) {
+                showMessage('error', '❌ New passwords do not match');
+                return;
+            }
+            
+            if (newPass.length < 8) {
+                showMessage('error', '❌ Password must be at least 8 characters long');
+                return;
+            }
+            
+            showMessage('success', '✅ Password change functionality tested successfully!');
+            console.log('Password change would be sent to: /api/dashboard/profile/change-password');
+        }
+
+        // Desktop notifications
+        async function requestNotificationPermission() {
+            if ('Notification' in window) {
+                const permission = await Notification.requestPermission();
+                if (permission === 'granted') {
+                    showMessage('success', '✅ Desktop notifications enabled successfully!');
+                    document.getElementById('desktopNotifications').checked = true;
+                    
+                    // Show test notification
+                    new Notification('CFO Dashboard', {
+                        body: 'Desktop notifications are now enabled!',
+                        icon: '/favicon.ico'
+                    });
+                } else {
+                    showMessage('error', '❌ Desktop notifications permission denied');
+                }
+            } else {
+                showMessage('error', '❌ Desktop notifications not supported in this browser');
+            }
+        }
+
+        function toggleDesktopNotifications(checkbox) {
+            if (checkbox.checked) {
+                requestNotificationPermission();
+            } else {
+                showMessage('success', '✅ Desktop notifications disabled');
+            }
+        }
+
+        // Test notification save
+        function testNotificationSave() {
+            const settings = {
+                email_notifications: document.getElementById('emailNotifications').checked,
+                desktop_notifications: document.getElementById('desktopNotifications').checked,
+                push_notifications: document.getElementById('pushNotifications').checked,
+                invoice_reminders: document.getElementById('invoiceReminders').checked,
+                consultation_alerts: document.getElementById('consultationAlerts').checked,
+                marketing_emails: document.getElementById('marketingEmails').checked
+            };
+            
+            console.log('Notification settings to save:', settings);
+            showMessage('success', '✅ Notification settings saved successfully!');
+            
+            // Test notification if desktop notifications are enabled
+            if (settings.desktop_notifications && Notification.permission === 'granted') {
+                new Notification('Settings Saved', {
+                    body: 'Your notification preferences have been updated!',
+                    icon: '/favicon.ico'
+                });
+            }
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Profile page test loaded successfully!');
+            showMessage('success', '🎉 Profile page loaded successfully! All features are ready for testing.');
+        });
+    </script>
+</body>
+</html>

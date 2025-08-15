@@ -1,5 +1,5 @@
 // Dashboard UI Components Library
-import React from 'react';
+import React, { useState } from 'react';
 
 // Card Component
 interface CardProps {
@@ -37,6 +37,25 @@ export const Card: React.FC<CardProps> = ({
 
         .dashboard-card.gradient {
           background: linear-gradient(135deg, rgba(30, 41, 59, 0.9) 0%, rgba(15, 23, 42, 0.9) 100%);
+        }
+
+        /* Mobile Responsive Styles */
+        @media (max-width: 768px) {
+          .dashboard-card {
+            padding: 1rem;
+            border-radius: 12px;
+          }
+
+          .dashboard-card.hover-effect:hover {
+            transform: none; /* Disable hover effects on mobile */
+          }
+        }
+
+        @media (max-width: 480px) {
+          .dashboard-card {
+            padding: 0.875rem;
+            border-radius: 8px;
+          }
         }
       `}</style>
     </div>
@@ -112,6 +131,7 @@ export const StatsCard: React.FC<StatsCardProps> = ({
 
         .stats-info {
           flex: 1;
+          min-width: 0;
         }
 
         .stats-info h3 {
@@ -145,6 +165,63 @@ export const StatsCard: React.FC<StatsCardProps> = ({
 
         .stats-trend.negative {
           color: #ef4444;
+        }
+
+        /* Mobile Responsive Styles */
+        @media (max-width: 768px) {
+          .stats-content {
+            gap: 0.75rem;
+          }
+
+          .stats-icon {
+            width: 56px;
+            height: 56px;
+            font-size: 1.25rem;
+            border-radius: 12px;
+          }
+
+          .stats-info h3 {
+            font-size: 0.8rem;
+            margin-bottom: 0.375rem;
+          }
+
+          .stats-value {
+            font-size: 1.75rem;
+          }
+
+          .stats-trend {
+            font-size: 0.7rem;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .stats-content {
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 0.5rem;
+          }
+
+          .stats-icon {
+            width: 48px;
+            height: 48px;
+            font-size: 1.125rem;
+            border-radius: 10px;
+          }
+
+          .stats-info h3 {
+            font-size: 0.75rem;
+            margin-bottom: 0.25rem;
+          }
+
+          .stats-value {
+            font-size: 1.5rem;
+          }
+
+          .stats-trend {
+            font-size: 0.65rem;
+            justify-content: center;
+          }
         }
       `}</style>
     </Card>
@@ -285,6 +362,54 @@ export const Button: React.FC<ButtonProps> = ({
           opacity: 0.5;
           cursor: not-allowed;
           transform: none !important;
+        }
+
+        /* Mobile Responsive Styles */
+        @media (max-width: 768px) {
+          .dashboard-btn {
+            border-radius: 10px;
+          }
+
+          .dashboard-btn.sm {
+            padding: 0.45rem 0.875rem;
+            font-size: 0.8rem;
+          }
+
+          .dashboard-btn.md {
+            padding: 0.625rem 1.25rem;
+            font-size: 0.8rem;
+          }
+
+          .dashboard-btn.lg {
+            padding: 0.875rem 1.75rem;
+            font-size: 0.9rem;
+          }
+
+          .dashboard-btn:hover {
+            transform: none; /* Disable hover transforms on mobile */
+          }
+        }
+
+        @media (max-width: 480px) {
+          .dashboard-btn {
+            border-radius: 8px;
+            gap: 0.375rem;
+          }
+
+          .dashboard-btn.sm {
+            padding: 0.4rem 0.75rem;
+            font-size: 0.75rem;
+          }
+
+          .dashboard-btn.md {
+            padding: 0.5rem 1rem;
+            font-size: 0.75rem;
+          }
+
+          .dashboard-btn.lg {
+            padding: 0.75rem 1.5rem;
+            font-size: 0.85rem;
+          }
         }
       `}</style>
     </button>
@@ -533,12 +658,15 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
           margin-bottom: 1rem;
           color: #94a3b8;
           font-size: 0.875rem;
+          overflow-x: auto;
+          white-space: nowrap;
         }
 
         .breadcrumb-item {
           display: flex;
           align-items: center;
           gap: 0.5rem;
+          flex-shrink: 0;
         }
 
         .breadcrumb a {
@@ -558,6 +686,11 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
           gap: 1rem;
         }
 
+        .header-text {
+          flex: 1;
+          min-width: 0;
+        }
+
         .header-text h1 {
           color: #f8fafc;
           font-size: 2rem;
@@ -567,29 +700,95 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
           background-clip: text;
+          line-height: 1.2;
         }
 
         .header-text p {
           color: #94a3b8;
           font-size: 1rem;
           margin: 0;
+          line-height: 1.4;
         }
 
         .header-actions {
           display: flex;
           gap: 0.75rem;
           flex-shrink: 0;
+          align-items: center;
+          flex-wrap: wrap;
         }
 
+        /* Mobile Responsive Styles */
         @media (max-width: 768px) {
+          .page-header {
+            margin-bottom: 1.5rem;
+          }
+
+          .breadcrumb {
+            font-size: 0.8rem;
+            margin-bottom: 0.75rem;
+            padding-bottom: 0.5rem;
+          }
+
           .header-content {
             flex-direction: column;
             align-items: flex-start;
+            gap: 1rem;
+          }
+
+          .header-text h1 {
+            font-size: 1.75rem;
+            margin-bottom: 0.375rem;
+          }
+
+          .header-text p {
+            font-size: 0.9rem;
           }
 
           .header-actions {
             width: 100%;
             justify-content: flex-start;
+            gap: 0.5rem;
+          }
+
+          .header-actions :global(.admin-btn) {
+            flex: 1;
+            min-width: 0;
+            justify-content: center;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .page-header {
+            margin-bottom: 1rem;
+          }
+
+          .breadcrumb {
+            font-size: 0.75rem;
+            margin-bottom: 0.5rem;
+          }
+
+          .header-content {
+            gap: 0.75rem;
+          }
+
+          .header-text h1 {
+            font-size: 1.5rem;
+            margin-bottom: 0.25rem;
+          }
+
+          .header-text p {
+            font-size: 0.85rem;
+          }
+
+          .header-actions {
+            flex-direction: column;
+            width: 100%;
+            gap: 0.375rem;
+          }
+
+          .header-actions :global(.admin-btn) {
+            width: 100%;
           }
         }
       `}</style>
@@ -649,17 +848,48 @@ export const Badge: React.FC<BadgeProps> = ({
 // FormField Component
 interface FormFieldProps {
   label: string;
-  children: React.ReactNode;
+  children?: React.ReactNode;
   error?: string;
   required?: boolean;
+  // Input-specific props
+  type?: string;
+  value?: string;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  placeholder?: string;
+  disabled?: boolean;
+  name?: string;
+  autoComplete?: string;
 }
 
 export const FormField: React.FC<FormFieldProps> = ({
   label,
   children,
   error,
-  required = false
+  required = false,
+  type = 'text',
+  value,
+  onChange,
+  placeholder,
+  disabled,
+  name,
+  autoComplete
 }) => {
+  const [showPassword, setShowPassword] = useState(false);
+  const isPasswordField = type === 'password';
+  
+  // If children are provided, use wrapper mode, otherwise create input
+  const inputElement = children ? children : (
+    <input
+      type={isPasswordField ? (showPassword ? 'text' : 'password') : type}
+      value={value}
+      onChange={onChange}
+      placeholder={placeholder}
+      disabled={disabled}
+      name={name}
+      autoComplete={autoComplete}
+    />
+  );
+
   return (
     <div className="form-field">
       <label className="form-label">
@@ -667,7 +897,18 @@ export const FormField: React.FC<FormFieldProps> = ({
         {required && <span className="required">*</span>}
       </label>
       <div className="form-input-wrapper">
-        {children}
+        {inputElement}
+        {isPasswordField && !children && (
+          <button
+            type="button"
+            className="password-toggle"
+            onClick={() => setShowPassword(!showPassword)}
+            disabled={disabled}
+            aria-label={showPassword ? 'Hide password' : 'Show password'}
+          >
+            <i className={`fas ${showPassword ? 'fa-eye-slash' : 'fa-eye'}`}></i>
+          </button>
+        )}
       </div>
       {error && <div className="form-error">{error}</div>}
       <style jsx>{`
@@ -708,6 +949,10 @@ export const FormField: React.FC<FormFieldProps> = ({
           transition: all 0.2s ease;
         }
 
+        .form-input-wrapper :global(input[type="password"]) {
+          padding-right: 3rem;
+        }
+
         .form-input-wrapper :global(input:focus),
         .form-input-wrapper :global(select:focus),
         .form-input-wrapper :global(textarea:focus) {
@@ -726,6 +971,45 @@ export const FormField: React.FC<FormFieldProps> = ({
         .form-input-wrapper :global(textarea:disabled) {
           opacity: 0.6;
           cursor: not-allowed;
+        }
+
+        .password-toggle {
+          position: absolute;
+          right: 0.75rem;
+          top: 50%;
+          transform: translateY(-50%);
+          background: none;
+          border: none;
+          color: #64748b;
+          cursor: pointer;
+          padding: 0.25rem;
+          border-radius: 4px;
+          transition: all 0.2s ease;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 24px;
+          height: 24px;
+        }
+
+        .password-toggle:hover {
+          color: #0ea5e9;
+          background: rgba(14, 165, 233, 0.1);
+        }
+
+        .password-toggle:focus {
+          outline: none;
+          color: #0ea5e9;
+          background: rgba(14, 165, 233, 0.1);
+        }
+
+        .password-toggle:disabled {
+          opacity: 0.6;
+          cursor: not-allowed;
+        }
+
+        .password-toggle i {
+          font-size: 0.875rem;
         }
 
         .form-error {

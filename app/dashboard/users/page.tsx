@@ -1,13 +1,14 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { 
   Card, 
   Button, 
   PageHeader, 
-  Badge,
-  Table 
+  Badge
 } from '@/components/dashboard/DashboardComponents';
+import ResponsiveDataView from '@/components/dashboard/ResponsiveDataView';
 
 interface User {
   id: number;
@@ -37,6 +38,7 @@ interface NewsletterSubscriber {
 }
 
 export default function DashboardUsers() {
+  const router = useRouter();
   const [users, setUsers] = useState<User[]>([]);
   const [subscribers, setSubscribers] = useState<NewsletterSubscriber[]>([]);
   const [loading, setLoading] = useState(true);
@@ -47,9 +49,74 @@ export default function DashboardUsers() {
   const [filterRole, setFilterRole] = useState<string>('all');
   const [sortBy, setSortBy] = useState<string>('created_at');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
+  const [successMessage, setSuccessMessage] = useState('');
+
+  const handleAddUser = () => {
+    router.push('/dashboard/users/new');
+  };
+
+  const handleViewUser = (userId: number) => {
+    // For now, show an alert. In a real app, this would navigate to user details
+    alert(`View user details for user ID: ${userId}`);
+  };
+
+  const handleEditUser = (userId: number) => {
+    // For now, show an alert. In a real app, this would open edit modal
+    alert(`Edit user functionality for user ID: ${userId}. This would open an edit modal.`);
+  };
+
+  const handleDeleteUser = async (userId: number) => {
+    if (confirm('Are you sure you want to delete this user?')) {
+      try {
+        const response = await fetch(`/api/dashboard/users?id=${userId}`, {
+          method: 'DELETE',
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+          await fetchData(); // Refresh the data
+          alert('User deleted successfully!');
+        } else {
+          alert('Failed to delete user: ' + result.error);
+        }
+      } catch (error) {
+        console.error('Error deleting user:', error);
+        alert('An error occurred while deleting the user');
+      }
+    }
+  };
+
+  const handleSendEmail = (userEmail: string) => {
+    // Open default email client
+    window.location.href = `mailto:${userEmail}`;
+  };
+
+  const handleViewAnalytics = (subscriberId: number) => {
+    // For now, show an alert. In a real app, this would navigate to analytics
+    alert(`View analytics for subscriber ID: ${subscriberId}. This would show email engagement metrics.`);
+  };
+
+  const handleBlockSubscriber = async (subscriberId: number) => {
+    if (confirm('Are you sure you want to block this subscriber?')) {
+      // For now, show an alert. In a real app, this would call an API
+      alert(`Block subscriber functionality for ID: ${subscriberId}. This would prevent future emails.`);
+    }
+  };
 
   useEffect(() => {
     fetchData();
+    
+    // Check for success message in URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const success = urlParams.get('success');
+    if (success === 'user_created') {
+      setSuccessMessage('User created successfully!');
+      // Clear the URL parameter
+      window.history.replaceState({}, '', '/dashboard/users');
+      // Clear message after 5 seconds
+      setTimeout(() => setSuccessMessage(''), 5000);
+    }
   }, []);
 
   const fetchData = async () => {
@@ -386,7 +453,7 @@ export default function DashboardUsers() {
             variant="ghost" 
             size="sm" 
             icon="fas fa-eye"
-            onClick={() => console.log('View user', row.id)}
+            onClick={() => handleViewUser(row.id)}
           >
             View
           </Button>
@@ -394,20 +461,26 @@ export default function DashboardUsers() {
             variant="ghost" 
             size="sm" 
             icon="fas fa-edit"
-            onClick={() => console.log('Edit user', row.id)}
+            onClick={() => handleEditUser(row.id)}
           >
             Edit
           </Button>
-          {row.role !== 'admin' && (
-            <Button 
-              variant="ghost" 
-              size="sm" 
-              icon="fas fa-ban"
-              onClick={() => console.log('Suspend user', row.id)}
-            >
-              Suspend
-            </Button>
-          )}
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            icon="fas fa-envelope"
+            onClick={() => handleSendEmail(row.email)}
+          >
+            Email
+          </Button>
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            icon="fas fa-trash"
+            onClick={() => handleDeleteUser(row.id)}
+          >
+            Delete
+          </Button>
         </div>
       ),
       width: '180px'
@@ -482,7 +555,7 @@ export default function DashboardUsers() {
             variant="ghost" 
             size="sm" 
             icon="fas fa-envelope"
-            onClick={() => console.log('Send email to', row.id)}
+            onClick={() => handleSendEmail(row.email)}
           >
             Email
           </Button>
@@ -490,7 +563,7 @@ export default function DashboardUsers() {
             variant="ghost" 
             size="sm" 
             icon="fas fa-chart-line"
-            onClick={() => console.log('View analytics for', row.id)}
+            onClick={() => handleViewAnalytics(row.id)}
           >
             Analytics
           </Button>
@@ -498,7 +571,7 @@ export default function DashboardUsers() {
             variant="ghost" 
             size="sm" 
             icon="fas fa-ban"
-            onClick={() => console.log('Unsubscribe', row.id)}
+            onClick={() => handleBlockSubscriber(row.id)}
           >
             Block
           </Button>
@@ -578,6 +651,121 @@ export default function DashboardUsers() {
     );
   }
 
+  const renderUserCard = (user: User, index: number) => (
+    <div key={user.id} className="user-card" onClick={() => handleViewUser(user.id)}>
+      <div className="user-header">
+        <div className="user-avatar" style={{
+          background: `linear-gradient(135deg, ${
+            user.role === 'admin' ? '#ef4444, #dc2626' :
+            user.role === 'consultant' ? '#0ea5e9, #3b82f6' :
+            user.role === 'moderator' ? '#f59e0b, #d97706' :
+            '#22c55e, #16a34a'
+          })`
+        }}>
+          {user.name.charAt(0).toUpperCase()}
+        </div>
+        <div className="user-info">
+          <h3 className="user-name">{user.name}</h3>
+          <p className="user-email">{user.email}</p>
+          {user.location && (
+            <p className="user-location">
+              <i className="fas fa-map-marker-alt"></i>
+              {user.location}
+            </p>
+          )}
+        </div>
+        <div className="user-badges">
+          {getRoleBadge(user.role)}
+          {getStatusBadge(user.status)}
+        </div>
+      </div>
+      
+      <div className="user-stats">
+        <div className="stat-item">
+          <span className="stat-label">Sessions</span>
+          <span className="stat-value">{user.consultations_count || 0}</span>
+        </div>
+        <div className="stat-item">
+          <span className="stat-label">Spent</span>
+          <span className="stat-value">{user.total_spent ? formatCurrency(parseFloat(user.total_spent)) : '—'}</span>
+        </div>
+        <div className="stat-item">
+          <span className="stat-label">Last Active</span>
+          <span className="stat-value">{user.last_login ? getTimeAgo(user.last_login) : 'Never'}</span>
+        </div>
+      </div>
+
+      <div className="user-actions">
+        <Button variant="ghost" size="sm" icon="fas fa-eye" onClick={() => handleViewUser(user.id)}>
+          View
+        </Button>
+        <Button variant="ghost" size="sm" icon="fas fa-edit" onClick={() => handleEditUser(user.id)}>
+          Edit
+        </Button>
+        <Button variant="ghost" size="sm" icon="fas fa-envelope" onClick={() => handleSendEmail(user.email)}>
+          Email
+        </Button>
+        <Button variant="ghost" size="sm" icon="fas fa-trash" onClick={() => handleDeleteUser(user.id)}>
+          Delete
+        </Button>
+      </div>
+    </div>
+  );
+
+  const renderSubscriberCard = (subscriber: NewsletterSubscriber, index: number) => (
+    <div key={subscriber.id} className="subscriber-card" onClick={() => handleViewAnalytics(subscriber.id)}>
+      <div className="subscriber-header">
+        <div className="subscriber-avatar">
+          <i className="fas fa-envelope"></i>
+        </div>
+        <div className="subscriber-info">
+          <h3 className="subscriber-email">{subscriber.email}</h3>
+          <p className="subscriber-meta">
+            Score: {subscriber.engagement_score || 0}% • {subscriber.source}
+          </p>
+        </div>
+        {getStatusBadge(subscriber.status)}
+      </div>
+      
+      <div className="subscriber-categories">
+        {subscriber.categories.slice(0, 3).map((category, index) => (
+          <Badge key={index} variant="info" size="sm">{category}</Badge>
+        ))}
+        {subscriber.categories.length > 3 && (
+          <Badge variant="neutral" size="sm">+{subscriber.categories.length - 3}</Badge>
+        )}
+      </div>
+
+      <div className="subscriber-stats">
+        <div className="stat-item">
+          <span className="stat-label">Engagement</span>
+          <span className={`stat-value ${
+            (subscriber.engagement_score || 0) >= 70 ? 'high' : 
+            (subscriber.engagement_score || 0) >= 40 ? 'medium' : 'low'
+          }`}>
+            {subscriber.engagement_score || 0}%
+          </span>
+        </div>
+        <div className="stat-item">
+          <span className="stat-label">Subscribed</span>
+          <span className="stat-value">{formatDate(subscriber.subscribed_at)}</span>
+        </div>
+      </div>
+
+      <div className="subscriber-actions">
+        <Button variant="ghost" size="sm" icon="fas fa-envelope" onClick={() => handleSendEmail(subscriber.email)}>
+          Email
+        </Button>
+        <Button variant="ghost" size="sm" icon="fas fa-chart-line" onClick={() => handleViewAnalytics(subscriber.id)}>
+          Analytics
+        </Button>
+        <Button variant="ghost" size="sm" icon="fas fa-ban" onClick={() => handleBlockSubscriber(subscriber.id)}>
+          Block
+        </Button>
+      </div>
+    </div>
+  );
+
   const roleOptions = ['admin', 'consultant', 'moderator', 'user'];
 
   return (
@@ -607,12 +795,23 @@ export default function DashboardUsers() {
             >
               Export JSON
             </Button>
-            <Button variant="primary" size="sm" icon="fas fa-plus">
+            <Button variant="primary" size="sm" icon="fas fa-plus" onClick={handleAddUser}>
               Add {activeTab === 'users' ? 'User' : 'Subscriber'}
             </Button>
           </div>
         }
       />
+
+      {/* Success Message */}
+      {successMessage && (
+        <div className="success-banner">
+          <i className="fas fa-check-circle"></i>
+          <span>{successMessage}</span>
+          <button onClick={() => setSuccessMessage('')} className="close-btn">
+            <i className="fas fa-times"></i>
+          </button>
+        </div>
+      )}
 
       {/* Tabs */}
       <div className="tabs">
@@ -670,7 +869,7 @@ export default function DashboardUsers() {
               className="filter-select"
             >
               <option value="all">All Roles</option>
-              {roleOptions.map(role => (
+              {roleOptions.map((role: string) => (
                 <option key={role} value={role}>
                   {role.charAt(0).toUpperCase() + role.slice(1)}
                 </option>
@@ -712,18 +911,22 @@ export default function DashboardUsers() {
 
       {/* Data Table */}
       {activeTab === 'users' ? (
-        <Table
-          columns={userColumns}
+        <ResponsiveDataView
           data={filteredUsers}
+          columns={userColumns}
           loading={loading}
-          onRowClick={(user) => console.log('View user details:', user)}
+          searchQuery={searchQuery}
+          cardRenderer={renderUserCard}
+          onRowClick={(user: User) => handleViewUser(user.id)}
         />
       ) : (
-        <Table
-          columns={subscriberColumns}
+        <ResponsiveDataView
           data={filteredSubscribers}
+          columns={subscriberColumns}
           loading={loading}
-          onRowClick={(subscriber) => console.log('View subscriber details:', subscriber)}
+          searchQuery={searchQuery}
+          cardRenderer={renderSubscriberCard}
+          onRowClick={(subscriber: NewsletterSubscriber) => handleViewAnalytics(subscriber.id)}
         />
       )}
 
@@ -732,6 +935,52 @@ export default function DashboardUsers() {
           padding: 2rem;
           min-height: 100vh;
           background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        }
+
+        .success-banner {
+          background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(5, 150, 105, 0.15));
+          border: 1px solid rgba(16, 185, 129, 0.3);
+          border-radius: 12px;
+          padding: 1rem 1.5rem;
+          margin-bottom: 1.5rem;
+          display: flex;
+          align-items: center;
+          gap: 0.75rem;
+          color: #6ee7b7;
+          font-weight: 500;
+          animation: slideDown 0.3s ease-out;
+        }
+
+        .success-banner i {
+          font-size: 1.125rem;
+          color: #10b981;
+        }
+
+        .success-banner .close-btn {
+          margin-left: auto;
+          background: none;
+          border: none;
+          color: #6ee7b7;
+          cursor: pointer;
+          padding: 0.25rem;
+          border-radius: 4px;
+          transition: all 0.2s ease;
+        }
+
+        .success-banner .close-btn:hover {
+          background: rgba(16, 185, 129, 0.2);
+          color: #10b981;
+        }
+
+        @keyframes slideDown {
+          from {
+            opacity: 0;
+            transform: translateY(-10px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
         }
 
         .tabs {
@@ -855,6 +1104,292 @@ export default function DashboardUsers() {
 
           .search-box {
             min-width: auto;
+          }
+        }
+
+        /* Mobile Card Styles */
+        .user-card,
+        .subscriber-card {
+          background: rgba(15, 23, 42, 0.6);
+          border: 1px solid rgba(59, 130, 246, 0.2);
+          border-radius: 8px;
+          padding: 1.25rem;
+          transition: all 0.2s ease;
+          cursor: pointer;
+        }
+
+        .user-card:hover,
+        .subscriber-card:hover {
+          border-color: rgba(14, 165, 233, 0.4);
+          transform: translateY(-2px);
+          box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .user-header,
+        .subscriber-header {
+          display: flex;
+          align-items: flex-start;
+          gap: 1rem;
+          margin-bottom: 1rem;
+        }
+
+        .user-avatar,
+        .subscriber-avatar {
+          width: 48px;
+          height: 48px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: white;
+          font-weight: 600;
+          font-size: 1.125rem;
+          flex-shrink: 0;
+        }
+
+        .subscriber-avatar {
+          background: linear-gradient(135deg, #0ea5e9, #3b82f6);
+        }
+
+        .user-info,
+        .subscriber-info {
+          flex: 1;
+          min-width: 0;
+        }
+
+        .user-name,
+        .subscriber-email {
+          margin: 0 0 0.25rem 0;
+          color: #f8fafc;
+          font-size: 1rem;
+          font-weight: 600;
+          line-height: 1.3;
+        }
+
+        .user-email,
+        .subscriber-meta {
+          margin: 0 0 0.25rem 0;
+          color: #94a3b8;
+          font-size: 0.875rem;
+        }
+
+        .user-location {
+          margin: 0;
+          color: #64748b;
+          font-size: 0.75rem;
+          display: flex;
+          align-items: center;
+          gap: 0.25rem;
+        }
+
+        .user-badges {
+          display: flex;
+          flex-direction: column;
+          gap: 0.5rem;
+          align-items: flex-end;
+        }
+
+        .subscriber-categories {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0.5rem;
+          margin-bottom: 1rem;
+        }
+
+        .user-stats,
+        .subscriber-stats {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 1rem;
+          margin-bottom: 1rem;
+          padding: 1rem;
+          background: rgba(15, 23, 42, 0.4);
+          border-radius: 6px;
+        }
+
+        .stat-item {
+          text-align: center;
+        }
+
+        .stat-label {
+          display: block;
+          color: #94a3b8;
+          font-size: 0.75rem;
+          font-weight: 500;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+          margin-bottom: 0.25rem;
+        }
+
+        .stat-value {
+          display: block;
+          color: #f8fafc;
+          font-size: 0.875rem;
+          font-weight: 600;
+        }
+
+        .stat-value.high {
+          color: #22c55e;
+        }
+
+        .stat-value.medium {
+          color: #f59e0b;
+        }
+
+        .stat-value.low {
+          color: #ef4444;
+        }
+
+        .user-actions,
+        .subscriber-actions {
+          display: flex;
+          gap: 0.5rem;
+          flex-wrap: wrap;
+        }
+
+        @media (max-width: 480px) {
+          .user-stats,
+          .subscriber-stats {
+            grid-template-columns: repeat(2, 1fr);
+          }
+
+          .user-card,
+          .subscriber-card {
+            border: 1px solid rgba(59, 130, 246, 0.4);
+            border-radius: 12px;
+            margin-bottom: 0.75rem;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+            position: relative;
+          }
+
+          .user-card:not(:last-child)::after,
+          .subscriber-card:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            bottom: -1rem;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.5), transparent);
+          }
+
+          .user-actions,
+          .subscriber-actions {
+            flex-direction: column;
+          }
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: rgba(0, 0, 0, 0.7);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          z-index: 1000;
+        }
+
+        .modal-content {
+          background: #1e293b;
+          border-radius: 12px;
+          width: 90%;
+          max-width: 500px;
+          max-height: 90vh;
+          overflow-y: auto;
+          box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 1.5rem;
+          border-bottom: 1px solid #334155;
+        }
+
+        .modal-header h3 {
+          color: #f8fafc;
+          margin: 0;
+          font-size: 1.25rem;
+          font-weight: 600;
+        }
+
+        .modal-close {
+          background: none;
+          border: none;
+          color: #94a3b8;
+          font-size: 1.25rem;
+          cursor: pointer;
+          padding: 0.5rem;
+          border-radius: 6px;
+          transition: all 0.2s;
+        }
+
+        .modal-close:hover {
+          color: #f8fafc;
+          background: rgba(255, 255, 255, 0.1);
+        }
+
+        .modal-body {
+          padding: 1.5rem;
+        }
+
+        .form-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 1rem;
+        }
+
+        .form-group {
+          display: flex;
+          flex-direction: column;
+        }
+
+        .form-group.full-width {
+          grid-column: 1 / -1;
+        }
+
+        .form-group label {
+          color: #e2e8f0;
+          font-size: 0.875rem;
+          font-weight: 500;
+          margin-bottom: 0.5rem;
+        }
+
+        .form-group input,
+        .form-group select {
+          background: #334155;
+          border: 1px solid #475569;
+          border-radius: 6px;
+          color: #f8fafc;
+          padding: 0.75rem;
+          font-size: 0.875rem;
+          transition: all 0.2s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+          outline: none;
+          border-color: #3b82f6;
+          background: #1e293b;
+        }
+
+        .modal-footer {
+          display: flex;
+          justify-content: flex-end;
+          gap: 0.75rem;
+          padding: 1.5rem;
+          border-top: 1px solid #334155;
+        }
+
+        @media (max-width: 640px) {
+          .form-grid {
+            grid-template-columns: 1fr;
           }
         }
       `}</style>

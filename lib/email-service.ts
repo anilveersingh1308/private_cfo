@@ -29,11 +29,14 @@ interface EmailResult {
 
 // Configuration - Update this with your email service details
 const EMAIL_CONFIG: EmailConfig = {
-  provider: 'mock', // Change to your preferred provider
-  // apiKey: process.env.EMAIL_API_KEY,
-  // region: process.env.AWS_REGION,
-  // domain: process.env.MAILGUN_DOMAIN,
-  // Add your configuration here
+  provider: process.env.EMAIL_PROVIDER as any || 'mock', // Change to your preferred provider
+  apiKey: process.env.EMAIL_API_KEY,
+  region: process.env.AWS_SES_REGION || process.env.AWS_REGION,
+  domain: process.env.MAILGUN_DOMAIN,
+  smtpHost: process.env.SMTP_HOST,
+  smtpPort: process.env.SMTP_PORT ? parseInt(process.env.SMTP_PORT) : undefined,
+  smtpUser: process.env.SMTP_USER,
+  smtpPass: process.env.SMTP_PASS,
 };
 
 // Default sender information

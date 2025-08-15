@@ -13,6 +13,7 @@ export default function SignIn() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   
   const { login, user, loading: authLoading } = useAuth();
   const router = useRouter();
@@ -169,6 +170,51 @@ export default function SignIn() {
           font-size: 1rem;
           color: #222;
           transition: box-shadow 0.3s ease;
+        }
+
+        .password-input-wrapper {
+          position: relative;
+          display: flex;
+          align-items: center;
+        }
+
+        .password-input-wrapper input {
+          padding-right: 3rem;
+        }
+
+        .password-toggle-btn {
+          position: absolute;
+          right: 0.75rem;
+          top: 50%;
+          transform: translateY(-50%);
+          background: none;
+          border: none;
+          color: #666;
+          cursor: pointer;
+          padding: 0.25rem;
+          border-radius: 4px;
+          transition: all 0.2s ease;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 24px;
+          height: 24px;
+          z-index: 1;
+        }
+
+        .password-toggle-btn:hover {
+          color: #00458a;
+          background: rgba(0, 69, 138, 0.1);
+        }
+
+        .password-toggle-btn:focus {
+          outline: none;
+          color: #00458a;
+          background: rgba(0, 69, 138, 0.1);
+        }
+
+        .password-toggle-btn i {
+          font-size: 0.875rem;
         }
 
         .form-group input:focus {
@@ -405,16 +451,26 @@ export default function SignIn() {
 
               <div className="form-group">
                 <label htmlFor="password">Password</label>
-                <input
-                  type="password"
-                  id="password"
-                  name="password"
-                  required
-                  placeholder="Enter your password"
-                  autoComplete="current-password"
-                  value={credentials.password}
-                  onChange={(e) => setCredentials({ ...credentials, password: e.target.value })}
-                />
+                <div className="password-input-wrapper">
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    id="password"
+                    name="password"
+                    required
+                    placeholder="Enter your password"
+                    autoComplete="current-password"
+                    value={credentials.password}
+                    onChange={(e) => setCredentials({ ...credentials, password: e.target.value })}
+                  />
+                  <button
+                    type="button"
+                    className="password-toggle-btn"
+                    onClick={() => setShowPassword(!showPassword)}
+                    aria-label={showPassword ? 'Hide password' : 'Show password'}
+                  >
+                    <i className={`fas ${showPassword ? 'fa-eye-slash' : 'fa-eye'}`}></i>
+                  </button>
+                </div>
               </div>
 
               <div className="remember-me">

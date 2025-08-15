@@ -179,6 +179,34 @@ export const employeeStats = pgTable('employee_stats', {
   updated_at: timestamp('updated_at').defaultNow().notNull(),
 });
 
+// User settings and preferences
+export const userSettings = pgTable('user_settings', {
+  id: serial('id').primaryKey(),
+  user_id: integer('user_id').references(() => users.id).notNull().unique(),
+  
+  // Notification settings
+  email_notifications: boolean('email_notifications').default(true),
+  push_notifications: boolean('push_notifications').default(true),
+  desktop_notifications: boolean('desktop_notifications').default(false),
+  invoice_reminders: boolean('invoice_reminders').default(true),
+  consultation_alerts: boolean('consultation_alerts').default(true),
+  marketing_emails: boolean('marketing_emails').default(false),
+  
+  // Security settings
+  two_factor_enabled: boolean('two_factor_enabled').default(false),
+  login_alerts: boolean('login_alerts').default(true),
+  session_timeout: integer('session_timeout').default(60),
+  
+  // Preferences
+  theme: varchar('theme', { length: 20 }).default('dark'),
+  language: varchar('language', { length: 10 }).default('en'),
+  timezone: varchar('timezone', { length: 50 }).default('Asia/Kolkata'),
+  currency: varchar('currency', { length: 10 }).default('INR'),
+  
+  created_at: timestamp('created_at').defaultNow().notNull(),
+  updated_at: timestamp('updated_at').defaultNow().notNull(),
+});
+
 // Type exports for TypeScript
 export type User = typeof users.$inferSelect;
 export type NewUser = typeof users.$inferInsert;
@@ -200,5 +228,7 @@ export type ConsultationSession = typeof consultationSessions.$inferSelect;
 export type NewConsultationSession = typeof consultationSessions.$inferInsert;
 export type EmployeeStats = typeof employeeStats.$inferSelect;
 export type NewEmployeeStats = typeof employeeStats.$inferInsert;
+export type UserSettings = typeof userSettings.$inferSelect;
+export type NewUserSettings = typeof userSettings.$inferInsert;
 export type InvoiceSequence = typeof invoiceSequence.$inferSelect;
 export type NewInvoiceSequence = typeof invoiceSequence.$inferInsert;

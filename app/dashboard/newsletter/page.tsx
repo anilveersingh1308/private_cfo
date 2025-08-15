@@ -8,9 +8,9 @@ import {
   Button, 
   PageHeader, 
   Badge,
-  Table,
   StatsCard 
 } from '@/components/dashboard/DashboardComponents';
+import ResponsiveDataView from '@/components/dashboard/ResponsiveDataView';
 
 interface NewsletterSubscriber {
   id: number;
@@ -315,6 +315,149 @@ export default function NewsletterPage() {
     return matchesSearch && matchesStatus;
   });
 
+  const renderSubscriberCard = (subscriber: NewsletterSubscriber, index: number) => (
+    <div key={subscriber.id} className="subscriber-card">
+      <div className="subscriber-header">
+        <div className="subscriber-email">
+          <h3>{subscriber.email}</h3>
+          <p className="subscriber-source">{subscriber.source || 'Unknown'}</p>
+        </div>
+        <div className="subscriber-badge">
+          <Badge variant={getStatusBadge(subscriber.status).variant}>
+            {getStatusBadge(subscriber.status).label}
+          </Badge>
+        </div>
+      </div>
+
+      <div className="subscriber-stats">
+        <div className="stat-item">
+          <span className="stat-label">Engagement</span>
+          <span className="stat-value">
+            {subscriber.engagement_score ? `${subscriber.engagement_score}%` : 'N/A'}
+          </span>
+        </div>
+        <div className="stat-item">
+          <span className="stat-label">Subscribed</span>
+          <span className="stat-value">{formatDate(subscriber.subscribed_at)}</span>
+        </div>
+      </div>
+
+      {subscriber.categories && subscriber.categories.length > 0 && (
+        <div className="subscriber-categories">
+          <span className="categories-label">Interests:</span>
+          <div className="categories-list">
+            {subscriber.categories.slice(0, 3).map((category, idx) => (
+              <Badge key={idx} variant="info" size="sm">{category}</Badge>
+            ))}
+            {subscriber.categories.length > 3 && (
+              <Badge variant="neutral" size="sm">+{subscriber.categories.length - 3}</Badge>
+            )}
+          </div>
+        </div>
+      )}
+
+      <div className="subscriber-actions">
+        <input
+          type="checkbox"
+          checked={selectedSubscribers.includes(subscriber.id)}
+          onChange={() => handleSelectSubscriber(subscriber.id)}
+          className="subscriber-checkbox"
+        />
+        {subscriber.status === 'active' && (
+          <Button variant="ghost" size="sm" icon="fas fa-envelope" onClick={() => handleOpenEmailModal(subscriber.id)}>
+            Email
+          </Button>
+        )}
+        {subscriber.status !== 'active' && (
+          <Button variant="ghost" size="sm" icon="fas fa-check" onClick={() => handleStatusUpdate(subscriber.id, 'active')}>
+            Activate
+          </Button>
+        )}
+        {subscriber.status !== 'unsubscribed' && (
+          <Button variant="ghost" size="sm" icon="fas fa-times" onClick={() => handleStatusUpdate(subscriber.id, 'unsubscribed')}>
+            Unsubscribe
+          </Button>
+        )}
+      </div>
+    </div>
+  );
+
+  const subscriberColumns = [
+    { 
+      key: 'select', 
+      title: (
+        <input
+          type="checkbox"
+          checked={selectedSubscribers.length === filteredSubscribers.length && filteredSubscribers.length > 0}
+          onChange={handleSelectAll}
+        />
+      ) as any,
+      render: (_: any, row: NewsletterSubscriber) => (
+        <input
+          type="checkbox"
+          checked={selectedSubscribers.includes(row.id)}
+          onChange={() => handleSelectSubscriber(row.id)}
+        />
+      )
+    },
+    { key: 'email', title: 'Email' },
+    { 
+      key: 'status', 
+      title: 'Status',
+      render: (status: string) => (
+        <Badge variant={getStatusBadge(status).variant}>
+          {getStatusBadge(status).label}
+        </Badge>
+      )
+    },
+    { key: 'source', title: 'Source' },
+    { 
+      key: 'engagement_score', 
+      title: 'Engagement',
+      render: (score: number) => score ? `${score}%` : 'N/A'
+    },
+    { 
+      key: 'subscribed_at', 
+      title: 'Subscribed',
+      render: (date: string) => formatDate(date)
+    },
+    {
+      key: 'actions',
+      title: 'Actions',
+      render: (_: any, row: NewsletterSubscriber) => (
+        <div className="action-buttons">
+          {row.status === 'active' && (
+            <button
+              onClick={() => handleOpenEmailModal(row.id)}
+              className="action-btn email"
+              title="Send Email"
+            >
+              <i className="fas fa-envelope"></i>
+            </button>
+          )}
+          {row.status !== 'active' && (
+            <button
+              onClick={() => handleStatusUpdate(row.id, 'active')}
+              className="action-btn activate"
+              title="Activate"
+            >
+              <i className="fas fa-check"></i>
+            </button>
+          )}
+          {row.status !== 'unsubscribed' && (
+            <button
+              onClick={() => handleStatusUpdate(row.id, 'unsubscribed')}
+              className="action-btn unsubscribe"
+              title="Unsubscribe"
+            >
+              <i className="fas fa-times"></i>
+            </button>
+          )}
+        </div>
+      )
+    }
+  ];
+
   useEffect(() => {
     fetchSubscribers();
   }, [searchTerm, statusFilter]);
@@ -492,90 +635,12 @@ export default function NewsletterPage() {
             <span style={{ color: '#6b7280' }}>Loading subscribers...</span>
           </div>
         ) : (
-          <Table
-            columns={[
-              { 
-                key: 'select', 
-                title: (
-                  <input
-                    type="checkbox"
-                    checked={selectedSubscribers.length === filteredSubscribers.length && filteredSubscribers.length > 0}
-                    onChange={handleSelectAll}
-                  />
-                ) as any,
-                render: (_, row) => (
-                  <input
-                    type="checkbox"
-                    checked={selectedSubscribers.includes(row.id)}
-                    onChange={() => handleSelectSubscriber(row.id)}
-                  />
-                )
-              },
-              { key: 'email', title: 'Email' },
-              { 
-                key: 'status', 
-                title: 'Status',
-                render: (status) => (
-                  <Badge variant={getStatusBadge(status).variant}>
-                    {getStatusBadge(status).label}
-                  </Badge>
-                )
-              },
-              { key: 'source', title: 'Source' },
-              { 
-                key: 'engagement_score', 
-                title: 'Engagement',
-                render: (score) => score ? `${score}%` : 'N/A'
-              },
-              { 
-                key: 'subscribed_at', 
-                title: 'Subscribed',
-                render: (date) => formatDate(date)
-              },
-              {
-                key: 'actions',
-                title: 'Actions',
-                render: (_, row) => (
-                  <div className="action-buttons">
-                    {row.status === 'active' && (
-                      <button
-                        onClick={() => handleOpenEmailModal(row.id)}
-                        className="action-btn email"
-                        title="Send Email"
-                      >
-                        <i className="fas fa-envelope"></i>
-                      </button>
-                    )}
-                    {row.status !== 'active' && (
-                      <button
-                        onClick={() => handleStatusUpdate(row.id, 'active')}
-                        className="action-btn activate"
-                        title="Activate"
-                      >
-                        <i className="fas fa-check"></i>
-                      </button>
-                    )}
-                    {row.status !== 'unsubscribed' && (
-                      <button
-                        onClick={() => handleStatusUpdate(row.id, 'unsubscribed')}
-                        className="action-btn unsubscribe"
-                        title="Unsubscribe"
-                      >
-                        <i className="fas fa-times"></i>
-                      </button>
-                    )}
-                    <button
-                      onClick={() => handleStatusUpdate(row.id, 'bounced')}
-                      className="action-btn bounce"
-                      title="Mark as Bounced"
-                    >
-                      <i className="fas fa-exclamation-triangle"></i>
-                    </button>
-                  </div>
-                )
-              }
-            ]}
+          <ResponsiveDataView
             data={filteredSubscribers}
+            columns={subscriberColumns}
+            loading={loadingData}
+            searchQuery={searchTerm}
+            cardRenderer={renderSubscriberCard}
           />
         )}
       </Card>
@@ -1085,6 +1150,158 @@ export default function NewsletterPage() {
 
           .bulk-actions {
             flex-wrap: wrap;
+          }
+
+          .subscriber-card {
+            background: rgba(30, 41, 59, 0.9);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 0.75rem;
+            padding: 1rem;
+            transition: all 0.2s ease;
+          }
+
+          .subscriber-card:hover {
+            border-color: rgba(59, 130, 246, 0.4);
+            background: rgba(30, 41, 59, 1);
+          }
+
+          .subscriber-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.75rem;
+          }
+
+          .subscriber-email {
+            font-weight: 600;
+            color: #f8fafc;
+            font-size: 0.9rem;
+            word-break: break-word;
+            flex: 1;
+            margin-right: 1rem;
+          }
+
+          .subscriber-card-body {
+            space-y: 0.5rem;
+          }
+
+          .subscriber-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
+          }
+
+          .subscriber-meta-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+          }
+
+          .subscriber-meta-label {
+            color: #94a3b8;
+            font-weight: 500;
+          }
+
+          .subscriber-meta-value {
+            color: #e2e8f0;
+            font-weight: 500;
+          }
+
+          .subscriber-card-actions {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-top: 0.75rem;
+            padding-top: 0.75rem;
+            border-top: 1px solid rgba(59, 130, 246, 0.1);
+          }
+
+          .subscriber-action-btn {
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            color: #94a3b8;
+            padding: 0.4rem 0.75rem;
+            border-radius: 0.5rem;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+          }
+
+          .subscriber-action-btn:hover {
+            background: rgba(59, 130, 246, 0.2);
+            color: #f8fafc;
+            border-color: rgba(59, 130, 246, 0.5);
+          }
+
+          .subscriber-action-btn.email {
+            background: rgba(34, 197, 94, 0.1);
+            border-color: rgba(34, 197, 94, 0.3);
+            color: #22c55e;
+          }
+
+          .subscriber-action-btn.email:hover {
+            background: rgba(34, 197, 94, 0.2);
+            border-color: rgba(34, 197, 94, 0.5);
+          }
+
+          .subscriber-action-btn.activate {
+            background: rgba(16, 185, 129, 0.1);
+            border-color: rgba(16, 185, 129, 0.3);
+            color: #10b981;
+          }
+
+          .subscriber-action-btn.activate:hover {
+            background: rgba(16, 185, 129, 0.2);
+            border-color: rgba(16, 185, 129, 0.5);
+          }
+
+          .subscriber-action-btn.unsubscribe {
+            background: rgba(239, 68, 68, 0.1);
+            border-color: rgba(239, 68, 68, 0.3);
+            color: #ef4444;
+          }
+
+          .subscriber-action-btn.unsubscribe:hover {
+            background: rgba(239, 68, 68, 0.2);
+            border-color: rgba(239, 68, 68, 0.5);
+          }
+
+          .subscriber-action-btn.bounce {
+            background: rgba(245, 158, 11, 0.1);
+            border-color: rgba(245, 158, 11, 0.3);
+            color: #f59e0b;
+          }
+
+          .subscriber-action-btn.bounce:hover {
+            background: rgba(245, 158, 11, 0.2);
+            border-color: rgba(245, 158, 11, 0.5);
+          }
+
+          .subscriber-checkbox {
+            margin-right: 0.5rem;
+          }
+
+          /* Mobile card separation */
+          .responsive-data-view .card {
+            position: relative;
+            border: 2px solid #e5e7eb;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 1.5rem;
+          }
+
+          .responsive-data-view .card:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            bottom: -0.75rem;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(to right, transparent, #d1d5db, transparent);
           }
         }
       `}</style>

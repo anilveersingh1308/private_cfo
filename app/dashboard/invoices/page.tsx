@@ -6,9 +6,9 @@ import {
   Card, 
   Button, 
   PageHeader, 
-  Table, 
   Badge 
 } from '@/components/dashboard/DashboardComponents';
+import ResponsiveDataView from '@/components/dashboard/ResponsiveDataView';
 
 interface Invoice {
   id: number;
@@ -392,6 +392,68 @@ export default function AdminInvoices() {
     .filter(invoice => invoice.status === 'overdue')
     .reduce((sum, invoice) => sum + invoice.amount, 0);
 
+  const renderInvoiceCard = (invoice: Invoice, index: number) => (
+    <div key={invoice.id} className="invoice-card" onClick={() => handleViewInvoice(invoice)}>
+      <div className="invoice-header">
+        <div className="invoice-info">
+          <h3 className="invoice-number">{invoice.invoice_number}</h3>
+          <p className="invoice-date">{formatDate(invoice.created_at)}</p>
+        </div>
+        <div className="invoice-status">
+          {getStatusBadge(invoice.status)}
+        </div>
+      </div>
+
+      <div className="invoice-client">
+        <h4 className="client-name">{invoice.client_name}</h4>
+        <p className="client-email">{invoice.client_email}</p>
+      </div>
+
+      <div className="invoice-details">
+        <div className="detail-row">
+          <span className="detail-label">Service</span>
+          <Badge variant="info" size="sm">{invoice.service_type}</Badge>
+        </div>
+        <div className="detail-row">
+          <span className="detail-label">Amount</span>
+          <span className="detail-value amount">{formatCurrency(invoice.amount)}</span>
+        </div>
+        <div className="detail-row">
+          <span className="detail-label">Due Date</span>
+          <span className="detail-value">{formatDate(invoice.due_date)}</span>
+        </div>
+        {invoice.paid_at && (
+          <div className="detail-row">
+            <span className="detail-label">Paid</span>
+            <span className="detail-value">{formatDate(invoice.paid_at)}</span>
+          </div>
+        )}
+      </div>
+
+      <div className="invoice-actions">
+        <Button variant="ghost" size="sm" icon="fas fa-eye" onClick={() => handleViewInvoice(invoice)}>
+          View
+        </Button>
+        <Button variant="ghost" size="sm" icon="fas fa-edit" onClick={() => handleEditInvoice(invoice)}>
+          Edit
+        </Button>
+        {invoice.status === 'draft' && (
+          <Button variant="ghost" size="sm" icon="fas fa-paper-plane" onClick={() => handleSendInvoice(invoice)}>
+            Send
+          </Button>
+        )}
+        {invoice.status === 'sent' && (
+          <Button variant="ghost" size="sm" icon="fas fa-check" onClick={() => handleMarkAsPaid(invoice)}>
+            Mark Paid
+          </Button>
+        )}
+        <Button variant="ghost" size="sm" icon="fas fa-trash" onClick={() => handleDeleteInvoice(invoice)}>
+          Delete
+        </Button>
+      </div>
+    </div>
+  );
+
   if (loading) {
     return (
       <div className="loading-container">
@@ -597,11 +659,13 @@ export default function AdminInvoices() {
       </Card>
 
       {/* Data Table */}
-      <Table
-        columns={columns}
+      <ResponsiveDataView
         data={filteredInvoices}
+        columns={columns}
         loading={loading}
-        onRowClick={(invoice) => handleViewInvoice(invoice)}
+        searchQuery={searchQuery}
+        cardRenderer={renderInvoiceCard}
+        onRowClick={(invoice: Invoice) => handleViewInvoice(invoice)}
       />
 
       {/* View Invoice Modal */}
@@ -1045,6 +1109,104 @@ export default function AdminInvoices() {
           font-size: 0.8rem !important;
         }
 
+        /* Invoice Card Styles */
+        .invoice-card {
+          background: rgba(15, 23, 42, 0.6);
+          border: 1px solid rgba(59, 130, 246, 0.2);
+          border-radius: 8px;
+          padding: 1.25rem;
+          transition: all 0.2s ease;
+          cursor: pointer;
+        }
+
+        .invoice-card:hover {
+          border-color: rgba(14, 165, 233, 0.4);
+          transform: translateY(-2px);
+          box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .invoice-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-start;
+          margin-bottom: 1rem;
+        }
+
+        .invoice-info {
+          flex: 1;
+        }
+
+        .invoice-number {
+          margin: 0 0 0.25rem 0;
+          color: #f8fafc;
+          font-size: 1rem;
+          font-weight: 600;
+          line-height: 1.3;
+        }
+
+        .invoice-date {
+          margin: 0;
+          color: #94a3b8;
+          font-size: 0.875rem;
+        }
+
+        .invoice-client {
+          margin-bottom: 1rem;
+          padding-bottom: 1rem;
+          border-bottom: 1px solid rgba(59, 130, 246, 0.1);
+        }
+
+        .client-name {
+          margin: 0 0 0.25rem 0;
+          color: #f8fafc;
+          font-size: 0.9rem;
+          font-weight: 600;
+        }
+
+        .client-email {
+          margin: 0;
+          color: #94a3b8;
+          font-size: 0.8rem;
+        }
+
+        .invoice-details {
+          margin-bottom: 1rem;
+        }
+
+        .detail-row {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 0.5rem;
+        }
+
+        .detail-row:last-child {
+          margin-bottom: 0;
+        }
+
+        .detail-label {
+          color: #94a3b8;
+          font-size: 0.875rem;
+          font-weight: 500;
+        }
+
+        .detail-value {
+          color: #f8fafc;
+          font-size: 0.875rem;
+          font-weight: 500;
+        }
+
+        .detail-value.amount {
+          color: #22c55e;
+          font-weight: 600;
+        }
+
+        .invoice-actions {
+          display: flex;
+          gap: 0.5rem;
+          flex-wrap: wrap;
+        }
+
         @media (max-width: 768px) {
           .admin-invoices {
             padding: 1rem;
@@ -1087,6 +1249,24 @@ export default function AdminInvoices() {
           .confirmation-content {
             flex-direction: column;
             text-align: center;
+          }
+
+          /* Mobile card separation */
+          .responsive-data-view .card {
+            position: relative;
+            border: 2px solid #e5e7eb;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 1.5rem;
+          }
+
+          .responsive-data-view .card:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            bottom: -0.75rem;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(to right, transparent, #d1d5db, transparent);
           }
         }
       `}</style>

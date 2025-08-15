@@ -219,6 +219,29 @@ export default function DashboardSidebar() {
           background: rgba(30, 41, 59, 0.3);
           border-radius: 12px;
           border: 1px solid rgba(59, 130, 246, 0.2);
+          text-decoration: none;
+          color: inherit;
+          cursor: pointer;
+          transition: all 0.2s ease;
+          position: relative;
+        }
+
+        .user-info:hover {
+          background: rgba(14, 165, 233, 0.1);
+          border-color: rgba(14, 165, 233, 0.4);
+          transform: translateY(-1px);
+        }
+
+        .user-arrow {
+          margin-left: auto;
+          color: #64748b;
+          font-size: 0.75rem;
+          transition: all 0.2s ease;
+        }
+
+        .user-info:hover .user-arrow {
+          color: #0ea5e9;
+          transform: translateX(2px);
         }
 
         .user-avatar {
@@ -324,7 +347,7 @@ export default function DashboardSidebar() {
         </nav>
 
         <div className="user-section">
-          <div className="user-info">
+          <Link href="/dashboard/profile" className="user-info">
             <div className="user-avatar">
               {user?.name?.charAt(0)?.toUpperCase() || 'A'}
             </div>
@@ -334,7 +357,8 @@ export default function DashboardSidebar() {
               </p>
               <p className="user-role">Administrator</p>
             </div>
-          </div>
+            <i className="fas fa-chevron-right user-arrow"></i>
+          </Link>
           
           <button onClick={handleLogout} className="logout-btn">
             <i className="fas fa-sign-out-alt"></i>
