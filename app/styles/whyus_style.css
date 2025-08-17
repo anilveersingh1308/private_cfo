@@ -1,0 +1,205 @@
+/* --- CONTENT SECTIONS --- */
+.content-section {
+    padding: 2rem 0;
+}
+.content-section p {
+    font-family: 'Mooli', sans-serif;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    font-size: 1rem;
+    line-height: 1.5;
+    margin-bottom: 1.5rem;
+}
+.content-section h2 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    font-size: 2.5rem;
+}
+
+/* For sections that need left-aligned text */
+.content-section:not(.cta-section) .container > p, 
+.content-section .container > ul {
+    text-align: left;
+    margin-left: 0;
+}
+.content-section:not(.cta-section) .container > h2 {
+    text-align: left;
+}
+
+.text-dim { color: var(--color-text-dim); }
+
+/* --- PILLARS V1 (LIST) --- */
+.pillars-list {
+    margin-top: 3rem;
+    gap: 2.5rem;
+}
+
+.pillar-item-v1 {
+    gap: 1.5rem;
+    padding: 1.5rem 0;
+}
+
+.pillar-icon-v1 {
+    text-align: center;
+    margin-bottom: 10px;
+}
+.pillar-icon-v1 img {
+    width: 100px;
+    height: 100px;
+    
+}
+
+.pillar-item-v1 h3 { 
+    color: var(--color-active-link); 
+    margin-bottom: 0.5rem;
+    font-size: 1.4rem;
+    font-weight: 600;
+}
+.pillar-item-v1 p { 
+    max-width: none; 
+    text-align: left; 
+    margin-bottom: 0;
+}
+
+/* --- PILLARS V2 (GRID) --- */
+.pillars-grid {
+    margin-top: 1rem;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 3rem;
+}
+
+.pillar-item-v2 {
+    text-align: center;
+    padding: 0 1.5rem;
+}
+
+.pillar-item-v2 h3 {
+    color: var(--color-heading);
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.pillar-icon-v2 {
+    margin-bottom: 1rem;
+}
+.pillar-icon-v2 img {
+    width: 100px;
+    height: 100px;
+    margin: 0 auto;
+    display: block;
+}
+.pillar-item-v2 p {
+    font-size: 0.95rem;
+    color: var(--color-text-dim);
+}
+
+/* --- DIFFERENCE V2 SECTION --- */
+.narrative-subtitle {
+    font-size: 1.387rem;
+    font-weight: 400;
+    margin-top: -1rem;
+    margin-bottom: 1.5rem;
+    letter-spacing: 1px;
+}
+
+.custom-list {
+    list-style: none;
+    padding-left: 1.5rem;
+    margin: 2rem 0rem;
+    margin-top: 0;
+}
+
+.custom-list li {
+    position: relative;
+    padding-bottom: 0.75rem;
+    margin-left: 2rem;
+}
+
+.custom-list li::before {
+    content: '•';
+    position: absolute;
+    left: -1.5rem;
+    color: var(--gradient-text-green);
+    font-size: 1.5rem;
+    line-height: 1;
+    color: #4ade80;
+}
+
+/* --- WORK WITH SECTION --- */
+.work-with-list {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+.work-with-list li {
+    margin-left: 1rem;
+}
+.work-with-list li h3 { font-size: 1.5rem; }
+.work-with-list li p { color: var(--color-text-dim); margin-top: -0.25rem; font-family: 'Mooli', sans-serif !important;}
+
+
+
+
+/* --- RESPONSIVE DESIGN --- */
+
+/* Laptops / Desktops */
+@media (max-width: 990px) {
+    .pillars-grid { gap: 2rem; }
+    section.content-section {
+        padding: 10px 0;
+    }
+    .pillar-item-v1 {
+        padding: 0;
+        margin-bottom: 20px;
+    }
+    .pillars-list h3 {
+        text-align: left;
+        line-height: 1.68em;
+    }
+}
+
+/* Tablets */
+@media (max-width: 768px) {
+    .pillars-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .content-section { padding: 3rem 0; }
+    .cta-section h2 { font-size: 2rem; }
+    .cta-section > .container > div[style*="display: flex"] {
+        flex-direction: column;
+        text-align: center;
+        gap: 1.5rem;
+    }
+    .cta-subtitle { 
+        font-size: 1.2rem;
+        text-align: center;
+    }
+}
+
+/* Mobile Phones */
+@media (max-width: 576px) {
+    .pillar-item-v1 { flex-direction: column; text-align: center; }
+    .pillar-item-v1 .pillar-icon-v1 { margin: 0 auto; }
+
+    .work-with-list li h3 { font-size: 1.3rem; }
+    
+    .cta-section h2 { font-size: 1.8rem; }
+    .cta-section > .container > div[style*="display: flex"] {
+        flex-direction: column;
+        text-align: center;
+        gap: 1.5rem;
+    }
+    .cta-subtitle { 
+        font-size: 1.1rem;
+        text-align: center;
+    }
+    .btn-cta {
+        padding: 0.9rem 1.5rem;
+        font-size: 0.95rem;
+    }
+}

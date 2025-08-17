@@ -1,0 +1,93 @@
+/* ------------------------- About Page Styling --------------------------------- */
+
+.about-section {
+    margin-top: 40px;
+}
+.about-section .text-purple { background: linear-gradient(90deg, #ffffff 0%,  #b97aff 100%); }
+.about-section .text-yellow { background: linear-gradient(90deg, #ffffff 0%,  #ffd86b 100%);}
+.about-section .text-blue { background: linear-gradient(90deg, #ffffff 0%,  #1bb7ff 100%); }
+.about-section .text-green, .cta-section .text-green { background: linear-gradient(90deg, #ffffff 0%,  #00ffc3 100%);}
+.about-section .text-purple, .about-section .text-yellow, .about-section .text-blue, .about-section .text-green, .cta-section .text-green {
+    font-size: 2em;
+    font-weight: 700;
+    margin-bottom: 0.2em;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    width: fit-content;
+}
+.about-section h3 {
+    margin: 1em 0 !important;
+    color: #fff;
+}
+.about-section ul.principles-list {
+    margin: 1.2em 0 0 0;
+    padding-left: 1.2em;
+}
+.about-section ul.principles-list li {
+    margin-bottom: 0.7em;
+    font-size: 1.05em;
+    color: #e0e0e0;
+}
+.about-section .content-image {
+    display: block;
+    margin: 32px auto 24px auto;
+    max-width: 420px;
+    width: 100%;
+    border-radius: 12px;
+    box-shadow: 0 4px 32px 0 rgba(0,0,0,0.18);
+}
+.about-section blockquote {
+    background: rgba(255,255,255,0.04);
+    border-left: 4px solid #5ecbff;
+    margin: 24px 0 0 0;
+    padding: 18px 24px;
+    font-size: 1.1em;
+    color: #b0c0d0;
+    border-radius: 8px;
+}
+.about-section blockquote cite {
+    display: block;
+    margin-top: 1em;
+    color: #ffd86b;
+    font-style: normal;
+    font-size: 1em;
+}
+.cta-section {
+    background: linear-gradient(90deg, #1a2340 60%, #003A8C 100%);
+    border-radius: 18px;
+    margin: 48px auto;
+    margin-bottom: 0;
+    max-width: 900px;
+    min-width: auto;
+    text-align: center;
+}
+.cta-section h2{
+    margin: 0 auto;
+}
+.cta-section p {
+    margin: 20px auto;
+    width: 85%;
+}
+.cta-section::before {
+    background: none;
+}
+@media (max-width: 900px) {
+    .about-section { margin-top: 0 !important;}
+    .about-section .container { margin: 0; }
+    .about-section .container h2 { margin-top: 30px; }
+    .about-section .container blockquote { width: 90vw; }
+    .about-section .container blockquote p { max-width: 100%;}
+    .about-section .container p, .about-section .container ul { text-align: justify; width: 90vw;}
+    .about-section, .cta-section { max-width: auto; padding: 4vw; }
+    .about-section, .cta-section p { width: 100%; text-align: justify;}
+    .about-hero { min-height: 220px; padding: 32px 0 24px 0; }
+    .about-hero h1 { font-size: 1.5em; }
+    .about-section .content-image { width: 90vw !important; }
+    .whyus-content.cta-section {
+        text-align: left;
+    }
+    .whyus-content.cta-section h2 { width: 100%; border: 1px solid red;}
+}
+
+/* --------------------------------------- why-us page styling -------------------------------- */
