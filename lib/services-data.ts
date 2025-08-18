@@ -179,7 +179,7 @@ export const businessServices: ServiceItem[] = [
 ];
 
 // Customer Testimonials - Real Impact Stories
-export const testimonials: TestimonialItem[] = [
+export const individualTestimonials: TestimonialItem[] = [
   {
     name: "Ajay Saxena",
     title: "Investor",
@@ -217,8 +217,32 @@ export const testimonials: TestimonialItem[] = [
   }
 ];
 
+export const businessTestimonials: TestimonialItem[] = [
+  {
+    name: "Rohit Agarwal",
+    title: "Business Owner",
+    avatar: "https://via.placeholder.com/40x40/374151/ffffff?text=RA",
+    rating: 5.0,
+    text: "Private CFO helped us streamline our cash flow and set up robust financial processes. Their team is proactive and always available for strategic advice. Highly recommended for any growing business!"
+  },
+  {
+    name: "Priya Sinha",
+    title: "Startup Founder",
+    avatar: "https://via.placeholder.com/40x40/374151/ffffff?text=PS",
+    rating: 5.0,
+    text: "The fundraising and investor reporting support was a game changer for our startup. We felt confident in every board meeting thanks to the clarity and insights provided by Private CFO."
+  },
+  {
+    name: "Manish Gupta",
+    title: "MSME Owner",
+    avatar: "https://via.placeholder.com/40x40/374151/ffffff?text=MG",
+    rating: 5.0,
+    text: "Their payroll and compliance solutions saved us countless hours and headaches. The team is knowledgeable and always goes the extra mile."
+  }
+];
+
 // Frequently Asked Questions - Common Financial Planning Queries
-export const faqs: FAQItem[] = [
+export const individualFaqs: FAQItem[] = [
   {
     question: "Is financial planning really necessary for someone like me?",
     answer: "Yes—regardless of your age, income, or stage in life, financial planning is essential. It's not just about wealth management; it's about creating a roadmap to help you make smarter money decisions, reduce financial stress, and prepare for future goals—whether that's buying your first home, saving for your child's education, or planning for retirement."
@@ -238,6 +262,29 @@ export const faqs: FAQItem[] = [
   {
     question: "Can a financial plan include my child's education planning?",
     answer: "Yes, planning for your child's education is a common and crucial component of financial planning. This can involve setting up specific investment vehicles, savings plans, and strategies to ensure funds are available when needed for educational expenses."
+  }
+];
+
+export const businessFaqs: FAQItem[] = [
+  {
+    question: "My business is growing, but I’m struggling with cash flow. What should I do?",
+    answer: "Cash flow is one of the biggest challenges for businesses of all sizes. The key is to implement proper cash flow forecasting, streamline receivables, negotiate payables smartly, and ensure you always have enough working capital. Professional financial management helps you maintain liquidity while planning for growth."
+  },
+  {
+    question: "How can I make sure my business stays financially stable during uncertain times?",
+    answer: "Stability comes from strong financial planning and risk management. This means building reserves, diversifying revenue streams, controlling expenses, and having contingency strategies in place. With the right financial oversight, your business can adapt quickly to market shifts and economic uncertainties."
+  },
+  {
+    question: "What are the typical costs of getting financial management support for my company?",
+    answer: "Costs vary depending on the level of support you need. Some businesses prefer ongoing monthly advisory, while others engage experts on a project or performance basis. What matters most is transparency—knowing exactly what you’re paying for and the value being delivered in terms of growth, savings, and efficiency."
+  },
+  {
+    question: "Can financial planning cover my company’s overall growth and long-term vision?",
+    answer: "Yes. A strong financial plan aligns day-to-day operations with long-term goals. It covers budgeting, cash flow, taxation, investments, compliance, and succession planning. This ensures your business is not only profitable today but also well-prepared for future expansion and sustainability."
+  },
+  {
+    question: "How can I prepare my business for expansion or funding from investors?",
+    answer: "Preparation involves having clear financial statements, a strong business model, and well-structured capital strategies. This builds investor confidence, improves funding opportunities, and helps secure the right mix of debt or equity. Sound financial planning ensures your business is positioned for growth without unnecessary risks."
   }
 ];
 

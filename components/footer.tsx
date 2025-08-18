@@ -215,7 +215,7 @@ export const Footer = () => {
                     <div className="footer-links">
                         <Link href="/privacy-policy">Privacy Policy</Link>
                         <Link href="/terms-of-service">Terms of Service</Link>
-                        <Link href="/contact-us">Contact Us</Link>
+                        <Link href="/consultation">Contact Us</Link>
                     </div>
                     <div className="footer-copyright">
                         <p>© 2025 | Private CFO | All rights reserved</p>

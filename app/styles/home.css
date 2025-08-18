@@ -291,6 +291,9 @@
     .mission-vision .icon {
         width: 90vw !important;
     }
+    .mission-vision .icon img {
+        margin: 0 auto !important;
+    }
     .mission-vision h3 {
         margin-top: 10px;
     }

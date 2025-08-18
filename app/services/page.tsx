@@ -8,8 +8,10 @@ import Link from 'next/link';
 import { 
   individualServices, 
   businessServices, 
-  testimonials, 
-  faqs, 
+  individualTestimonials,
+  businessTestimonials,
+  individualFaqs,
+  businessFaqs,
   pageContent 
 } from '@/lib/services-data';
 
@@ -21,6 +23,9 @@ function ServicesContent() {
   const services = serviceType === 'business' ? businessServices : individualServices;
   const content = pageContent[serviceType as keyof typeof pageContent];
   const pageTitle = serviceType === 'business' ? 'Business CFO Services' : 'Individual CFO Services';
+  // Use correct testimonials and faqs arrays
+  const testimonialsArr = serviceType === 'business' ? businessTestimonials : individualTestimonials;
+  const faqsArr = serviceType === 'business' ? businessFaqs : individualFaqs;
 
   return (
     <>
@@ -110,7 +115,7 @@ function ServicesContent() {
         <div className="container">
           <h2 className="section-title impact-title">The Impact of our work</h2>
           <div className="testimonials-grid" style={{maxHeight: '340px', overflowY: 'auto', display: 'block', paddingRight: '8px', scrollbarWidth: 'none'}}>
-            {testimonials.map((testimonial, index) => (
+            {testimonialsArr.map((testimonial, index) => (
               <div key={index} className="testimonial-card" style={{background: 'none', border: 'none', borderRadius: 0, boxShadow: 'none', padding: '18px 0 18px 0', marginBottom: 0, borderBottom: '1px solid #232946'}}>
                 <div className="testimonial-header" style={{display: 'flex', alignItems: 'center', marginBottom: '8px', background: 'none', boxShadow: 'none', padding: 0}}>
                   <img 
@@ -145,7 +150,7 @@ function ServicesContent() {
         <div className="container">
           <h2 className="section-title faq-title">FAQs</h2>
           <div className="faq-list">
-            {faqs.map((faq, index) => (
+            {faqsArr.map((faq, index) => (
               <div key={index} className={`faq-item ${activeFaq === index ? 'active' : ''}`}>
                 <button className="faq-question" onClick={() => setActiveFaq(activeFaq === index ? null : index)}>
                   <span>{String(index + 1).padStart(2, '0')}</span>

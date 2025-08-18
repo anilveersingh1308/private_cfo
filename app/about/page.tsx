@@ -159,19 +159,22 @@ export default function AboutPage() {
         </section>
 
         {/* CTA Section */}
-        <section className="cta-section py-16 mx-4 md:mx-8 max-w-4xl lg:mx-auto rounded-2xl bg-gradient-to-r from-[#1a2340] to-[#003A8C] text-center">
-          <div className="px-8 md:px-12">
-            <h2 className="text-green text-4xl font-bold mb-6">Ready to Build Your Financial Future?</h2>
-            <p className="text-lg mb-8 text-[rgb(184,184,184)] max-w-2xl mx-auto">
-              Your journey toward financial empowerment, clarity, and strategic growth begins with a conversation. 
-              Let's discuss your goals and explore how a dedicated CFO partner can help you achieve them.
-            </p>
-            <Link 
-              href="/consultation" 
-              className="btn-primary inline-flex items-center justify-center px-8 py-4 bg-gradient-to-r from-[#3b4d66] to-[#003A8C] text-white font-semibold rounded-full transition-all duration-300 hover:transform hover:-translate-y-1 hover:shadow-lg"
-            >
-              Book a free consultation
-            </Link>
+        <section className="cta-section">
+          <div className="container text-center">
+            <h2 className="gradient-text-cta-heading">Ready to Build Your Financial Future?</h2>
+            <p>Your journey toward financial empowerment, clarity, and strategic growth begins with a conversation. 
+              Let's discuss your goals and explore how a dedicated CFO partner can help you achieve them.</p>
+            <div className="cta-bottom" style={{display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '2rem'}}>
+              <div>
+                <a href="/consultation" className="btn-cta">
+                  Book a free consultation
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <line x1="5" y1="12" x2="19" y2="12"/>
+                    <polyline points="12 5 19 12 12 19"/>
+                  </svg>
+                </a>
+              </div>
+            </div>
           </div>
         </section>
       </main>

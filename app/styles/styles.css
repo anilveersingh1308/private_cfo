@@ -27,7 +27,7 @@
 .about-section ul.principles-list li {
     margin-bottom: 0.7em;
     font-size: 1.05em;
-    color: #e0e0e0;
+    color: #b8b8b8;
 }
 .about-section .content-image {
     display: block;
@@ -74,19 +74,20 @@
 }
 .cta-section p {
     margin: 20px auto;
-    width: 85%;
+    width: 90%;
 }
 .cta-section::before {
     background: none;
 }
 @media (max-width: 900px) {
     .about-section { margin-top: 0 !important;}
-    .about-section .container { margin: 0; }
+    .about-section .container { margin: 0; width: 100% !important; }
     .about-section .container h2 { margin-top: 30px; }
     .about-section .container blockquote { width: 90vw; }
     .about-section .container blockquote p { max-width: 100%;}
     .about-section .container p, .about-section .container ul { text-align: justify; width: 90vw;}
-    .about-section, .cta-section { max-width: auto; padding: 4vw; }
+    .about-section, .cta-section { max-width: auto; padding: 4vw; background: transparent !important;}
+    .about-section, .cta-section h2 { width: 100% !important; font-size: 0.95rem !important;}
     .about-section, .cta-section p { width: 100%; text-align: justify;}
     .about-hero { min-height: 220px; padding: 32px 0 24px 0; }
     .about-hero h1 { font-size: 1.5em; }
@@ -94,6 +95,7 @@
     .whyus-content.cta-section {
         text-align: left;
     }
+    .cta-section h2 { font-size: 1.5rem !important; }
     .whyus-content.cta-section h2 { width: 100%; border: 1px solid red;}
 }
 
