@@ -348,7 +348,7 @@ export default function ConsultationPage() {
       
       <div className="consultation-page">
         <div className="container">
-          <main className="content-wrapper">
+          <main className="form-content-wrapper">
             <section className="intro-text">
               <h1>Welcome<span className="highlight">!</span></h1>
               <h2>Let's Build a Stronger<br />Financial Future</h2>

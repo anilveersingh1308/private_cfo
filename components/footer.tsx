@@ -97,6 +97,7 @@ export const Footer = () => {
                                 </button>
                             </div>
                             <div className="newsletter-categories">
+                                {/* Custom styled checkboxes */}
                                 <label className="checkbox-label">
                                     <input 
                                         type="checkbox" 
@@ -105,6 +106,7 @@ export const Footer = () => {
                                         checked={allUpdates}
                                         onChange={(e) => setAllUpdates(e.target.checked)}
                                     />
+                                    <span className="checkmark"></span>
                                     All Updates
                                 </label>
                                 <label className="checkbox-label">
@@ -115,6 +117,7 @@ export const Footer = () => {
                                         checked={financialTips}
                                         onChange={(e) => setFinancialTips(e.target.checked)}
                                     />
+                                    <span className="checkmark"></span>
                                     Financial Tips
                                 </label>
                                 <label className="checkbox-label">
@@ -125,6 +128,7 @@ export const Footer = () => {
                                         checked={marketUpdates}
                                         onChange={(e) => setMarketUpdates(e.target.checked)}
                                     />
+                                    <span className="checkmark"></span>
                                     Market Updates
                                 </label>
                                 <label className="checkbox-label">
@@ -135,6 +139,7 @@ export const Footer = () => {
                                         checked={taxPlanning}
                                         onChange={(e) => setTaxPlanning(e.target.checked)}
                                     />
+                                    <span className="checkmark"></span>
                                     Tax Planning
                                 </label>
                                 <label className="checkbox-label">
@@ -145,6 +150,7 @@ export const Footer = () => {
                                         checked={investmentInsights}
                                         onChange={(e) => setInvestmentInsights(e.target.checked)}
                                     />
+                                    <span className="checkmark"></span>
                                     Investment Insights
                                 </label>
                                 <label className="checkbox-label">
@@ -155,6 +161,7 @@ export const Footer = () => {
                                         checked={businessFinance}
                                         onChange={(e) => setBusinessFinance(e.target.checked)}
                                     />
+                                    <span className="checkmark"></span>
                                     Business Finance
                                 </label>
                             </div>
@@ -164,47 +171,24 @@ export const Footer = () => {
                     {/* Company Information */}
                     <div className="footer-section company-section">
                         <h3>Private CFO CLUB</h3>
-                        <div className="company-tagline">
-                            <p className="smart-money">SMART MONEY MANAGEMENT</p>
-                            <p className="unit-info">(Unit of GIGAFACTORY INNOVATIONS)</p>
+                        <div className="company-info">
+                            <div className="tagline">SMART MONEY MANAGEMENT</div>
+                            <div className="parent-company">(Unit of GIGAFACTORY INNOVATIONS PVT. LTD.)</div>
                         </div>
-                        
-                        <div className="contact-info">
-                            <div className="contact-item">
-                                <i className="fas fa-map-marker-alt"></i>
-                                <div>
-                                    <h4>Our Address</h4>
-                                    <p>B-80, SECTOR-65, NOIDA</p>
-                                    <p>UP-201301</p>
-                                </div>
-                            </div>
-                            
-                            <div className="contact-item">
-                                <i className="fas fa-phone"></i>
-                                <span>+91-XXXXXXXXXX</span>
-                            </div>
-                            
-                            <div className="contact-item">
-                                <i className="fas fa-envelope"></i>
-                                <span>info@privatecfo.com</span>
-                            </div>
+                        <div className="address">
+                            <p><i className="fas fa-map-marker-alt"></i> <strong>Our Address</strong></p>
+                            <p>B-80, SECTOR-65, NOIDA</p>
+                            <p>UP-201301</p>
+                            <p><i className="fas fa-phone"></i> +91-7084646376</p>
+                            <p><i className="fas fa-envelope"></i> info@privatecfo.com</p>
                         </div>
-                        
-                        <div className="social-links">
+                        <div className="social-media">
                             <h4>Follow Us</h4>
-                            <div className="social-icons">
-                                <a href="#" className="social-icon">
-                                    <i className="fab fa-facebook-f"></i>
-                                </a>
-                                <a href="#" className="social-icon">
-                                    <i className="fab fa-twitter"></i>
-                                </a>
-                                <a href="#" className="social-icon">
-                                    <i className="fab fa-linkedin-in"></i>
-                                </a>
-                                <a href="#" className="social-icon">
-                                    <i className="fab fa-instagram"></i>
-                                </a>
+                            <div className="social-links">
+                                <a href="#" aria-label="Facebook"><i className="fab fa-facebook-f"></i></a>
+                                <a href="#" aria-label="Twitter"><i className="fab fa-twitter"></i></a>
+                                <a href="#" aria-label="LinkedIn"><i className="fab fa-linkedin-in"></i></a>
+                                <a href="#" aria-label="Instagram"><i className="fab fa-instagram"></i></a>
                             </div>
                         </div>
                     </div>
@@ -213,17 +197,15 @@ export const Footer = () => {
                     <div className="footer-section map-section">
                         <h3>Find Us</h3>
                         <div className="map-container">
-                            <div className="map-placeholder">
-                                <iframe
-                                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3503.4457!2d77.3647!3d28.6139!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390ce5456ef36d9d%3A0x61d5e7e6d83b8b8!2sSector%2065%2C%20Noida%2C%20Uttar%20Pradesh!5e0!3m2!1sen!2sin!4v1620000000000!5m2!1sen!2sin"
-                                    width="100%"
-                                    height="250"
-                                    style={{ border: 0, borderRadius: '8px' }}
-                                    allowFullScreen
-                                    loading="lazy"
-                                    referrerPolicy="no-referrer-when-downgrade"
-                                ></iframe>
-                            </div>
+                            <iframe
+                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3503.4457!2d77.3647!3d28.6139!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390ce5456ef36d9d%3A0x61d5e7e6d83b8b8!2sSector%2065%2C%20Noida%2C%20Uttar%20Pradesh!5e0!3m2!1sen!2sin!4v1620000000000!5m2!1sen!2sin"
+                                width="100%"
+                                height="250"
+                                style={{ border: 0, borderRadius: '8px' }}
+                                allowFullScreen
+                                loading="lazy"
+                                referrerPolicy="no-referrer-when-downgrade"
+                            ></iframe>
                         </div>
                     </div>
                 </div>

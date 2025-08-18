@@ -290,34 +290,43 @@ export default function WhyUsPage() {
             </ul>
           </div>
         </section>
-        
-        {/* CTA Section */}
-        <section className="whyus-content cta-section py-16 mx-4 md:mx-8 max-w-4xl lg:mx-auto rounded-2xl bg-gradient-to-r from-[#1a2340] to-[#003A8C] text-center">
-          <div className="container text-center">
-            <h2 className="gradient-text-purple text-4xl font-bold mb-6">Ready to Take Control of Your Financial Future?</h2>
-            <p className="text-[rgb(184,184,184)] text-justify mb-8 max-w-2xl mx-auto">
-              Whether you're growing a business, building personal wealth, or simply ready to stop flying blind, Private CFO is here to help you 
-              see the whole picture—and move forward with purpose.
-            </p>
-            <div className="flex flex-col md:flex-row items-center justify-center gap-6">
-              <div>
-                <h3 className="cta-subtitle text-xl text-center">Book your free discovery session today.</h3>
-              </div>
-              <div>
+
+        {/* Call to Action Section */}
+        <section className="whyus-cta-section flex items-center justify-center py-24 px-2 md:px-0 w-full">
+          <div className="relative w-full max-w-[800px] mx-auto">
+            {/* Frame background layer */}
+            <div className="inset-0 bg-gradient-to-br from-[#101a2b] via-[#1e2a3f] to-[#233a5e] opacity-95 shadow-2xl border-4 border-[#38bdf8] z-10" style={{borderRadius: '2rem'}}>
+            {/* Animated gradient border background */}
+            <div className="absolute inset-0 rounded-3xl pointer-events-none whyus-cta-gradient-border animate-gradient-border z-20" />
+            {/* Card content */}
+            <div className="relative z-30 whyus-cta-card p-12 md:p-24 flex flex-col items-center text-center gap-12" style={{margin: '24px', boxSizing: 'border-box', borderRadius: '2rem'}}>
+              <h2 className="gradient-text-purple text-4xl md:text-5xl font-extrabold mb-4 tracking-tight drop-shadow-2xl animate-gradient-text leading-tight">Ready to Take Control of Your Financial Future?</h2>
+              <p className="text-[rgb(200,220,255)] text-base md:text-lg mb-6 max-w-lg mx-auto text-center">
+                Whether you're growing a business, building personal wealth, or simply ready to stop flying blind, <span className="font-semibold text-white">Private CFO</span> is here to help you see the whole pictureand move forward with purpose.
+              </p>
+              <div className="w-full flex flex-col md:flex-row items-center justify-between gap-6 md:gap-10">
+                <h3 className="cta-subtitle text-xl md:text-2xl font-semibold text-white mb-6 md:mb-0 animate-gradient-text text-center md:text-right flex-1 md:pr-6" style={{marginRight: '2rem'}}>
+                  Book your free discovery session today.
+                </h3>
                 <Link 
                   href="/consultation" 
-                  className="btn-cta inline-flex items-center justify-center px-8 py-4 bg-gradient-to-r from-[#3b4d66] to-[#003A8C] text-white font-semibold rounded-full transition-all duration-300 hover:transform hover:-translate-y-1 hover:shadow-lg gap-2"
+                  className="btn-cta interactive-btn inline-flex items-center justify-center px-10 py-5 bg-gradient-to-r from-[#38bdf8] via-[#3b4d66] to-[#003A8C] text-white font-extrabold text-lg md:text-xl rounded-full transition-all duration-300 hover:scale-105 hover:shadow-2xl gap-3 shadow-xl border-2 border-[#38bff8ce] focus:outline-none focus:ring-4 focus:ring-[#38bdf8]/40 animate-glow"
+                  style={{ boxShadow: '0 0 6px 2px #38bdf8, 0 0 14px 8px #003A8C44', marginTop: '2rem' }}
                 >
-                  Let's Talk
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <line x1="5" y1="12" x2="19" y2="12"></line>
-                    <polyline points="12 5 19 12 12 19"></polyline>
-                  </svg>
+                  <span className="font-extrabold tracking-wide flex items-center gap-2">
+                    <svg className="animate-bounce" style={{marginRight: '1rem'}} xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <circle cx="12" cy="12" r="10"/>
+                      <polyline points="12 8 16 12 12 16"/>
+                    </svg>
+                    Let's Talk
+                  </span>
                 </Link>
               </div>
             </div>
-          </div>        
+            </div>
+          </div>
         </section>
+        
       </main>
 
       <Footer />

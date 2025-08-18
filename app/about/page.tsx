@@ -109,37 +109,11 @@ export default function AboutPage() {
           </div>
         </section>
 
-        {/* Meet Our Experts Section */}
-        <section className="about-section py-16">
-          <div className="container">
-            <h2 className="text-blue text-4xl font-bold mb-8">Meet Our Experts</h2>
-            <div className="flex justify-center mb-8">
-              <Image 
-                src="/images/about/bf_fill.png" 
-                alt="A financial expert giving a presentation" 
-                width={420}
-                height={280}
-                className="rounded-xl shadow-lg"
-              />
-            </div>
-            <blockquote className="bg-[rgba(255,255,255,0.04)] border-l-4 border-[#5ecbff] p-6 rounded-lg">
-              <p className="text-lg text-[#b0c0d0] mb-4 leading-relaxed">
-                "From the beginning, my vision was to create the financial advisory service I wished I had access to earlier in my career. 
-                A service that is intelligent, proactive, and genuinely invested in its clients' success. At Private CFO, we've assembled a 
-                team of experts who share this vision. We are here to be the strategic sounding board you can always count on. Welcome to a 
-                new way of thinking about your financial future."
-              </p>
-              <cite className="block text-[#ffd86b] font-normal text-base">
-                [Founder's Name], Founder & Principal CFO
-              </cite>
-            </blockquote>
-          </div>
-        </section>
 
         {/* Our Team Section */}
         <section className="about-section py-16">
           <div className="container">
-            <h2 className="text-yellow text-4xl font-bold mb-8">Our Team of Financial Strategists</h2>
+            <h2 className="text-yellow text-4xl font-bold mb-8 text-left">Our Team of Financial Strategists</h2>
             <div className="flex justify-center mb-8">
               <Image 
                 src="/images/services/financial-team.png" 
