@@ -161,6 +161,15 @@ export const consultationSessions = pgTable('consultation_sessions', {
 });
 
 // Employee statistics for performance tracking
+// Consultation Forms table (added to fix import error)
+export const consultationForms = pgTable('consultation_forms', {
+  id: serial('id').primaryKey(),
+  consultation_id: integer('consultation_id').references(() => consultations.id),
+  guidance: varchar('guidance', { length: 255 }),
+  form_data: json('form_data'),
+  created_at: timestamp('created_at').defaultNow().notNull(),
+  updated_at: timestamp('updated_at').defaultNow().notNull(),
+});
 export const employeeStats = pgTable('employee_stats', {
   id: serial('id').primaryKey(),
   employee_id: integer('employee_id').references(() => users.id).notNull(),

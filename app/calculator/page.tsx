@@ -1,5 +1,6 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+export const dynamic = 'force-dynamic';
+import React, { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Footer } from '@/components/footer';
 import '../styles/calculator.css';
@@ -10,7 +11,8 @@ import {
 } from '../../lib/calculator-data';
 import { Header } from '@/components/header';
 
-export default function Calculator() {
+
+function CalculatorContent() {
   const searchParams = useSearchParams();
   const typeFromUrl = searchParams.get('type') as CalculatorType;
   const [calculatorType, setCalculatorType] = useState<CalculatorType>(typeFromUrl || 'sip');
@@ -23,6 +25,7 @@ export default function Calculator() {
 
   const calculatorData: CalculatorData = CALCULATOR_DATA_MAP[calculatorType];
 
+  // ...existing logic and handlers...
   // Format number to Indian currency format
   const formatINR = (num: number): string => {
     return '₹ ' + num.toLocaleString('en-IN');
@@ -41,11 +44,9 @@ export default function Calculator() {
     let decimalPart = parts[1] ? '.' + parts[1] : '';
     let lastThree = integerPart.substring(integerPart.length - 3);
     let otherNumbers = integerPart.substring(0, integerPart.length - 3);
-    
     if (otherNumbers !== '') {
       lastThree = ',' + lastThree;
     }
-    
     let result = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ',') + lastThree + decimalPart;
     return result;
   };
@@ -89,7 +90,6 @@ export default function Calculator() {
     if (rate === 0) {
       return { maturity: P, invested: P, returns: 0 };
     }
-    
     const maturity = Math.round(P * Math.pow(1 + r/n, n * nYears));
     const invested = P;
     const returns = maturity - invested;
@@ -189,10 +189,14 @@ export default function Calculator() {
   return (
     <>
       <Header />
-      
       <div className="calculator-container">
+        {/* ...existing JSX... */}
+        {/* Hero Section, Calculator Widget, CTA Section, Footer, etc. */}
+        {/* ...existing JSX... */}
+        {/* The full JSX from previous return statement goes here */}
+        {/* ...existing code... */}
         {/* Hero Section */}
-        <section className="hero-section">
+        <section className="hero-section" style={{ marginTop: '5%' }}>
           <div className="container text-center">
             <h1 className={calculatorData.calculator_config.calculator_gradient}>
               {calculatorData.meta.title}
@@ -200,7 +204,6 @@ export default function Calculator() {
             <p>{calculatorData.meta.hero_subtitle}</p>
           </div>
         </section>
-
         {/* Calculator Widget */}
         <section className="calculator-wrapper">
           <div className="container">
@@ -215,7 +218,6 @@ export default function Calculator() {
                     <p className="text-small">Estimation is based on the past performance</p>
                   </div>
                 </div>
-                
                 {/* Amount Input */}
                 <div className="input-group">
                   <label htmlFor="amount-input">{calculatorData.calculator_config.amount_label}</label>
@@ -232,7 +234,6 @@ export default function Calculator() {
                     />
                   </div>
                 </div>
-                
                 {/* Duration Slider */}
                 <div className="slider-group">
                   <div className="slider-label">
@@ -255,7 +256,6 @@ export default function Calculator() {
                     <span>{calculatorData.calculator_config.duration_range.max}Yrs</span>
                   </div>
                 </div>
-                
                 {/* Return Rate Slider */}
                 <div className="slider-group">
                   <div className="slider-label">
@@ -279,7 +279,6 @@ export default function Calculator() {
                   </div>
                 </div>
               </div>
-
               {/* Output Area */}
               <div className="calculator-output-area">
                 <p className="text-medium">
@@ -325,7 +324,6 @@ export default function Calculator() {
                 </div>
               </div>
             </div>
-
             {/* Calculator Tabs */}
             <div className="calculator-tabs">
               {calculatorData.tabs.map((tab) => (
@@ -341,23 +339,19 @@ export default function Calculator() {
                 )
               ))}
             </div>
-
             {/* Info Content */}
             <div className="info-content">
               {calculatorData.info_blocks.map((block, index) => (
                 <div key={index} className="info-block">
                   <h2>{block.title}</h2>
-                  
                   {block.type === 'paragraph' && (
                     <p>{block.content}</p>
                   )}
-                  
                   {block.type === 'paragraphs' && Array.isArray(block.content) && (
                     block.content.map((paragraph, pIndex) => (
                       <p key={pIndex}>{paragraph}</p>
                     ))
                   )}
-                  
                   {block.type === 'list_with_note' && (
                     <>
                       <p>{block.content}</p>
@@ -371,7 +365,6 @@ export default function Calculator() {
                       {block.note && <p className="note-text">{block.note}</p>}
                     </>
                   )}
-                  
                   {block.type === 'formula' && (
                     <>
                       <p>{block.content}</p>
@@ -387,7 +380,6 @@ export default function Calculator() {
                       {block.formula_note && <p>{block.formula_note}</p>}
                     </>
                   )}
-                  
                   {block.type === 'ordered_list' && (
                     <ol>
                       {block.benefits?.map((benefit, bIndex) => (
@@ -397,7 +389,6 @@ export default function Calculator() {
                       ))}
                     </ol>
                   )}
-                  
                   {block.type === 'ordered_list_simple' && (
                     <ol>
                       {block.points?.map((point, pIndex) => (
@@ -410,7 +401,6 @@ export default function Calculator() {
             </div>
           </div>
         </section>
-
         {/* CTA Section */}
         <section className="cta-section">
           <div className="container text-center">
@@ -435,5 +425,13 @@ export default function Calculator() {
       </div>
       <Footer />
     </>
+  );
+}
+
+export default function Calculator() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-[var(--color-dark-bg)] flex items-center justify-center"><div className="text-white text-xl">Loading...</div></div>}>
+      <CalculatorContent />
+    </Suspense>
   );
 }
