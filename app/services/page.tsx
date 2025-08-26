@@ -1,7 +1,7 @@
 'use client';
 
 import { Suspense, useState } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { Header } from '@/components/header';
 import { Footer } from '@/components/footer';
 import Link from 'next/link';
@@ -17,6 +17,7 @@ import {
 
 function ServicesContent() {
   const searchParams = useSearchParams();
+  const router = useRouter();
   const serviceType = searchParams.get('type') || 'individual';
   const [activeFaq, setActiveFaq] = useState<number | null>(0);
 
@@ -27,6 +28,14 @@ function ServicesContent() {
   const testimonialsArr = serviceType === 'business' ? businessTestimonials : individualTestimonials;
   const faqsArr = serviceType === 'business' ? businessFaqs : individualFaqs;
 
+  // Handle service type change
+  const switchServiceType = (type: string) => {
+    // Update URL using Next.js router for proper navigation
+    const params = new URLSearchParams(window.location.search);
+    params.set('type', type);
+    router.replace(`?${params.toString()}`);
+  };
+
   return (
     <>
       <Header />
@@ -34,7 +43,7 @@ function ServicesContent() {
       {/* Dynamic Hero Background Styling */}
       <style jsx>{`
         .hero {
-          background-image: url('/images/hero/${serviceType === 'business' ? 'business_hero_image.png' : 'hero_image.png'}');
+          background-image: url('/images/hero/${serviceType === 'business' ? 'business_hero_image.png' : 'individual_hero_image.png'}');
           background-size: cover;
           background-position: center;
         }
@@ -75,6 +84,7 @@ function ServicesContent() {
             </div>
             
             <h3 className="services-offered-title">Services Offered:</h3>
+            
             <div className="services-grid">
               {services.map((service, index) => (
                 <div key={index} className="service-item">

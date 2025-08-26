@@ -1,7 +1,7 @@
 'use client';
 export const dynamic = 'force-dynamic';
 import React, { useState, useEffect, Suspense } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { Footer } from '@/components/footer';
 import '../styles/calculator.css';
 import { 
@@ -14,6 +14,7 @@ import { Header } from '@/components/header';
 
 function CalculatorContent() {
   const searchParams = useSearchParams();
+  const router = useRouter();
   const typeFromUrl = searchParams.get('type') as CalculatorType;
   const [calculatorType, setCalculatorType] = useState<CalculatorType>(typeFromUrl || 'sip');
   const [amount, setAmount] = useState<string>('5,000');
@@ -180,10 +181,10 @@ function CalculatorContent() {
   // Handle calculator type change
   const switchCalculator = (type: CalculatorType) => {
     setCalculatorType(type);
-    // Update URL without page reload
-    const url = new URL(window.location.href);
-    url.searchParams.set('type', type);
-    window.history.pushState({}, '', url.toString());
+    // Update URL using Next.js router for proper navigation
+    const params = new URLSearchParams(window.location.search);
+    params.set('type', type);
+    router.replace(`?${params.toString()}`);
   };
 
   return (

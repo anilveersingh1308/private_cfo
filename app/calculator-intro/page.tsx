@@ -47,6 +47,15 @@ export default function CalculatorIntroPage() {
   return (
     <div className="min-h-screen bg-[var(--color-dark-bg)]">
       <Header />
+
+       {/* Dynamic Hero Background Styling */}
+      <style jsx>{`
+        .hero {
+          background-image: url('/images/hero/cal_intro_hero_image.png');
+          background-size: cover;
+          background-position: center;
+        }
+      `}</style>
       
       {/* Hero Section */}
       <section className="hero hero-calculators">

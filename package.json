@@ -27,7 +27,8 @@
     "db:reset": "tsx scripts/reset-database.ts && npm run db:push && npm run db:seed",
     "db:fresh": "tsx scripts/reset-database.ts",
     "setup": "node scripts/setup-database.js",
-    "type-check": "tsc --noEmit"
+  "type-check": "tsc --noEmit",
+  "export": "next export"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^6.7.2",

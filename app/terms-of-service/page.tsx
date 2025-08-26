@@ -172,15 +172,45 @@ const sections = [
     ),
   },
   // The following sections are placeholders for brevity. You can fill them with actual content as needed.
-  { title: 'Intellectual Property Rights', content: <div className="section-content"><p>Content for Intellectual Property Rights.</p></div> },
-  { title: 'Confidentiality and Data Protection', content: <div className="section-content"><p>Content for Confidentiality and Data Protection.</p></div> },
-  { title: 'Third-Party Services and Links', content: <div className="section-content"><p>Content for Third-Party Services and Links.</p></div> },
-  { title: 'Limitation of Liability', content: <div className="section-content"><p>Content for Limitation of Liability.</p></div> },
-  { title: 'Indemnification', content: <div className="section-content"><p>Content for Indemnification.</p></div> },
-  { title: 'Termination and Suspension', content: <div className="section-content"><p>Content for Termination and Suspension.</p></div> },
-  { title: 'Governing Law and Jurisdiction', content: <div className="section-content"><p>Content for Governing Law and Jurisdiction.</p></div> },
-  { title: 'Dispute Resolution', content: <div className="section-content"><p>Content for Dispute Resolution.</p></div> },
-  { title: 'Miscellaneous Provisions', content: <div className="section-content"><p>Content for Miscellaneous Provisions.</p></div> },
+  {
+    title: 'Intellectual Property Rights',
+    content: (
+      <div className="section-content">
+        <p>
+          <strong>Ownership:</strong><br />
+          All content, materials, trademarks, logos, software, and intellectual property on the Private CFO Club platform are owned by GIGAFACTRY INNOVATIONS PVT. LTD. or its licensors.
+        </p>
+        <p>
+          <strong>Permitted Use:</strong><br />
+          You may use the Service and its content solely for your personal or business use in accordance with these Terms. Any unauthorized use, reproduction, distribution, or modification of our content is strictly prohibited.
+        </p>
+        <p>
+          <strong>Restrictions:</strong>
+          <ul style={{ marginLeft: '1.5em' }}>
+            <li>You may not copy, reproduce, republish, upload, post, transmit, or distribute any material from our platform without prior written consent.</li>
+            <li>You may not reverse engineer, decompile, or disassemble any software or technology provided by Private CFO Club.</li>
+            <li>All trademarks, service marks, and logos are the property of their respective owners and may not be used without permission.</li>
+          </ul>
+        </p>
+        <p>
+          <strong>User Content:</strong><br />
+          By submitting any content (such as feedback, testimonials, or suggestions) to Private CFO Club, you grant us a non-exclusive, worldwide, royalty-free license to use, reproduce, modify, and display such content for business and promotional purposes.
+        </p>
+        <p>
+          <strong>Copyright Infringement:</strong><br />
+          If you believe your intellectual property rights have been infringed, please contact us immediately with details so we can investigate and take appropriate action.
+        </p>
+      </div>
+    ),
+  },
+    { title: 'Confidentiality and Data Protection', content: <div className="section-content"><p><strong>Confidentiality:</strong> We treat all client information as strictly confidential. We will not disclose your personal, financial, or business information to third parties except as required by law or with your explicit consent.<br /><br /><strong>Data Protection:</strong> We comply with applicable data protection laws and use industry-standard security measures to safeguard your data. You have the right to access, correct, or request deletion of your personal data. For more details, see our Privacy Policy.<br /><br /><strong>Data Storage:</strong> Your data may be stored on secure servers within India or internationally, subject to legal requirements and our internal policies.</p></div> },
+    { title: 'Third-Party Services and Links', content: <div className="section-content"><p><strong>Third-Party Services:</strong> Our platform may contain links to third-party websites, tools, or services. We do not control or endorse these third parties and are not responsible for their content, privacy practices, or service quality.<br /><br /><strong>External Links:</strong> Use of third-party links is at your own risk. We recommend reviewing the terms and privacy policies of any third-party sites you visit.<br /><br /><strong>Third-Party Integrations:</strong> Some services may be delivered in partnership with third-party providers. We will disclose such relationships and ensure that your data is handled securely.</p></div> },
+    { title: 'Limitation of Liability', content: <div className="section-content"><p><strong>No Warranty:</strong> Our services are provided "as is" and "as available" without warranties of any kind, either express or implied.<br /><br /><strong>Limitation:</strong> To the maximum extent permitted by law, Private CFO Club and its affiliates shall not be liable for any indirect, incidental, special, consequential, or punitive damages, or any loss of profits or revenues, whether incurred directly or indirectly, arising from your use of our services.<br /><br /><strong>Maximum Liability:</strong> Our total liability for any claim arising out of or relating to these Terms or our services will not exceed the amount paid by you for the specific service giving rise to the claim.</p></div> },
+    { title: 'Indemnification', content: <div className="section-content"><p>You agree to indemnify, defend, and hold harmless Private CFO Club, its officers, directors, employees, agents, and affiliates from and against any claims, liabilities, damages, losses, and expenses (including reasonable legal fees) arising out of or in connection with your use of the Service, violation of these Terms, or infringement of any rights of another party.</p></div> },
+    { title: 'Termination and Suspension', content: <div className="section-content"><p><strong>Termination by Us:</strong> We may terminate or suspend your access to the Service at any time, with or without notice, for conduct that we believe violates these Terms or is harmful to other users, us, or third parties.<br /><br /><strong>Termination by You:</strong> You may terminate your account at any time by contacting us. Upon termination, your right to use the Service will cease immediately.<br /><br /><strong>Effect of Termination:</strong> All provisions of these Terms which by their nature should survive termination shall survive, including confidentiality, intellectual property, and limitation of liability.</p></div> },
+    { title: 'Governing Law and Jurisdiction', content: <div className="section-content"><p>These Terms are governed by and construed in accordance with the laws of India. Any disputes arising under or in connection with these Terms shall be subject to the exclusive jurisdiction of the courts located in Noida, Uttar Pradesh, India.</p></div> },
+    { title: 'Dispute Resolution', content: <div className="section-content"><p><strong>Amicable Resolution:</strong> We strive to resolve all disputes amicably through direct communication.<br /><br /><strong>Formal Dispute Resolution:</strong> If a dispute cannot be resolved informally, it shall be settled by binding arbitration in accordance with the Arbitration and Conciliation Act, 1996, in Noida, Uttar Pradesh, India.<br /><br /><strong>Waiver of Class Actions:</strong> You agree to resolve disputes with us on an individual basis and not as part of any class or representative action.</p></div> },
+    { title: 'Miscellaneous Provisions', content: <div className="section-content"><p><strong>Entire Agreement:</strong> These Terms constitute the entire agreement between you and Private CFO Club regarding your use of the Service.<br /><br /><strong>Severability:</strong> If any provision of these Terms is found to be invalid or unenforceable, the remaining provisions will remain in full force and effect.<br /><br /><strong>No Waiver:</strong> Our failure to enforce any right or provision of these Terms will not be deemed a waiver of such right or provision.<br /><br /><strong>Assignment:</strong> You may not assign your rights or obligations under these Terms without our prior written consent. We may assign these Terms at any time.</p></div> },
 ];
 
 export default function TermsOfServicePage() {
