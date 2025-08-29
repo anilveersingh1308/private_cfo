@@ -43,7 +43,7 @@ function ServicesContent() {
       {/* Dynamic Hero Background Styling */}
       <style jsx>{`
         .hero {
-          background-image: url('/images/hero/${serviceType === 'business' ? 'business_hero_image.png' : 'individual_hero_image.png'}');
+          background-image: url('/images/hero/${serviceType === 'business' ? 'business_hero_image.jpg' : 'individual_hero_image.jpg'}');
           background-size: cover;
           background-position: center;
         }
@@ -77,9 +77,12 @@ function ServicesContent() {
                 <p>{content.sectionDescription}</p>
               </div>
               
-              <div className="solutions-photo-placeholder">
-                ADD Photo
-                <span className="plus-icon">+</span>
+              <div className="solutions-photo-placeholder" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minWidth: '220px', minHeight: '220px', background: 'none' }}>
+                <img
+                  src={serviceType === 'business' ? '/images/services/business-service-solution.jpg' : '/images/services/individual-service-solution.jpg'}
+                  alt={serviceType === 'business' ? 'Business Service Solution' : 'Individual Service Solution'}
+                  style={{objectFit: 'cover', borderRadius: '18px', boxShadow: '0 4px 24px rgba(0,0,0,0.12)' }}
+                />
               </div>
             </div>
             

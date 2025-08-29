@@ -19,7 +19,7 @@ export default function DashboardSidebar() {
             <div className="logo-icon">
               <i className="fas fa-chart-line"></i>
             </div>
-            <span>CFO Dashboard</span>
+            <span>Private CFO Dashboard</span>
           </div>
         </div>
         <div style={{ padding: '1rem', color: '#94a3b8' }}>Loading...</div>
@@ -303,7 +303,7 @@ export default function DashboardSidebar() {
             <div className="logo-icon">
               <i className="fas fa-chart-line"></i>
             </div>
-            <span>CFO Dashboard</span>
+            <span>Private CFO Dashboard</span>
           </Link>
         </div>
 

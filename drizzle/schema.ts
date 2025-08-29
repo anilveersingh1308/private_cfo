@@ -1,4 +1,21 @@
 import { pgTable, unique, serial, varchar, json, text, boolean, timestamp, numeric, integer, foreignKey, index, pgEnum } from "drizzle-orm/pg-core"
+// Payments table for storing payment records
+export const payments = pgTable("payments", {
+	id: serial().primaryKey().notNull(),
+	paymentId: varchar("payment_id", { length: 32 }),
+	invoiceNumber: varchar("invoice_number", { length: 50 }),
+	consultant: varchar("consultant", { length: 255 }),
+	amount: numeric("amount", { precision: 10, scale: 2 }).notNull(),
+	transactionId: varchar("transaction_id", { length: 100 }),
+	paymentDate: timestamp("payment_date", { mode: 'string' }).defaultNow().notNull(),
+	status: varchar("status", { length: 50 }).default('paid'),
+	paymentType: varchar("payment_type", { length: 50 }),
+	paymentMethod: varchar("payment_method", { length: 50 }),
+	notes: text("notes"),
+	metadata: json("metadata"),
+	createdAt: timestamp("created_at", { mode: 'string' }).defaultNow().notNull(),
+	updatedAt: timestamp("updated_at", { mode: 'string' }).defaultNow().notNull(),
+});
 import { sql } from "drizzle-orm"
 
 export const consultationStatus = pgEnum("consultation_status", ['scheduled', 'ongoing', 'completed', 'pending', 'cancelled'])

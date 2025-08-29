@@ -1,3 +1,4 @@
+"use client";
 // Dashboard UI Components Library
 import React, { useState } from 'react';
 

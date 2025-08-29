@@ -1196,6 +1196,9 @@ a:hover {
 
 /* --- RESPONSIVENESS --- */
 @media (max-width: 1024px) {
+    .calculator-wrapper {
+        width: 100% !important;
+    }
     .calculator-widget {
         grid-template-columns: 1fr;
         min-height: auto;
@@ -1211,6 +1214,14 @@ a:hover {
     }
 }
 @media (max-width: 992px) {
+    .hero-section {
+        padding: 2rem 0;
+        background: none !important;
+        margin: 0 auto !important;
+    }
+    .hero-section p {
+        width: 100% !important;
+    }
     .cta-section .cta-bottom {
         flex-direction: column;
     }

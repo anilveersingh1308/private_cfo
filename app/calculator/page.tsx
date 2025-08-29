@@ -197,8 +197,8 @@ function CalculatorContent() {
         {/* The full JSX from previous return statement goes here */}
         {/* ...existing code... */}
         {/* Hero Section */}
-        <section className="hero-section" style={{ marginTop: '5%' }}>
-          <div className="container text-center">
+        <section className="hero-section" style={{ marginTop: '5%', background: 'rgba(1, 25, 48, 255)' }}>
+          <div className="container text-center" style={{ padding: '2rem 0' }}>
             <h1 className={calculatorData.calculator_config.calculator_gradient}>
               {calculatorData.meta.title}
             </h1>
@@ -211,10 +211,16 @@ function CalculatorContent() {
             <div className="calculator-widget">
               {/* Input Area */}
               <div className="calculator-input-area">
-                <div className="estimator-header">
-                  <div>
-                    <h3 className={calculatorData.calculator_config.calculator_gradient}>
-                      Returns Estimator
+                <div className="estimator-header" style={{ display: 'flex', alignItems: 'flex-start', gap: '1.2rem' }}>
+                  {/* Icon beside heading/paragraph block */}
+                  <img
+                    src={`/images/icons/${calculatorType}-icon.png`}
+                    alt={`${calculatorType} calculator icon`}
+                    style={{ width: '48px', height: '48px', objectFit: 'contain', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.08)', marginTop: '2px' }}
+                  />
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+                    <h3 className={calculatorData.calculator_config.calculator_gradient} style={{ marginBottom: '0.3rem' }}>
+                      {`${calculatorData.meta.title}`}
                     </h3>
                     <p className="text-small">Estimation is based on the past performance</p>
                   </div>
@@ -344,7 +350,14 @@ function CalculatorContent() {
             <div className="info-content">
               {calculatorData.info_blocks.map((block, index) => (
                 <div key={index} className="info-block">
-                  <h2>{block.title}</h2>
+                  <h2 style={{
+                    background: 'linear-gradient(90deg, #00B2FF 0%, #54DD0A 100%)',
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                    backgroundClip: 'text',
+                    color: 'transparent',
+                    fontWeight: 700,
+                  }}>{block.title}</h2>
                   {block.type === 'paragraph' && (
                     <p>{block.content}</p>
                   )}

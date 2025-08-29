@@ -326,7 +326,7 @@ export default function DashboardSidebar() {
             <div className="logo-icon">
               <i className="fas fa-chart-line"></i>
             </div>
-            <span>CFO Dashboard</span>
+            <span>Private CFO Dashboard</span>
           </Link>
         </div>
 

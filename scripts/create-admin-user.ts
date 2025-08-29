@@ -16,7 +16,7 @@ async function createAdminUser() {
     const existingAdmin = await db
       .select()
       .from(users)
-      .where(eq(users.email, 'admin@cfo.com'))
+      .where(eq(users.email, 'admin@privatecfo.com'))
       .limit(1);
     
     if (existingAdmin.length > 0) {

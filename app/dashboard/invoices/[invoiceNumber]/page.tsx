@@ -828,6 +828,18 @@ export default function InvoiceViewEdit() {
           }
         }
       `}</style>
+      {/* Add Record Payment button for this invoice */}
+      <div style={{ textAlign: 'right', margin: '2rem 0 1rem 0' }}>
+        <Button
+          variant="primary"
+          icon="fas fa-credit-card"
+          size="md"
+          onClick={() => router.push(`/dashboard/payments/new?invoiceId=${invoice?.id || ''}`)}
+          disabled={!invoice}
+        >
+          Record Payment
+        </Button>
+      </div>
     </div>
   );
 }

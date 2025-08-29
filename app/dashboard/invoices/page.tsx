@@ -1270,6 +1270,17 @@ export default function AdminInvoices() {
           }
         }
       `}</style>
+      {/* Add Record Payment button above or below invoice list */}
+      <div style={{ textAlign: 'right', margin: '2rem 0 1rem 0' }}>
+        <Button
+          variant="primary"
+          icon="fas fa-credit-card"
+          size="md"
+          onClick={() => router.push('/dashboard/payments/new')}
+        >
+          Record Payment
+        </Button>
+      </div>
     </div>
   );
 }

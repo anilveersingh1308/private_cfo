@@ -105,6 +105,15 @@ export default function HomePage() {
     <div className="min-h-screen bg-[var(--color-dark-bg)]">
       <Header />
       
+      {/* Dynamic Hero Background Styling */}
+      <style jsx>{`
+        .hero {
+          background-image: url('/images/hero/hero_image.jpg');
+          background-size: cover;
+          background-position: center;
+        }
+      `}</style>
+
       {/* Hero Section */}
       <section className="hero">
         <div className="hero-content container">

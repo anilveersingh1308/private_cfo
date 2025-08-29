@@ -3,7 +3,6 @@ import { db } from '@/lib/db';
 import { 
   users, 
   consultations, 
-  consultationForms,
   invoices, 
   newsletterSubscribers,
   employeeStats,
@@ -42,11 +41,9 @@ export async function GET(request: NextRequest) {
       consultationStats,
       userStats,
       financialStats,
-      serviceStats,
       revenueData,
       consultationTrends,
-      userGrowth,
-      topServices
+      userGrowth
     ] = await Promise.all([
       // Consultation statistics
       db.select({
@@ -78,18 +75,7 @@ export async function GET(request: NextRequest) {
       .from(invoices)
       .where(gte(invoices.created_at, startDate)),
 
-      // Service statistics from consultation forms
-      db.select({
-        guidance: consultationForms.guidance,
-        count: count()
-      })
-      .from(consultationForms)
-      .where(gte(consultationForms.created_at, startDate))
-      .groupBy(consultationForms.guidance)
-      .orderBy(desc(count()))
-      .limit(5),
-
-      // Monthly revenue data for charts (last 6 months)
+  // Monthly revenue data for charts (last 6 months)
       db.select({
         month: sql<string>`to_char(${invoices.created_at}, 'Mon')`,
         monthNum: sql<number>`extract(month from ${invoices.created_at})`,
@@ -127,24 +113,6 @@ export async function GET(request: NextRequest) {
       .groupBy(sql`extract(month from ${users.created_at}), to_char(${users.created_at}, 'Mon')`)
       .orderBy(sql`extract(month from ${users.created_at})`),
 
-      // Top services from consultation forms
-      db.select({
-        service: consultationForms.guidance,
-        count: count(),
-        avgDuration: sql<number>`coalesce(avg(extract(epoch from (${consultationSessions.actual_end} - ${consultationSessions.actual_start}))/60), 60)`
-      })
-      .from(consultationForms)
-      .leftJoin(consultations, eq(consultationForms.id, consultations.id))
-      .leftJoin(consultationSessions, eq(consultations.id, consultationSessions.consultation_id))
-      .where(
-        and(
-          gte(consultationForms.created_at, startDate),
-          sql`${consultationForms.guidance} is not null`
-        )
-      )
-      .groupBy(consultationForms.guidance)
-      .orderBy(desc(count()))
-      .limit(1)
     ]);
 
     // Calculate monthly growth
@@ -197,9 +165,9 @@ export async function GET(request: NextRequest) {
         subscribersCount: Number(userStats[0]?.subscribersCount) || 0
       },
       services: {
-        mostPopular: topServices[0]?.service || 'Financial Planning',
-        totalServices: serviceStats.length || 0,
-        averageDuration: Math.round(Number(topServices[0]?.avgDuration) || 60)
+        mostPopular: 'Financial Planning',
+        totalServices: 0,
+        averageDuration: 60
       },
       financial: {
         totalRevenue: Number(financialStats[0]?.totalRevenue) || 0,
@@ -221,10 +189,7 @@ export async function GET(request: NextRequest) {
           data: formatChartData(userGrowth, 'count')
         }
       },
-      topServices: serviceStats.map(service => ({
-        name: service.guidance || 'Unknown',
-        count: Number(service.count)
-      }))
+      topServices: []
     };
 
     return NextResponse.json(response);

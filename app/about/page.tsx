@@ -28,17 +28,18 @@ export default function AboutPage() {
     <div className="min-h-screen bg-[var(--color-dark-bg)]">
       <Header />
       
+      {/* Dynamic Hero Background Styling */}
+      <style jsx>{`
+        .hero {
+          background-image: url('/images/hero/about_hero_image.jpg');
+          background-size: cover;
+          background-position: center;
+        }
+      `}</style>
+      
       <main>
         {/* Hero Section */}
-        <section className="about-hero hero relative min-h-[80vh] flex items-center justify-center bg-cover bg-center pt-40 pb-16">
-          <div 
-            className="absolute inset-0 bg-gradient-to-t from-[rgba(13,14,27,1)] via-[rgba(13,14,27,0.7)] to-[rgba(13,14,27,0.3)]"
-            style={{
-              backgroundImage: `url('/images/hero/about_hero_image.png')`,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center'
-            }}
-          />
+        <section className="about-hero hero">
           <div className="hero-content container relative z-10 text-center text-white">
             <h1 className="base-hero-h1 text-4xl md:text-5xl lg:text-6xl font-bold mb-6 max-w-4xl mx-auto leading-tight">
               Beyond the Balance Sheet

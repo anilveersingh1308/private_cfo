@@ -28,17 +28,18 @@ export default function WhyUsPage() {
     <div className="min-h-screen bg-[var(--color-dark-bg)]">
       <Header />
       
+      {/* Dynamic Hero Background Styling */}
+      <style jsx>{`
+        .hero {
+          background-image: url('/images/hero/why_us_hero_image.jpg');
+          background-size: cover;
+          background-position: center;
+        }
+      `}</style>
+
       <main>
         {/* Hero Section */}
         <section className="hero relative min-h-[80vh] flex items-center justify-center bg-cover bg-center pt-40 pb-16">
-          <div
-            className="absolute inset-0 bg-gradient-to-t from-[rgba(13,14,27,1)] via-[rgba(13,14,27,0.7)] to-[rgba(13,14,27,0.3)]"
-            style={{
-              backgroundImage: `url('/images/hero/why_us_hero_image.png')`,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center'
-            }}
-          />
           <div className="hero-content container relative z-10 text-center text-white flex flex-col items-center">
             <h1 className="base-hero-h1 text-4xl md:text-5xl lg:text-6xl font-bold mb-6 max-w-4xl mx-auto leading-tight">
               Why Choose Private CFO?
@@ -56,14 +57,6 @@ export default function WhyUsPage() {
                 Book a free consultation
               </span>
             </Link>
-          {/* Add enhanced button styles */}
-          <style jsx>{`
-            @keyframes bounceBtn {
-              0% { transform: scale(1) translateY(0); }
-              50% { transform: scale(1.08) translateY(-6px); }
-              100% { transform: scale(1.06) translateY(-2px); }
-            }
-          `}</style>
           </div>
         </section>
 

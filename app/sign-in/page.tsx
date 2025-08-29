@@ -163,12 +163,12 @@ export default function SignIn() {
         .form-group input {
           width: 100%;
           padding: 0.75rem 1rem;
-          background: #E8E8E8;
+          color: #ffffff;
           border: none;
           border-radius: 8px;
+          border: 1px solid #374151;
           font-family: 'Poppins', sans-serif;
           font-size: 1rem;
-          color: #222;
           transition: box-shadow 0.3s ease;
         }
 

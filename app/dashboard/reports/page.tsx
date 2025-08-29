@@ -1,6 +1,19 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { Line } from 'react-chartjs-2';
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+} from 'chart.js';
+
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 import { 
   Card, 
   Button, 
@@ -97,6 +110,7 @@ export default function DashboardReports() {
         datasets: [{
           label: 'Revenue',
           data: chartData.revenue.data,
+           // fill: true,
           backgroundColor: 'rgba(14, 165, 233, 0.1)',
           borderColor: '#0ea5e9'
         }]
@@ -107,8 +121,9 @@ export default function DashboardReports() {
       datasets: [{
         label: 'Revenue',
         data: [45000, 52000, 48000, 61000, 55000, 67000],
+         // fill: true,
         backgroundColor: 'rgba(14, 165, 233, 0.1)',
-        borderColor: '#0ea5e9'
+  borderColor: '#0ea5e9'
       }]
     };
   };
@@ -120,6 +135,7 @@ export default function DashboardReports() {
         datasets: [{
           label: 'Consultations',
           data: chartData.consultations.data,
+           // fill: true,
           backgroundColor: 'rgba(34, 197, 94, 0.1)',
           borderColor: '#22c55e'
         }]
@@ -130,8 +146,9 @@ export default function DashboardReports() {
       datasets: [{
         label: 'Consultations',
         data: [12, 15, 13, 18, 16, 22],
+         // fill: true,
         backgroundColor: 'rgba(34, 197, 94, 0.1)',
-        borderColor: '#22c55e'
+  borderColor: '#22c55e'
       }]
     };
   };
@@ -143,6 +160,7 @@ export default function DashboardReports() {
         datasets: [{
           label: 'New Users',
           data: chartData.users.data,
+           // fill: true,
           backgroundColor: 'rgba(168, 85, 247, 0.1)',
           borderColor: '#a855f7'
         }]
@@ -153,8 +171,9 @@ export default function DashboardReports() {
       datasets: [{
         label: 'New Users',
         data: [85, 92, 78, 105, 95, 112],
+         // fill: true,
         backgroundColor: 'rgba(168, 85, 247, 0.1)',
-        borderColor: '#a855f7'
+  borderColor: '#a855f7'
       }]
     };
   };
@@ -354,12 +373,235 @@ export default function DashboardReports() {
               </button>
             </div>
           </div>
-          <div className="chart-placeholder">
-            <div className="chart-mockup">
-              <i className="fas fa-chart-area"></i>
-              <p>Chart: {activeChart.charAt(0).toUpperCase() + activeChart.slice(1)} Trends</p>
-              <span>Interactive chart would be rendered here using Chart.js or similar library</span>
-            </div>
+          <div className="chart-area">
+            {activeChart === 'revenue' && (
+              <Line
+                data={getRevenueChartData()}
+                options={{
+                  responsive: true,
+                  animation: {
+                    duration: 1200,
+                    easing: 'easeInOutQuart'
+                  },
+                  plugins: {
+                    legend: {
+                      display: true,
+                      position: 'top',
+                      labels: {
+                        color: '#0ea5e9',
+                        font: { size: 15, weight: 'bold' },
+                        boxWidth: 22,
+                        boxHeight: 22,
+                        padding: 24
+                      }
+                    },
+                    title: {
+                      display: true,
+                      text: 'Revenue Trends',
+                      color: '#f8fafc',
+                      font: { size: 20, weight: 'bold' },
+                      padding: { top: 16, bottom: 24 }
+                    },
+                    tooltip: {
+                      enabled: true,
+                      backgroundColor: '#0ea5e9',
+                      titleColor: '#fff',
+                      bodyColor: '#fff',
+                      borderColor: '#38bdf8',
+                      borderWidth: 2,
+                      padding: 16,
+                      cornerRadius: 10,
+                      titleFont: { size: 16, weight: 'bold' },
+                      bodyFont: { size: 15 },
+                      displayColors: false
+                    }
+                  },
+                  layout: {
+                    padding: { left: 16, right: 16, top: 8, bottom: 8 }
+                  },
+                  scales: {
+                    y: {
+                      beginAtZero: true,
+                      grid: { color: 'rgba(14,165,233,0.12)' },
+                      ticks: { color: '#38bdf8', font: { size: 14 } }
+                    },
+                    x: {
+                      grid: { color: 'rgba(14,165,233,0.07)' },
+                      ticks: { color: '#38bdf8', font: { size: 14 } }
+                    }
+                  },
+                  elements: {
+                    line: {
+                      borderWidth: 5,
+                      borderColor: '#0ea5e9',
+                      backgroundColor: 'rgba(14,165,233,0.15)',
+                    },
+                    point: {
+                      radius: 8,
+                      backgroundColor: '#0ea5e9',
+                      borderColor: '#fff',
+                      borderWidth: 3,
+                      hoverRadius: 12,
+                      hoverBackgroundColor: '#38bdf8',
+                      hoverBorderColor: '#fff',
+                      hoverBorderWidth: 4
+                    }
+                  }
+                }}
+              />
+            )}
+            {activeChart === 'consultations' && (
+              <Line
+                data={getConsultationChartData()}
+                options={{
+                  responsive: true,
+                  animation: {
+                    duration: 1200,
+                    easing: 'easeInOutQuart'
+                  },
+                  plugins: {
+                    legend: {
+                      display: true,
+                      position: 'top',
+                      labels: {
+                        color: '#22c55e',
+                        font: { size: 15, weight: 'bold' },
+                        boxWidth: 22,
+                        boxHeight: 22,
+                        padding: 24
+                      }
+                    },
+                    title: {
+                      display: true,
+                      text: 'Consultations Trends',
+                      color: '#f8fafc',
+                      font: { size: 20, weight: 'bold' },
+                      padding: { top: 16, bottom: 24 }
+                    },
+                    tooltip: {
+                      enabled: true,
+                      backgroundColor: '#22c55e',
+                      titleColor: '#fff',
+                      bodyColor: '#fff',
+                      borderColor: '#38bdf8',
+                      borderWidth: 2,
+                      padding: 16,
+                      cornerRadius: 10,
+                      titleFont: { size: 16, weight: 'bold' },
+                      bodyFont: { size: 15 },
+                      displayColors: false
+                    }
+                  },
+                  layout: {
+                    padding: { left: 16, right: 16, top: 8, bottom: 8 }
+                  },
+                  scales: {
+                    y: {
+                      beginAtZero: true,
+                      grid: { color: 'rgba(34,197,94,0.12)' },
+                      ticks: { color: '#22c55e', font: { size: 14 } }
+                    },
+                    x: {
+                      grid: { color: 'rgba(34,197,94,0.07)' },
+                      ticks: { color: '#22c55e', font: { size: 14 } }
+                    }
+                  },
+                  elements: {
+                    line: {
+                      borderWidth: 5,
+                      borderColor: '#22c55e',
+                      backgroundColor: 'rgba(34,197,94,0.15)',
+                    },
+                    point: {
+                      radius: 8,
+                      backgroundColor: '#22c55e',
+                      borderColor: '#fff',
+                      borderWidth: 3,
+                      hoverRadius: 12,
+                      hoverBackgroundColor: '#38bdf8',
+                      hoverBorderColor: '#fff',
+                      hoverBorderWidth: 4
+                    }
+                  }
+                }}
+              />
+            )}
+            {activeChart === 'users' && (
+              <Line
+                data={getUserChartData()}
+                options={{
+                  responsive: true,
+                  animation: {
+                    duration: 1200,
+                    easing: 'easeInOutQuart'
+                  },
+                  plugins: {
+                    legend: {
+                      display: true,
+                      position: 'top',
+                      labels: {
+                        color: '#a855f7',
+                        font: { size: 15, weight: 'bold' },
+                        boxWidth: 22,
+                        boxHeight: 22,
+                        padding: 24
+                      }
+                    },
+                    title: {
+                      display: true,
+                      text: 'User Growth Trends',
+                      color: '#f8fafc',
+                      font: { size: 20, weight: 'bold' },
+                      padding: { top: 16, bottom: 24 }
+                    },
+                    tooltip: {
+                      enabled: true,
+                      backgroundColor: '#a855f7',
+                      titleColor: '#fff',
+                      bodyColor: '#fff',
+                      borderColor: '#38bdf8',
+                      borderWidth: 2,
+                      padding: 16,
+                      cornerRadius: 10,
+                      titleFont: { size: 16, weight: 'bold' },
+                      bodyFont: { size: 15 },
+                      displayColors: false
+                    }
+                  },
+                  layout: {
+                    padding: { left: 16, right: 16, top: 8, bottom: 8 }
+                  },
+                  scales: {
+                    y: {
+                      beginAtZero: true,
+                      grid: { color: 'rgba(168,85,247,0.12)' },
+                      ticks: { color: '#a855f7', font: { size: 14 } }
+                    },
+                    x: {
+                      grid: { color: 'rgba(168,85,247,0.07)' },
+                      ticks: { color: '#a855f7', font: { size: 14 } }
+                    }
+                  },
+                  elements: {
+                    line: {
+                      borderWidth: 5,
+                      borderColor: '#a855f7',
+                      backgroundColor: 'rgba(168,85,247,0.15)',
+                    },
+                    point: {
+                      radius: 8,
+                      backgroundColor: '#a855f7',
+                      borderColor: '#fff',
+                      borderWidth: 3,
+                      hoverRadius: 12,
+                      hoverBackgroundColor: '#38bdf8',
+                      hoverBorderColor: '#fff',
+                      hoverBorderWidth: 4
+                    }
+                  }
+                }}
+              />
+            )}
           </div>
         </Card>
       </div>
@@ -566,39 +808,13 @@ export default function DashboardReports() {
           color: #0ea5e9;
         }
 
-        .chart-placeholder {
+        .chart-area {
           padding: 2rem;
-        }
-
-        .chart-mockup {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
-          height: 300px;
           background: rgba(15, 23, 42, 0.5);
           border: 2px dashed rgba(59, 130, 246, 0.3);
           border-radius: 8px;
           color: #94a3b8;
           text-align: center;
-        }
-
-        .chart-mockup i {
-          font-size: 3rem;
-          margin-bottom: 1rem;
-          color: #0ea5e9;
-        }
-
-        .chart-mockup p {
-          font-size: 1.125rem;
-          font-weight: 600;
-          margin: 0 0 0.5rem 0;
-          color: #f8fafc;
-        }
-
-        .chart-mockup span {
-          font-size: 0.875rem;
-          opacity: 0.7;
         }
 
         .reports-grid {
