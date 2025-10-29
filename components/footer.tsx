@@ -173,14 +173,14 @@ export const Footer = () => {
                         <h3>Private CFO CLUB</h3>
                         <div className="company-info">
                             <div className="tagline">SMART MONEY MANAGEMENT</div>
-                            <div className="parent-company">(Unit of GIGAFACTORY INNOVATIONS PVT. LTD.)</div>
+                            <div className="parent-company">(Unit of GIGAFACTRY INNOVATIONS PVT. LTD.)</div>
                         </div>
                         <div className="address">
                             <p><i className="fas fa-map-marker-alt"></i> <strong>Our Address</strong></p>
                             <p>B-80, SECTOR-65, NOIDA</p>
                             <p>UP-201301</p>
-                            <p><i className="fas fa-phone"></i> +91-7084646376</p>
-                            <p><i className="fas fa-envelope"></i> info@privatecfo.com</p>
+                            <p><i className="fas fa-phone"></i> +91-7905095515</p>
+                            <p><i className="fas fa-envelope"></i> info@privatecfo.club</p>
                         </div>
                         <div className="social-media">
                             <h4>Follow Us</h4>

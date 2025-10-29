@@ -51,7 +51,7 @@ export default function CalculatorIntroPage() {
       {/* Dynamic Hero Background Styling */}
       <style jsx>{`
         .hero {
-          background-image: url('/images/hero/cal_intro_hero_image.png');
+          background-image: url('/images/hero/cal_intro_hero_image.jpeg');
           background-size: cover;
           background-position: center;
         }

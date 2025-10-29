@@ -158,7 +158,7 @@ export default function HomePage() {
               </div>
               
               <div className="solutions-photo-placeholder">
-                <img src="/images/icons/omichannel.png" alt="omichannel CFO service" className="virtual-cfo-image" />
+                <img src="/images/icons/omichannel.jpeg" alt="omichannel CFO service" className="virtual-cfo-image" />
               </div>
             </div>
           </div>

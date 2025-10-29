@@ -183,35 +183,35 @@ export const individualTestimonials: TestimonialItem[] = [
   {
     name: "Ajay Saxena",
     title: "Investor",
-    avatar: "https://randomuser.me/api/portraits/men/7.jpg",
+    avatar: "/images/testimonials/image1.jpg",
     rating: 5.0,
     text: "Having someone like Komal from the private CFO team on my side gave me confidence as an investor. She looked at my existing portfolio and offered updates that were both practical and impactful. I've seen real improvement since."
   },
   {
     name: "Niteesh Khurana",
     title: "Investor",
-    avatar: "https://randomuser.me/api/portraits/men/19.jpg", 
+    avatar: "/images/testimonials/image2.jpg", 
     rating: 5.0,
     text: "I can't stress enough how easy the entire process felt with my CFO guiding me. They took the time to understand my situation, offered expert insight, and made complex decisions feel manageable. Big thumbs-up!"
   },
   {
     name: "Nisha Chaturvedi",
     title: "Investor",
-    avatar: "https://randomuser.me/api/portraits/women/3.jpg",
+    avatar: "/images/testimonials/image3.jpg",
     rating: 5.0,
     text: "Deepika Goyal really opened my eyes to how strategic a financial partnership can be. She helped me refine my investment approach, set clearer goals, and make changes that I now see boosting my portfolio performance."
   },
   {
     name: "Jayant Singh", 
     title: "Investor",
-    avatar: "https://randomuser.me/api/portraits/men/20.jpg",
+    avatar: "/images/testimonials/image4.jpg",
     rating: 5.0,
     text: "Ayan Sharma quickly figured out exactly what I needed. His advice was spot-on, and I never felt like I was getting generic suggestions. I'd recommend him to anyone who wants a smart, insightful approach to managing their finances."
   },
   {
     name: "Vikram Mehra",
     title: "Investor",
-    avatar: "https://randomuser.me/api/portraits/men/24.jpg",
+    avatar: "/images/testimonials/image5.jpg",
     rating: 5.0,
     text: "Divya went above and beyond to ensure I understood every financial option laid out for me. Her explanations were detailed yet clear, and she was always ready to respond to any doubts I had. That personal attention really stood out."
   }
@@ -221,35 +221,35 @@ export const businessTestimonials: TestimonialItem[] = [
   {
     name: "Rohit Agarwal",
     title: "Business Owner",
-    avatar: "https://randomuser.me/api/portraits/men/5.jpg",
+    avatar: "/images/testimonials/image6.jpg",
     rating: 5.0,
     text: "Private CFO helped us streamline our cash flow and set up robust financial processes. Their team is proactive and always available for strategic advice. Highly recommended for any growing business!"
   },
   {
     name: "Priya Sinha",
     title: "Startup Founder",
-    avatar: "https://randomuser.me/api/portraits/women/11.jpg",
+    avatar: "/images/testimonials/image7.jpg",
     rating: 5.0,
     text: "The fundraising and investor reporting support was a game changer for our startup. We felt confident in every board meeting thanks to the clarity and insights provided by Private CFO."
   },
   {
     name: "Manish Gupta",
     title: "MSME Owner",
-    avatar: "https://randomuser.me/api/portraits/men/47.jpg",
+    avatar: "/images/testimonials/image8.jpg",
     rating: 5.0,
     text: "Their payroll and compliance solutions saved us countless hours and headaches. The team is knowledgeable and always goes the extra mile."
   },
   {
     name: "Sneha Verma",
     title: "Small Business CEO",
-    avatar: "https://randomuser.me/api/portraits/women/23.jpg",
+    avatar: "/images/testimonials/image9.jpg",
     rating: 5.0,
     text: "With Private CFO’s financial planning and analysis, we gained better control over our budgeting and forecasting. Their insights helped us make smarter decisions and grow with confidence."
   },
   {
     name: "Amit Deshmukh",
     title: "Tech Entrepreneur",
-    avatar: "https://randomuser.me/api/portraits/men/33.jpg",
+    avatar: "/images/testimonials/image10.jpg",
     rating: 5.0,
     text: "The strategic business advisory from Private CFO was invaluable during our expansion phase. Their expertise in risk analysis and compliance gave us peace of mind and set us up for long-term success."
   }

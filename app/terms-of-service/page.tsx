@@ -32,7 +32,7 @@ const sections = [
         </div>
         <div className="section-content">
           <p>
-            Welcome to Private CFO Club, operated by GIGAFACTRY INNOVATIONS PVT. LTD. These Terms of Service ("Terms") govern your use of our website located at www.privatecfo.com and our financial advisory services (the "Service").<br /><br />
+            Welcome to Private CFO Club, operated by Gigafactry Innovations Pvt Ltd. These Terms of Service ("Terms") govern your use of our website located at www.privatecfo.com and our financial advisory services (the "Service").<br /><br />
             By accessing or using our Service, you agree to be bound by these Terms. If you disagree with any part of these Terms, then you may not access the Service. These Terms apply to all visitors, users, and others who access or use the Service.<br /><br />
             We reserve the right to update or modify these Terms at any time without prior notice. Your continued use of the Service after any such changes constitutes your acceptance of the new Terms. We encourage you to review these Terms periodically to stay informed about our rules and policies.<br /><br />
             If you are entering into these Terms on behalf of a company or other legal entity, you represent that you have the authority to bind such entity to these Terms, in which case "you" will refer to such entity.
@@ -178,7 +178,7 @@ const sections = [
       <div className="section-content">
         <p>
           <strong>Ownership:</strong><br />
-          All content, materials, trademarks, logos, software, and intellectual property on the Private CFO Club platform are owned by GIGAFACTRY INNOVATIONS PVT. LTD. or its licensors.
+          All content, materials, trademarks, logos, software, and intellectual property on the Private CFO Club platform are owned by Gigafactry Innovations Pvt Ltd or its licensors.
         </p>
         <p>
           <strong>Permitted Use:</strong><br />
