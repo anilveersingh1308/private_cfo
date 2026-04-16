@@ -1,6 +1,6 @@
 export { metadata } from "./metadata";
 
-export default function CalculatorIntroLayout({
+export default function SignUpLayout({
   children,
 }: {
   children: React.ReactNode;
