@@ -179,7 +179,7 @@ export const Footer = () => {
                             <p><i className="fas fa-phone"></i> +91-7905095515</p>
                             <p><i className="fas fa-envelope"></i> info@privatecfo.club</p>
                         </div>
-                        <div className="social-media">
+                        <div className="social-media" style={{ display: 'none' }}>
                             <h4>Follow Us</h4>
                             <div className="social-links">
                                 <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><i className="fab fa-facebook-f"></i></a>
