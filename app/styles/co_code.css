@@ -1313,6 +1313,11 @@ a {
     section {
         margin: 0 !important;
     }
+    /* Ensure header has solid background on mobile */
+    .site-header {
+        background: rgba(13, 14, 27, 0.98);
+        box-shadow: 0 2px 16px 0 rgba(0, 0, 0, 0.10);
+    }
     /* Hide desktop navigation on mobile */
     .main-nav ul {
         flex-direction: column;
@@ -1326,7 +1331,7 @@ a {
         top: 3.38rem;
         left: 50%;
         right: 0;
-        background: rgba(17, 24, 39, 0.295);
+        background: rgba(13, 14, 27, 0.97);
         backdrop-filter: blur(10px);
         -webkit-backdrop-filter: blur(10px);
         transform: translateY(-100%);
