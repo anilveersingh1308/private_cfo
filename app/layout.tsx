@@ -29,48 +29,62 @@ export default function RootLayout({
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "FinancialService",
-              name: "Private CFO",
-              url: process.env.NEXT_PUBLIC_APP_URL || "https://privatecfo.club",
-              logo: `${process.env.NEXT_PUBLIC_APP_URL || "https://privatecfo.club"}/images/logo-512.png`,
-              description:
-                "Strategic financial leadership for individuals and businesses — personalized CFO services including wealth management, tax planning, and investment advisory.",
-              serviceType: "Financial Advisory",
-              areaServed: {
-                "@type": "Country",
-                name: "India",
-              },
-              provider: {
-                "@type": "Organization",
-                name: "Gigafactry Innovations Pvt Ltd",
-              },
-              hasOfferCatalog: {
-                "@type": "OfferCatalog",
-                name: "CFO Services",
-                itemListElement: [
-                  {
-                    "@type": "Offer",
-                    itemOffered: {
-                      "@type": "Service",
-                      name: "Individual CFO Services",
-                      description:
-                        "Personal financial planning, wealth management, tax optimization, and retirement planning.",
+            __html: JSON.stringify([
+              {
+                "@context": "https://schema.org",
+                "@type": "FinancialService",
+                name: "Private CFO",
+                url: process.env.NEXT_PUBLIC_APP_URL || "https://privatecfo.club",
+                logo: {
+                  "@type": "ImageObject",
+                  url: `${process.env.NEXT_PUBLIC_APP_URL || "https://privatecfo.club"}/images/logo-512.png`,
+                  width: 512,
+                  height: 512,
+                },
+                image: `${process.env.NEXT_PUBLIC_APP_URL || "https://privatecfo.club"}/images/logo-512.png`,
+                description:
+                  "Strategic financial leadership for individuals and businesses — personalized CFO services including wealth management, tax planning, and investment advisory.",
+                serviceType: "Financial Advisory",
+                areaServed: {
+                  "@type": "Country",
+                  name: "India",
+                },
+                provider: {
+                  "@type": "Organization",
+                  name: "Gigafactry Innovations Pvt Ltd",
+                },
+                hasOfferCatalog: {
+                  "@type": "OfferCatalog",
+                  name: "CFO Services",
+                  itemListElement: [
+                    {
+                      "@type": "Offer",
+                      itemOffered: {
+                        "@type": "Service",
+                        name: "Individual CFO Services",
+                        description:
+                          "Personal financial planning, wealth management, tax optimization, and retirement planning.",
+                      },
                     },
-                  },
-                  {
-                    "@type": "Offer",
-                    itemOffered: {
-                      "@type": "Service",
-                      name: "Business CFO Services",
-                      description:
-                        "MSME financial strategy, cash flow management, compliance, and growth planning.",
+                    {
+                      "@type": "Offer",
+                      itemOffered: {
+                        "@type": "Service",
+                        name: "Business CFO Services",
+                        description:
+                          "MSME financial strategy, cash flow management, compliance, and growth planning.",
+                      },
                     },
-                  },
-                ],
+                  ],
+                },
               },
-            }),
+              {
+                "@context": "https://schema.org",
+                "@type": "WebSite",
+                name: "Private CFO",
+                url: process.env.NEXT_PUBLIC_APP_URL || "https://privatecfo.club",
+              },
+            ]),
           }}
         />
       </head>
