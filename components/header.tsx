@@ -110,31 +110,29 @@ export const Header = () => {
                             className={`has-submenu ${isServicesOpen ? 'active' : ''} ${isActiveLink('/services') ? 'current-page' : ''} ${isScrolled ? 'scrolled' : ''}`}
                             ref={servicesRef}
                         >
-                            <a 
-                                href="#" 
+                            <button 
+                                type="button"
                                 className={`dropdown-toggle ${isActiveLink('/services') ? 'active' : ''}`}
                                 onClick={toggleServices}
-                                aria-expanded={isServicesOpen}
-                                aria-haspopup="true"
+                                aria-expanded={isServicesOpen ? "true" : "false"}
+                                aria-haspopup="listbox"
                             >
                                 Services
-                                <i className={`fas fa-chevron-down ${isServicesOpen ? 'rotated' : ''}`}></i>
-                            </a>
-                            <ul className="submenu" role="menu">
-                                <li role="none">
+                                {' '}<i className={`fas fa-chevron-down ${isServicesOpen ? 'rotated' : ''}`}></i>
+                            </button>
+                            <ul className="submenu">
+                                <li>
                                     <Link 
                                         href="/services?type=individual" 
                                         onClick={closeMenus}
-                                        role="menuitem"
                                     >
                                         Individual Services
                                     </Link>
                                 </li>
-                                <li role="none">
+                                <li>
                                     <Link 
                                         href="/services?type=business" 
                                         onClick={closeMenus}
-                                        role="menuitem"
                                     >
                                         Business Services
                                     </Link>
@@ -147,7 +145,7 @@ export const Header = () => {
                     className="menu-toggle" 
                     aria-label="Toggle menu"
                     onClick={toggleMobileMenu}
-                    aria-expanded={isMobileMenuOpen}
+                    aria-expanded={isMobileMenuOpen ? "true" : "false"}
                 >
                     <i className={`fas ${isMobileMenuOpen ? 'fa-times' : 'fa-bars'}`}></i>
                 </button>
