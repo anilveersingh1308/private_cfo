@@ -93,7 +93,7 @@ export default function DashboardLayout({
           color: #f8fafc !important;
           margin: 0;
           padding: 0;
-          font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+          font-family: var(--font-poppins), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
           overflow-x: hidden;
           min-height: 100vh;
         }

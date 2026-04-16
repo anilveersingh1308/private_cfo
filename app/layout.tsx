@@ -1,4 +1,4 @@
-import { Montserrat, Mooli } from "next/font/google";
+import { Montserrat, Mooli, Poppins, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/lib/auth-context";
 export { metadata } from "./metadata";
@@ -15,6 +15,18 @@ const mooli = Mooli({
   weight: ["400"],
 });
 
+const poppins = Poppins({
+  variable: "--font-poppins",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+});
+
+const plusJakartaSans = Plus_Jakarta_Sans({
+  variable: "--font-jakarta",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800"],
+});
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -24,8 +36,6 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -89,7 +99,7 @@ export default function RootLayout({
         />
       </head>
       <body 
-        className={`${montserrat.variable} ${mooli.variable} antialiased`}
+        className={`${montserrat.variable} ${mooli.variable} ${poppins.variable} ${plusJakartaSans.variable} antialiased`}
         style={{
           fontFamily: 'var(--font-montserrat), sans-serif',
           backgroundColor: 'var(--color-dark-bg)',

@@ -105,10 +105,13 @@ export default function HomePage() {
     <div className="min-h-screen bg-[var(--color-dark-bg)]">
       <Header />
       
+      {/* Preload hero image for faster LCP */}
+      <link rel="preload" as="image" href="/images/hero/hero_image.webp" type="image/webp" />
+      
       {/* Dynamic Hero Background Styling */}
       <style jsx>{`
         .hero {
-          background-image: url('/images/hero/hero_image.jpg');
+          background-image: url('/images/hero/hero_image.webp');
           background-size: cover;
           background-position: center;
         }
@@ -158,7 +161,7 @@ export default function HomePage() {
               </div>
               
               <div className="solutions-photo-placeholder">
-                <img src="/images/icons/omichannel.jpeg" alt="omichannel CFO service" className="virtual-cfo-image" />
+                <img src="/images/icons/omichannel.webp" alt="omichannel CFO service" className="virtual-cfo-image" />
               </div>
             </div>
           </div>
@@ -215,7 +218,7 @@ export default function HomePage() {
                 </div>
                 <div className="image-placeholder-wrapper">
                   <div className="image-placeholder">
-                    <img src="/images/services/financial-health.png" alt="" className="financial-health-image" />
+                    <img src="/images/services/financial-health.webp" alt="Financial Health Score" className="financial-health-image" />
                   </div>
                 </div>
               </div>

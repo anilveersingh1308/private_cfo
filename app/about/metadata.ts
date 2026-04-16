@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     locale: "en_IN",
     images: [
       {
-        url: `${BASE_URL}/images/hero/about_hero_image.jpg`,
+        url: `${BASE_URL}/images/hero/about_hero_image.webp`,
         width: 1200,
         height: 630,
         alt: "About Private CFO — Your Financial Partner",
@@ -40,6 +40,6 @@ export const metadata: Metadata = {
     title: "About Private CFO — Beyond the Balance Sheet",
     description:
       "Decades of financial expertise, a deeply personal approach. Discover the story behind your trusted financial partner.",
-    images: [`${BASE_URL}/images/hero/about_hero_image.jpg`],
+    images: [`${BASE_URL}/images/hero/about_hero_image.webp`],
   },
 };

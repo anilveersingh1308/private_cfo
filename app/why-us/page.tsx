@@ -31,7 +31,7 @@ export default function WhyUsPage() {
       {/* Dynamic Hero Background Styling */}
       <style jsx>{`
         .hero {
-          background-image: url('/images/hero/why_us_hero_image.jpg');
+          background-image: url('/images/hero/why_us_hero_image.webp');
           background-size: cover;
           background-position: center;
         }

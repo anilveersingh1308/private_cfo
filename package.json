@@ -77,5 +77,8 @@
     "to-ico": "^1.1.5",
     "tsx": "^4.20.3",
     "typescript": "^5"
-  }
+  },
+  "browserslist": [
+    "defaults and fully supports es6-module"
+  ]
 }

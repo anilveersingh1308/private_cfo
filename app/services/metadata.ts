@@ -32,7 +32,7 @@ export const metadata: Metadata = {
     locale: "en_IN",
     images: [
       {
-        url: `${BASE_URL}/images/services/individual-service-solution.jpg`,
+        url: `${BASE_URL}/images/services/individual-service-solution.webp`,
         width: 1200,
         height: 630,
         alt: "Private CFO — Financial Services",
@@ -44,6 +44,6 @@ export const metadata: Metadata = {
     title: "CFO Services — Individual & Business Solutions",
     description:
       "Personalized financial services for individuals and businesses. Wealth management, tax planning, growth strategy, and more.",
-    images: [`${BASE_URL}/images/services/individual-service-solution.jpg`],
+    images: [`${BASE_URL}/images/services/individual-service-solution.webp`],
   },
 };

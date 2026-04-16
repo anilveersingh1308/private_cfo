@@ -8,7 +8,10 @@ const nextConfig: NextConfig = {
     ignoreBuildErrors: true,
   },
   experimental: {
-    optimizePackageImports: ['lucide-react'],
+    optimizePackageImports: ['lucide-react', '@fortawesome/fontawesome-free'],
+  },
+  images: {
+    formats: ['image/webp'],
   },
   // No static export, full backend support
 };

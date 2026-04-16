@@ -43,7 +43,7 @@ function ServicesContent() {
       {/* Dynamic Hero Background Styling */}
       <style jsx>{`
         .hero {
-          background-image: url('/images/hero/${serviceType === 'business' ? 'business_hero_image.jpg' : 'individual_hero_image.jpg'}');
+          background-image: url('/images/hero/${serviceType === 'business' ? 'business_hero_image.webp' : 'individual_hero_image.webp'}');
           background-size: cover;
           background-position: center;
         }
@@ -79,7 +79,7 @@ function ServicesContent() {
               
               <div className="solutions-photo-placeholder" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minWidth: '220px', minHeight: '220px', background: 'none' }}>
                 <img
-                  src={serviceType === 'business' ? '/images/services/business-service-solution.jpg' : '/images/services/individual-service-solution.jpg'}
+                  src={serviceType === 'business' ? '/images/services/business-service-solution.webp' : '/images/services/individual-service-solution.webp'}
                   alt={serviceType === 'business' ? 'Business Service Solution' : 'Individual Service Solution'}
                   style={{objectFit: 'cover', borderRadius: '18px', boxShadow: '0 4px 24px rgba(0,0,0,0.12)' }}
                 />

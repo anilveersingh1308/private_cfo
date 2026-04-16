@@ -167,7 +167,7 @@ export default function SignIn() {
           border: none;
           border-radius: 8px;
           border: 1px solid #374151;
-          font-family: 'Poppins', sans-serif;
+          font-family: var(--font-poppins), sans-serif;
           font-size: 1rem;
           transition: box-shadow 0.3s ease;
         }

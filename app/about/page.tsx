@@ -31,7 +31,7 @@ export default function AboutPage() {
       {/* Dynamic Hero Background Styling */}
       <style jsx>{`
         .hero {
-          background-image: url('/images/hero/about_hero_image.jpg');
+          background-image: url('/images/hero/about_hero_image.webp');
           background-size: cover;
           background-position: center;
         }
@@ -117,7 +117,7 @@ export default function AboutPage() {
             <h2 className="text-yellow text-4xl font-bold mb-8 text-left">Our Team of Financial Strategists</h2>
             <div className="flex justify-center mb-8">
               <Image 
-                src="/images/services/financial-team.png" 
+                src="/images/services/financial-team.webp" 
                 alt="A diverse team of financial strategists" 
                 width={420}
                 height={280}

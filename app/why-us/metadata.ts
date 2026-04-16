@@ -29,7 +29,7 @@ export const metadata: Metadata = {
     locale: "en_IN",
     images: [
       {
-        url: `${BASE_URL}/images/hero/why_us_hero_image.jpg`,
+        url: `${BASE_URL}/images/hero/why_us_hero_image.webp`,
         width: 1200,
         height: 630,
         alt: "Why Choose Private CFO — Financial Partnership",
@@ -41,6 +41,6 @@ export const metadata: Metadata = {
     title: "Why Choose Private CFO",
     description:
       "A uniquely holistic perspective, data-driven strategies, and client-first philosophy — discover why we're the right financial partner for you.",
-    images: [`${BASE_URL}/images/hero/why_us_hero_image.jpg`],
+    images: [`${BASE_URL}/images/hero/why_us_hero_image.webp`],
   },
 };
