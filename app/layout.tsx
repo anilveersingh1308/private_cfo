@@ -1,6 +1,7 @@
 import { Montserrat, Mooli } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/lib/auth-context";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 export { metadata } from "./metadata";
 
 const montserrat = Montserrat({
@@ -87,6 +88,7 @@ export default function RootLayout({
         <AuthProvider>
           {children}
         </AuthProvider>
+        <SpeedInsights />
       </body>
     </html>
   );
