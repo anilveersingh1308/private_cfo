@@ -193,17 +193,39 @@ export const Footer = () => {
                     {/* Map Section */}
                     <div className="footer-section map-section">
                         <h3>Find Us</h3>
-                        <div className="map-container">
+                        <div className="map-container" style={{ position: 'relative' }}>
                             <iframe
-                                title="Office Location Map"
-                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3503.4457!2d77.3647!3d28.6139!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390ce5456ef36d9d%3A0x61d5e7e6d83b8b8!2sSector%2065%2C%20Noida%2C%20Uttar%20Pradesh!5e0!3m2!1sen!2sin!4v1620000000000!5m2!1sen!2sin"
+                                title="Office Location Map - Gigafactry, Noida"
+                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3502.573819152459!2d77.38456277422206!3d28.61255948498965!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390cef2c8ab83231%3A0x5703cfb8b6d8d20a!2sGigafactry!5e0!3m2!1sen!2sin!4v1776379152057!5m2!1sen!2sin"
                                 width="100%"
                                 height="250"
+                                style={{ border: 0, display: 'block' }}
                                 className="map-iframe"
                                 allowFullScreen
                                 loading="lazy"
                                 referrerPolicy="no-referrer-when-downgrade"
+                                allow="fullscreen"
                             ></iframe>
+                            <a
+                                href="https://www.google.com/maps/place/Gigafactry/@28.6125595,77.3845628,17z"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                aria-label="Open Gigafactry location in Google Maps"
+                                style={{
+                                    position: 'absolute',
+                                    bottom: 8,
+                                    right: 8,
+                                    background: 'rgba(0,0,0,0.7)',
+                                    color: '#fff',
+                                    padding: '6px 12px',
+                                    borderRadius: '6px',
+                                    fontSize: '0.75rem',
+                                    textDecoration: 'none',
+                                    zIndex: 2,
+                                }}
+                            >
+                                Open in Google Maps ↗
+                            </a>
                         </div>
                     </div>
                 </div>
