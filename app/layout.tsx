@@ -33,7 +33,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <script
@@ -99,6 +99,7 @@ export default function RootLayout({
         />
       </head>
       <body 
+        suppressHydrationWarning
         className={`${montserrat.variable} ${mooli.variable} ${poppins.variable} ${plusJakartaSans.variable} antialiased`}
         style={{
           fontFamily: 'var(--font-montserrat), sans-serif',
